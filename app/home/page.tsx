@@ -1,0 +1,1087 @@
+"use client"
+
+import { RefreshCw, Wallet, Plus, Grid3X3, Gamepad2, Spade, Fish, Zap } from "lucide-react"
+import { useState, useEffect } from "react"
+import Link from "next/link"
+import { NgameCardsData, gameCardsData, bannerData } from "@/data/games"
+import BottomNavigation from "@/components/bottom-navigation"
+import React from "react"
+import { RandomAvatarImg } from "@/components/random-avatar"
+
+interface UserCredentials {
+  username: string
+  password: string
+  user?: {
+    username: string
+    email: string
+  }
+  loginTime: string
+}
+
+interface GameLoadingState {
+  isLoading: boolean
+  progress: number
+  gameName: string
+}
+
+function GameImage({
+  gCode,
+  alt,
+  prefer = "small",
+}: {
+  gCode: string
+  alt: string
+  prefer?: "small" | "large"
+}) {
+  // Only use the provided test server, en-US images. Try both small and large folders.
+  const base = "https://test.zyronetworks.shop"
+  const smalls = [
+    `${base}/images/small/JL/en-US/${gCode}.png`,
+    `${base}/small/JL/en-US/${gCode}.png`,
+    `${base}/images/small/JL/en-us/${gCode}.png`,
+  ]
+  const larges = [
+    `${base}/images/large/JL/en-US/${gCode}.png`,
+    `${base}/large/JL/en-US/${gCode}.png`,
+    `${base}/images/large/JL/en-us/${gCode}.png`,
+  ]
+  // Neutral fallback still constrained to en-US on the same host
+  const neutrals = [`${base}/JL/en-US/${gCode}.png`, `${base}/JL/en-us/${gCode}.png`]
+  const candidates = (prefer === "small" ? [...smalls, ...larges] : [...larges, ...smalls]).concat(neutrals)
+
+  const [idx, setIdx] = React.useState(0)
+  const src = candidates[Math.min(idx, candidates.length - 1)]
+
+  return (
+    <img
+      src={src || "/placeholder.svg"}
+      alt={alt}
+      loading="eager"
+      onError={() => setIdx((i) => (i + 1 < candidates.length ? i + 1 : i))}
+      className="w-full h-full object-cover"
+    />
+  )
+}
+
+function JEImage({
+  gCode,
+  alt,
+}: {
+  gCode: string
+  alt: string
+}) {
+  // Build: https://test.zyronetworks.shop/294x400/JL_294x400_GameIDNNN_en-US.png
+  const base = "https://test.zyronetworks.shop/294x400"
+  const pad3 = (n: string) => {
+    if (!n || n === undefined || n === null) return "000"
+    return n.toString().padStart(3, "0")
+  }
+  const src = `${base}/JL_294x400_GameID${pad3(gCode)}_en-US.png`
+
+  return <img src={src || "/placeholder.svg"} alt={alt} loading="eager" className="w-full h-full object-cover" />
+}
+
+function JEBannerImage({
+  gCode,
+  alt,
+  fallbackSrc,
+}: {
+  gCode: string
+  alt: string
+  fallbackSrc?: string
+}) {
+  // Build: https://test.zyronetworks.shop/590x193/JL_590x193_GameIDNNN_en-US.png
+  const base = "https://test.zyronetworks.shop/590x193"
+  const pad3 = (n: string) => {
+    if (!n || n === undefined || n === null) return "000"
+    return n.toString().padStart(3, "0")
+  }
+  const src = `${base}/JL_590x193_GameID${pad3(gCode)}_en-US.png`
+
+  return (
+    <img
+      src={src || "/placeholder.svg"}
+      alt={alt}
+      loading="eager"
+      className="w-full h-full object-cover"
+      onError={(e) => {
+        if (fallbackSrc && e.currentTarget.src !== fallbackSrc) {
+          e.currentTarget.src = fallbackSrc
+        }
+      }}
+    />
+  )
+}
+
+// Small utility to pick random items without mutating original
+function pickRandom<T>(arr: T[], count: number): T[] {
+  const copy = [...arr]
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[copy[i], copy[j]] = [copy[j], copy[i]]
+  }
+  return copy.slice(0, Math.min(count, copy.length))
+}
+
+export default function HomePage() {
+  const [balance, setBalance] = useState<string>("Loading...")
+  const [username, setUsername] = useState<string>("")
+  const [userCredentials, setUserCredentials] = useState<UserCredentials | null>(null)
+  const [isLoadingBalance, setIsLoadingBalance] = useState(true)
+  const [gameLoading, setGameLoading] = useState<GameLoadingState>({
+    isLoading: false,
+    progress: 0,
+    gameName: "",
+  })
+  const [selectedFilter, setSelectedFilter] = useState("ALL")
+  const [currentBanner, setCurrentBanner] = useState(0)
+  const [showWelcomeNotification, setShowWelcomeNotification] = useState(false)
+  const [showInsufficientBalancePopup, setShowInsufficientBalancePopup] = useState(false)
+  const [showDailyRewardsPopup, setShowDailyRewardsPopup] = useState(false)
+  const [claimedRewards, setClaimedRewards] = useState<number[]>([])
+  const [isHorizontal, setIsHorizontal] = useState(false)
+  const [categoryPages, setCategoryPages] = useState({
+    SL: 0,
+    FH: 0,
+    CB: 0,
+    OT: 0,
+  })
+
+  const dailyRewards = [
+    {
+      day: 1,
+      type: "coins",
+      amount: 10,
+      image:
+        "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Picsart_25-09-06_17-23-49-344-C8WSvOAmvZcm8MEZ7A1QKwwVPSeZg0.png",
+    },
+    {
+      day: 2,
+      type: "coins",
+      amount: 20,
+      image:
+        "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Picsart_25-09-06_17-23-49-344-C8WSvOAmvZcm8MEZ7A1QKwwVPSeZg0.png",
+    },
+    {
+      day: 3,
+      type: "coins",
+      amount: 30,
+      image:
+        "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Picsart_25-09-06_17-23-49-344-C8WSvOAmvZcm8MEZ7A1QKwwVPSeZg0.png",
+    },
+    {
+      day: 4,
+      type: "coins",
+      amount: 40,
+      image:
+        "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Picsart_25-09-06_17-23-49-344-C8WSvOAmvZcm8MEZ7A1QKwwVPSeZg0.png",
+    },
+    {
+      day: 5,
+      type: "rupees",
+      amount: 5,
+      image:
+        "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Picsart_25-09-06_17-24-45-677-WY3Zvdd8eHYp3GtTlkLlfZtFop846v.png",
+    },
+    {
+      day: 6,
+      type: "rupees",
+      amount: 10,
+      image:
+        "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Picsart_25-09-06_17-24-45-677-WY3Zvdd8eHYp3GtTlkLlfZtFop846v.png",
+    },
+    {
+      day: 7,
+      type: "rupees",
+      amount: 25,
+      image:
+        "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Picsart_25-09-06_17-24-45-677-WY3Zvdd8eHYp3GtTlkLlfZtFop846v.png",
+    },
+  ]
+
+  // Check if device is in horizontal orientation
+  useEffect(() => {
+    const checkOrientation = () => {
+      setIsHorizontal(window.innerWidth > window.innerHeight && window.innerWidth >= 568)
+    }
+
+    checkOrientation()
+    window.addEventListener("resize", checkOrientation)
+    window.addEventListener("orientationchange", checkOrientation)
+
+    return () => {
+      window.removeEventListener("resize", checkOrientation)
+      window.removeEventListener("orientationchange", checkOrientation)
+    }
+  }, [])
+
+  useEffect(() => {
+    const loadUserDataAndBalance = async () => {
+      try {
+        const storedCredentials = localStorage.getItem("userCredentials")
+        if (storedCredentials) {
+          const credentials: UserCredentials = JSON.parse(storedCredentials)
+          setUsername(credentials.username)
+          setUserCredentials(credentials)
+          await fetchBalance(credentials.username, credentials.password)
+        } else {
+          setBalance("0")
+          setIsLoadingBalance(false)
+        }
+      } catch (error) {
+        console.error("Error loading user data:", error)
+        setBalance("Error")
+        setIsLoadingBalance(false)
+      }
+    }
+
+    loadUserDataAndBalance()
+  }, [])
+
+  // Banner auto-slide effect (only for vertical view)
+  useEffect(() => {
+    if (!isHorizontal) {
+      const interval = setInterval(() => {
+        setCurrentBanner((prev) => (prev + 1) % bannerData.length)
+      }, 4000)
+
+      return () => clearInterval(interval)
+    }
+  }, [isHorizontal])
+
+  // Show welcome notification on first load
+  useEffect(() => {
+    const hasShownWelcome = localStorage.getItem("hasShownWelcome")
+    if (userCredentials && !hasShownWelcome) {
+      setShowWelcomeNotification(true)
+      localStorage.setItem("hasShownWelcome", "true")
+
+      const timer = setTimeout(() => {
+        setShowWelcomeNotification(false)
+      }, 3000)
+
+      return () => clearTimeout(timer)
+    }
+  }, [userCredentials])
+
+  useEffect(() => {
+    const checkDailyRewards = () => {
+      const today = new Date().toDateString()
+      const lastShown = localStorage.getItem("dailyRewardsLastShown")
+      const todaysClaimed = JSON.parse(localStorage.getItem("todayClaimedRewards") || "[]")
+
+      if (lastShown !== today && userCredentials) {
+        // Reset claimed rewards for new day
+        localStorage.setItem("todayClaimedRewards", "[]")
+        setClaimedRewards([])
+        setShowDailyRewardsPopup(true)
+        localStorage.setItem("dailyRewardsLastShown", today)
+      } else {
+        setClaimedRewards(todaysClaimed)
+      }
+    }
+
+    if (userCredentials) {
+      checkDailyRewards()
+    }
+  }, [userCredentials])
+
+  const fetchBalance = async (username: string, password: string) => {
+    try {
+      setIsLoadingBalance(true)
+      const response = await fetch(
+        `/api/auth/balance?username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`,
+      )
+      const data = await response.json()
+
+      if (data.success) {
+        const balanceValue = data.balance || data.rawResponse || "0"
+        setBalance(balanceValue.toString())
+      } else {
+        setBalance("Error")
+        console.error("Balance fetch failed:", data.message)
+      }
+    } catch (error) {
+      console.error("Error fetching balance:", error)
+      setBalance("Error")
+    } finally {
+      setIsLoadingBalance(false)
+    }
+  }
+
+  const refreshBalance = async () => {
+    if (userCredentials) {
+      await fetchBalance(userCredentials.username, userCredentials.password)
+    }
+  }
+
+  const checkBalance = () => {
+    const numericBalance = Number.parseFloat(balance)
+    return !isNaN(numericBalance) && numericBalance >= 10
+  }
+
+  const launchGame = async (gameCode: string, gameType: string, gameName: string, Pvcode: string) => {
+    if (!userCredentials) {
+      alert("Please login to play games")
+      return
+    }
+
+    if (!checkBalance()) {
+      setShowInsufficientBalancePopup(true)
+      return
+    }
+    console.log(Pvcode)
+    setGameLoading({
+      isLoading: true,
+      progress: 0,
+      gameName: gameName,
+    })
+
+    const progressInterval = setInterval(() => {
+      setGameLoading((prev) => ({
+        ...prev,
+        progress: Math.min(prev.progress + Math.random() * 15, 90),
+      }))
+    }, 200)
+
+    try {
+      const params = new URLSearchParams({
+        username: userCredentials.username,
+        password: userCredentials.password,
+        type: gameType,
+        provider_code: Pvcode,
+        gameid: gameCode,
+        lang: "en-US",
+        html5: "1",
+      })
+
+      console.log(params.toString())
+
+      const response = await fetch(`/api/auth/launch-game?${params.toString()}`)
+      const data = await response.json()
+
+      clearInterval(progressInterval)
+      setGameLoading((prev) => ({ ...prev, progress: 100 }))
+
+      if (data.success && data.data) {
+        if (data.data.gameUrl || data.data.url) {
+          const gameUrl = data.data.gameUrl || data.data.url
+          setTimeout(() => {
+            window.location.href = gameUrl
+          }, 500)
+        } else if (data.data.rawResponse) {
+          console.log("Game launch response:", data.data.rawResponse)
+          setTimeout(() => {
+            setGameLoading({ isLoading: false, progress: 0, gameName: "" })
+            alert("Game launched! Check console for details.")
+          }, 500)
+        } else {
+          console.log("Game launch successful:", data.data)
+          setTimeout(() => {
+            setGameLoading({ isLoading: false, progress: 0, gameName: "" })
+            alert("Game launched successfully!")
+          }, 500)
+        }
+      } else {
+        console.error("Game launch failed:", data.message)
+        setTimeout(() => {
+          setGameLoading({ isLoading: false, progress: 0, gameName: "" })
+          alert(`Failed to launch game: ${data.message}`)
+        }, 500)
+      }
+    } catch (error) {
+      clearInterval(progressInterval)
+      console.error("Error launching game:", error)
+      setTimeout(() => {
+        setGameLoading({ isLoading: false, progress: 0, gameName: "" })
+        alert("Failed to launch game. Please try again.")
+      }, 500)
+    }
+  }
+
+  const claimReward = (day: number) => {
+    const newClaimedRewards = [...claimedRewards, day]
+    setClaimedRewards(newClaimedRewards)
+    localStorage.setItem("todayClaimedRewards", JSON.stringify(newClaimedRewards))
+
+    // Add reward to balance (simplified - in real app would call API)
+    const reward = dailyRewards[day - 1]
+    console.log(`Claimed ${reward.amount} ${reward.type}!`)
+  }
+
+  const handleBannerClick = (banner: any) => {
+    if (banner.name === "Daily Rewards" || banner.type === "PROMO") {
+      setShowDailyRewardsPopup(true)
+    }
+  }
+
+  const formatBalance = (balance: string) => {
+    if (balance === "Loading..." || balance === "Error") return balance
+    try {
+      const num = Number.parseFloat(balance)
+      if (isNaN(num)) return balance
+      return num.toLocaleString()
+    } catch {
+      return balance
+    }
+  }
+
+  const getGameTypeLabel = (type: string) => {
+    switch (type) {
+      case "SL":
+        return "Slots"
+      case "FH":
+        return "Fishing"
+      case "CB":
+        return "Cards"
+      case "OT":
+        return "Others"
+      default:
+        return "Game"
+    }
+  }
+
+  const getGameTypeIcon = (type: string) => {
+    switch (type) {
+      case "SL":
+        return <Gamepad2 size={16} />
+      case "FH":
+        return <Fish size={16} />
+      case "CB":
+        return <Spade size={16} />
+      case "OT":
+        return <Zap size={16} />
+      default:
+        return <Grid3X3 size={16} />
+    }
+  }
+
+  const nextPage = (category: string) => {
+    const categoryGames = filteredGames.filter((game) => game.p_type === category)
+    const maxPages = Math.ceil(categoryGames.length / 9)
+    setCategoryPages((prev) => ({
+      ...prev,
+      [category]: (prev[category] + 1) % maxPages,
+    }))
+  }
+
+  const prevPage = (category: string) => {
+    const categoryGames = filteredGames.filter((game) => game.p_type === category)
+    const maxPages = Math.ceil(categoryGames.length / 9)
+    setCategoryPages((prev) => ({
+      ...prev,
+      [category]: prev[category] > 0 ? prev[category] - 1 : maxPages - 1,
+    }))
+  }
+
+  const getCategoryGames = (category: string) => {
+    const categoryGames = filteredGames.filter((game) => game.p_type === category)
+    const startIndex = categoryPages[category] * 9
+    return categoryGames.slice(startIndex, startIndex + 9)
+  }
+
+  const filteredGames = gameCardsData.filter((game) => {
+    const matchesFilter = selectedFilter === "ALL" || game.p_type === selectedFilter
+    return matchesFilter
+  })
+  const NfilteredGames = NgameCardsData.filter((game) => {
+    const matchesFilter = selectedFilter === "ALL" || game.p_type === selectedFilter
+    return matchesFilter
+  })
+
+  const handleGifClick = async () => {
+    if (!userCredentials) {
+      alert("Please login to play games")
+      return
+    }
+    launchGame("0", "LC", "Live Casino", "GE")
+  }
+
+  return (
+    <div className="min-h-screen bg-linear-65 from-burgundy-800 to-burgundy-960 text-white">
+      <div className="fixed bottom-18 right-4 z-50 animate-bounce">
+        <img
+          src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/design-mode-images/1000282551-unscreen-%281%29-1757152743414-1757152800749%281%29-im0mYeMnK8MolbQOGrvOqYt8aewCm1.gif"
+          alt="Casino promotion"
+          className="w-16 h-auto rounded-lg shadow-lg cursor-pointer hover:scale-110 transition-transform"
+          onClick={handleGifClick}
+        />
+      </div>
+      {/* Insufficient Balance Popup */}
+      {showInsufficientBalancePopup && (
+        <div className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-gradient-to-br from-black via-gray-900 to-gray-900/95 backdrop-blur-md rounded-2xl p-6 max-w-md w-full border border-yellow-500/30 shadow-2xl">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-yellow-500/20 rounded-full flex items-center justify-center mx-auto mb-4 border border-yellow-500/30">
+                <Wallet size={32} className="text-yellow-400" />
+              </div>
+              <h2 className="text-2xl font-bold text-yellow-400 mb-2">Insufficient Balance</h2>
+              <p className="text-yellow-200 mb-4">You need at least ₹10 to play games</p>
+
+              <div className="bg-black/50 rounded-lg p-4 mb-6 border border-yellow-500/20">
+                <p className="text-gray-300 text-sm mb-1">Current Balance</p>
+                <p className="text-3xl font-bold text-yellow-400">₹{formatBalance(balance)}</p>
+              </div>
+
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setShowInsufficientBalancePopup(false)}
+                  className="flex-1 bg-gray-700 hover:bg-gray-600 text-white font-semibold py-3 px-4 rounded-lg transition-colors border border-gray-600"
+                >
+                  Cancel
+                </button>
+                <Link
+                  href="/deposit"
+                  className="flex-1 bg-gradient-to-r from-yellow-600 to-yellow-500 hover:from-yellow-700 hover:to-yellow-600 text-black font-bold py-3 px-4 rounded-lg transition-all text-center border border-yellow-400/30"
+                  onClick={() => setShowInsufficientBalancePopup(false)}
+                >
+                  Add Cash
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Full Window Loading Overlay */}
+      {gameLoading.isLoading && (
+        <div className="fixed inset-0 bg-black/95 backdrop-blur-sm z-50 flex items-center justify-center">
+          <div className="text-center max-w-md mx-auto p-8">
+            <div className="mb-8">
+              <div className="w-24 h-24 border-4 border-yellow-500/30 border-t-yellow-400 rounded-full animate-spin mx-auto mb-6" />
+              <h2 className="text-2xl font-bold mb-2 text-yellow-400">Launching {gameLoading.gameName}</h2>
+              <p className="text-gray-300">Please wait while we prepare your game...</p>
+            </div>
+
+            <div className="w-full bg-black/50 rounded-full h-3 mb-4 border border-yellow-500/20">
+              <div
+                className="bg-gradient-to-r from-yellow-600 to-yellow-400 h-3 rounded-full transition-all duration-300 ease-out"
+                style={{ width: `${gameLoading.progress}%` }}
+              />
+            </div>
+            <p className="text-sm text-gray-400">{Math.round(gameLoading.progress)}% Complete</p>
+          </div>
+        </div>
+      )}
+
+      {showDailyRewardsPopup && (
+        <div className="fixed inset-0 bg-black/95 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="relative max-w-sm w-full">
+            {/* Background Frame */}
+            <div
+              className="relative w-full h-[450px] bg-cover bg-center rounded-2xl overflow-hidden border border-yellow-500/30"
+              style={{
+                backgroundImage:
+                  "url(https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Picsart_25-09-06_17-12-10-877-FF8GV3aidsTY8ht6qTh2AO0sZhldAA.png)",
+              }}
+            >
+              {/* Close Button */}
+              <button
+                onClick={() => setShowDailyRewardsPopup(false)}
+                className="absolute top-4 right-4 w-8 h-8 bg-black/60 hover:bg-black/80 rounded-full flex items-center justify-center text-yellow-400 border border-yellow-500/30 transition-colors z-10"
+              >
+                ✕
+              </button>
+
+              {/* Content Container */}
+              <div className="absolute inset-0 p-4 pt-12">
+                {/* Title */}
+                <div className="text-center mb-4">
+                  <h2 className="text-xl font-bold text-yellow-400 drop-shadow-lg mb-1">Daily Rewards</h2>
+                  <p className="text-yellow-200 text-xs drop-shadow-md">Claim your daily rewards!</p>
+                </div>
+
+                {/* Rewards Grid */}
+                <div className="grid grid-cols-2 gap-2 mb-4">
+                  {dailyRewards.map((reward) => {
+                    const isClaimed = claimedRewards.includes(reward.day)
+                    return (
+                      <div
+                        key={reward.day}
+                        className={`relative bg-black/40 backdrop-blur-sm rounded-xl p-2 border transition-all ${
+                          isClaimed
+                            ? "border-green-500/50 bg-green-900/20"
+                            : "border-yellow-500/30 hover:border-yellow-400/50"
+                        }`}
+                      >
+                        {/* Day Number */}
+                        <div className="absolute -top-1 -left-1 w-5 h-5 bg-yellow-600 rounded-full flex items-center justify-center text-black text-xs font-bold">
+                          {reward.day}
+                        </div>
+
+                        {/* Reward Image */}
+                        <div className="flex justify-center mb-1">
+                          <img
+                            src={reward.image || "/placeholder.svg"}
+                            alt={`${reward.amount} ${reward.type}`}
+                            className="w-10 h-10 object-contain"
+                          />
+                        </div>
+
+                        {/* Reward Amount */}
+                        <div className="text-center mb-1">
+                          <p className="text-yellow-300 font-bold text-xs">
+                            {reward.amount} {reward.type === "coins" ? "Coins" : "Rupees"}
+                          </p>
+                        </div>
+
+                        {/* Claim Button */}
+                        <button
+                          onClick={() => claimReward(reward.day)}
+                          disabled={isClaimed}
+                          className={`w-full py-1 px-2 rounded-lg text-xs font-bold transition-colors ${
+                            isClaimed
+                              ? "bg-green-600/50 text-green-200 cursor-not-allowed"
+                              : "bg-yellow-600 hover:bg-yellow-500 text-black"
+                          }`}
+                        >
+                          {isClaimed ? "Claimed" : "Claim"}
+                        </button>
+                      </div>
+                    )
+                  })}
+                </div>
+
+                {/* Close Button */}
+                <div className="text-center">
+                  <button
+                    onClick={() => setShowDailyRewardsPopup(false)}
+                    className="bg-red-600 hover:bg-red-500 text-white px-4 py-1 rounded-lg font-bold text-sm transition-colors"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Header */}
+      <header
+        className={`sticky top-0 z-40 bg-black/90 backdrop-blur-md border-b border-yellow-500/20 ${
+          isHorizontal ? "p-2" : "p-3 md:p-4"
+        }`}
+      >
+        
+
+        {/* Profile Section */}
+        <div className="bg-black/90 border-b border-yellow-500/30 px-4 py-3 flex items-center justify-between">
+          {/* Left Side - Avatar & Username */}
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-yellow-500/50">
+              <Link href="/profile">
+                <RandomAvatarImg username={username} size={40} className="object-cover w-full h-full" alt="Profile" />
+              </Link>
+            </div>
+            <div className="flex flex-col">
+              <span className="text-yellow-300 font-semibold text-sm">{username || "Player12345"}</span>
+              <span className="text-xs text-black px-1.5 py-0.5 rounded-full bg-gradient-to-r from-yellow-600 to-yellow-400 font-bold shadow-lg hover:scale-105 transition-transform">
+                VIP 0
+              </span>
+            </div>
+          </div>
+
+          {/* Right Side - Deposit & Withdraw */}
+          <div className="flex items-center space-x-2">
+            <Link
+              href="/wallet"
+              className="px-2 py-1 rounded-full bg-gradient-to-r from-yellow-600 to-yellow-400 text-black font-bold text-xs shadow-lg hover:scale-105 transition-transform flex items-center space-x-2"
+            >
+              <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/design-mode-images/Deposit-D0r-Ek-R4a%281%29-XCg8by3zTaBkIbUHFxfiluLb30NSwc.png" alt="Deposit" className="w-full h-6" />
+              <span className="text-black">Deposit</span>
+            </Link>
+            <Link
+              href="/wallet"
+              className="px-2 py-1 rounded-full bg-gradient-to-r from-yellow-600 to-yellow-400 text-black font-bold text-xs shadow-lg hover:scale-105 transition-transform flex items-center space-x-2"
+            >
+              <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/design-mode-images/Withdraw-DHhv-Ss-MY%281%29-qMxw2UNAod2m5OFDFHsZaPnUVwUEOh.png" alt="Withdraw" className="w-full h-6" />
+              <span className="text-black">Withdraw</span>
+            </Link>
+          </div>
+        </div>
+      </header>
+
+      {/* Floating Welcome Notification */}
+      {showWelcomeNotification && (
+        <div className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 animate-in slide-in-from-top duration-500">
+          <div className="bg-gradient-to-r from-yellow-600 to-yellow-500 text-black px-6 py-3 rounded-full shadow-lg backdrop-blur-sm border border-yellow-400/30">
+            <p className="text-sm md:text-base font-bold">Welcome back, {username}! 🎮</p>
+          </div>
+        </div>
+      )}
+
+      {/* Main Content */}
+      {isHorizontal ? (
+        /* Horizontal Layout */
+        <div className="flex h-[calc(100vh-60px)]">
+          {/* Vertical Banner */}
+
+          {/* Left Sidebar */}
+          <div className="w-16 bg-black/80 backdrop-blur-sm border-r border-yellow-500/20 flex flex-col items-center py-2 space-y-2">
+            <button
+              onClick={() => setSelectedFilter("ALL")}
+              className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors border ${
+                selectedFilter === "ALL"
+                  ? "bg-yellow-600 text-black border-yellow-400"
+                  : "bg-black/60 text-yellow-400 hover:bg-black/80 border-yellow-500/30"
+              }`}
+            >
+              <Grid3X3 size={16} />
+            </button>
+            {[
+              { key: "SL", label: "Slots", icon: "🎰" },
+              { key: "FH", label: "Fishing", icon: "🐟" },
+              { key: "CB", label: "Cards", icon: "🃏" },
+              { key: "OT", label: "Others", icon: "🎮" },
+            ].map((filter) => (
+              <button
+                key={filter}
+                onClick={() => setSelectedFilter(filter)}
+                className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors border ${
+                  selectedFilter === filter
+                    ? "bg-yellow-600 text-black border-yellow-400"
+                    : "bg-black/60 text-yellow-400 hover:bg-black/80 border-yellow-500/30"
+                }`}
+              >
+                {getGameTypeIcon(filter)}
+              </button>
+            ))}
+          </div>
+
+          {/* Main Content Area */}
+          <div className="flex-1 overflow-hidden p-2">
+            {/* Games Section - 2 Rows */}
+            {/* use JEImage in the small horizontal scroller for JE games */}
+            <div className="h-full overflow-x-auto scrollbar-hide">
+              <div className="grid grid-rows-2 grid-flow-col gap-2 h-full" style={{ width: "max-content" }}>
+                {filteredGames.slice(0, 20).map((game) => (
+                  <div
+                    key={game.g_code}
+                    className="relative cursor-pointer hover:scale-105 transition-all duration-300 group"
+                    onClick={() => launchGame(game.g_code, game.p_type, game.gameName, game.Pcode)}
+                  >
+                    <div className="relative w-28 h-36 bg-gradient-to-br from-black via-gray-900 to-black rounded-lg overflow-hidden shadow-lg border border-yellow-500/30">
+                      <JEImage gCode={game.g_code} alt={game.gameName} />
+                    </div>
+                    <div className="mt-1 text-[11px] text-center text-yellow-200 line-clamp-1">{game.gameName}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="mt-3 overflow-x-auto scrollbar-hide">
+              <div className="flex gap-2">
+                {pickRandom(filteredGames, 10).map((game) => (
+                  <button
+                    key={`je-banner-${game.g_code}`}
+                    onClick={() => launchGame(game.g_code, game.p_type, game.gameName, game.Pcode)}
+                    className="relative flex-shrink-0 w-[295px] md:w-[360px] aspect-[590/193] rounded-lg overflow-hidden bg-black/70 border border-yellow-500/20 hover:border-yellow-400/40 transition-colors"
+                    aria-label={`Play ${game.gameName}`}
+                  >
+                    <JEBannerImage gCode={game.g_code} alt={game.gameName} fallbackSrc={game.imgFileName} />
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        /* Vertical Layout - Redesigned with 3x3 Category Grids */
+        <div className="max-w-6xl mx-auto p-3 md:p-6 space-y-6 md:space-y-8 pb-20 bg-gradient-to-br from-purple-900/20 via-red-900/20 to-black/20 backdrop-blur-sm">
+          {/* Banner Slider */}
+          <div className="relative w-full h-40 md:h-60 lg:h-72 mb-6 md:mb-8 overflow-hidden rounded-xl md:rounded-2xl border border-yellow-500/30">
+            <div
+              className="flex transition-transform duration-500 ease-in-out h-full"
+              style={{ transform: `translateX(-${currentBanner * 100}%)` }}
+            >
+              {bannerData.map((banner, index) => (
+                <div
+                  key={index}
+                  className="relative w-full h-full flex-shrink-0 cursor-pointer"
+                  onClick={() => handleBannerClick(banner)}
+                >
+                  <img
+                    src={banner.image || "/placeholder.svg"}
+                    alt={banner.name}
+                    className="w-full h-full object-cover"
+                    loading="eager"
+                  />
+                  {/* Banner title overlay */}
+
+                </div>
+              ))}
+            </div>
+
+            {/* Banner Navigation Dots */}
+            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+              {bannerData.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentBanner(index)}
+                  className={`w-2 h-2 rounded-full transition-colors ${
+                    currentBanner === index ? "bg-yellow-400" : "bg-white/50"
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            {/* Category Filter Buttons */}
+            <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-2">
+              <button
+                onClick={() => setSelectedFilter("ALL")}
+                className={`flex items-center gap-2 px-4 py-2 rounded-xl whitespace-nowrap transition-colors border ${
+                  selectedFilter === "ALL"
+                    ? "bg-yellow-600 text-black border-yellow-400 font-bold"
+                    : "bg-black/60 text-yellow-400 hover:bg-black/80 border-yellow-500/30"
+                }`}
+              >
+                <Grid3X3 size={16} />
+                All Games
+              </button>
+              {[
+                { key: "SL", label: "Slots", icon: "🎰" },
+                { key: "FH", label: "Fishing", icon: "🐟" },
+                { key: "CB", label: "Cards", icon: "🃏" },
+                { key: "OT", label: "Others", icon: "🎮" },
+              ].map((filter) => (
+                <button
+                  key={filter.key}
+                  onClick={() => setSelectedFilter(filter.key)}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-xl whitespace-nowrap transition-colors border ${
+                    selectedFilter === filter.key
+                      ? "bg-yellow-600 text-black border-yellow-400 font-bold"
+                      : "bg-black/60 text-yellow-400 hover:bg-black/80 border-yellow-500/30"
+                  }`}
+                >
+                  <span>{filter.icon}</span>
+                  {filter.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="space-y-8">
+            {/* Slots Games Category */}
+            {filteredGames.filter((game) => game.p_type === "SL").length > 0 && (
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
+                      <span className="text-white">🎰</span>
+                    </div>
+                    <h2 className="text-xl md:text-2xl font-bold text-white drop-shadow-lg">Slots Games</h2>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-gray-200 text-sm drop-shadow-md">
+                      All {filteredGames.filter((game) => game.p_type === "SL").length}
+                    </span>
+                    <button
+                      onClick={() => prevPage("SL")}
+                      className="w-8 h-8 bg-black/60 border border-yellow-500/30 rounded-lg flex items-center justify-center text-yellow-400 hover:bg-black/80 transition-colors"
+                    >
+                      ‹
+                    </button>
+                    <button
+                      onClick={() => nextPage("SL")}
+                      className="w-8 h-8 bg-black/60 border border-yellow-500/30 rounded-lg flex items-center justify-center text-yellow-400 hover:bg-black/80 transition-colors"
+                    >
+                      ›
+                    </button>
+                  </div>
+                </div>
+                <div className="grid grid-cols-3 gap-3 md:gap-4">
+                  {getCategoryGames("SL").map((game) => (
+                    <div
+                      key={`slots-grid-${game.g_code}`}
+                      className="relative cursor-pointer hover:scale-105 transition-all duration-300 group"
+                      onClick={() => launchGame(game.g_code, game.p_type, game.gameName, game.Pcode)}
+                    >
+                      <div className="relative w-full aspect-[3/4] bg-gradient-to-br from-black via-gray-900 to-black rounded-xl overflow-hidden shadow-lg border border-yellow-500/30">
+                        <JEImage gCode={game.g_code} alt={game.gameName} />
+                        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-2">
+                          <h3 className="text-yellow-300 font-bold text-xs text-center truncate">{game.gameName}</h3>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Fishing Games Category */}
+            {filteredGames.filter((game) => game.p_type === "FH").length > 0 && (
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-lg flex items-center justify-center">
+                      <span className="text-white">🐟</span>
+                    </div>
+                    <h2 className="text-xl md:text-2xl font-bold text-white drop-shadow-lg">Fishing Games</h2>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-gray-200 text-sm drop-shadow-md">
+                      All {filteredGames.filter((game) => game.p_type === "FH").length}
+                    </span>
+                    <button
+                      onClick={() => prevPage("FH")}
+                      className="w-8 h-8 bg-black/60 border border-yellow-500/30 rounded-lg flex items-center justify-center text-yellow-400 hover:bg-black/80 transition-colors"
+                    >
+                      ‹
+                    </button>
+                    <button
+                      onClick={() => nextPage("FH")}
+                      className="w-8 h-8 bg-black/60 border border-yellow-500/30 rounded-lg flex items-center justify-center text-yellow-400 hover:bg-black/80 transition-colors"
+                    >
+                      ›
+                    </button>
+                  </div>
+                </div>
+                <div className="grid grid-cols-3 gap-3 md:gap-4">
+                  {getCategoryGames("FH").map((game) => (
+                    <div
+                      key={`fishing-grid-${game.g_code}`}
+                      className="relative cursor-pointer hover:scale-105 transition-all duration-300 group"
+                      onClick={() => launchGame(game.g_code, game.p_type, game.gameName, game.Pcode)}
+                    >
+                      <div className="relative w-full aspect-[3/4] bg-gradient-to-br from-black via-gray-900 to-black rounded-xl overflow-hidden shadow-lg border border-yellow-500/30">
+                        <JEImage gCode={game.g_code} alt={game.gameName} />
+                        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-2">
+                          <h3 className="text-yellow-300 font-bold text-xs text-center truncate">{game.gameName}</h3>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Card Games Category */}
+            {filteredGames.filter((game) => game.p_type === "CB").length > 0 && (
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 bg-gradient-to-r from-red-500 to-orange-500 rounded-lg flex items-center justify-center">
+                      <span className="text-white">🃏</span>
+                    </div>
+                    <h2 className="text-xl md:text-2xl font-bold text-white drop-shadow-lg">Cards Casino Games</h2>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-gray-200 text-sm drop-shadow-md">
+                      All {filteredGames.filter((game) => game.p_type === "CB").length}
+                    </span>
+                    <button
+                      onClick={() => prevPage("CB")}
+                      className="w-8 h-8 bg-black/60 border border-yellow-500/30 rounded-lg flex items-center justify-center text-yellow-400 hover:bg-black/80 transition-colors"
+                    >
+                      ‹
+                    </button>
+                    <button
+                      onClick={() => nextPage("CB")}
+                      className="w-8 h-8 bg-black/60 border border-yellow-500/30 rounded-lg flex items-center justify-center text-yellow-400 hover:bg-black/80 transition-colors"
+                    >
+                      ›
+                    </button>
+                  </div>
+                </div>
+                <div className="grid grid-cols-3 gap-3 md:gap-4">
+                  {getCategoryGames("CB").map((game) => (
+                    <div
+                      key={`cards-grid-${game.g_code}`}
+                      className="relative cursor-pointer hover:scale-105 transition-all duration-300 group"
+                      onClick={() => launchGame(game.g_code, game.p_type, game.gameName, game.Pcode)}
+                    >
+                      <div className="relative w-full aspect-[3/4] bg-gradient-to-br from-black via-gray-900 to-black rounded-xl overflow-hidden shadow-lg border border-yellow-500/30">
+                        <JEImage gCode={game.g_code} alt={game.gameName} />
+                        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-2">
+                          <h3 className="text-yellow-300 font-bold text-xs text-center truncate">{game.gameName}</h3>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Other Games Category */}
+            {filteredGames.filter((game) => game.p_type === "OT").length > 0 && (
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 bg-gradient-to-r from-green-500 to-emerald-500 rounded-lg flex items-center justify-center">
+                      <span className="text-white">🎮</span>
+                    </div>
+                    <h2 className="text-xl md:text-2xl font-bold text-white drop-shadow-lg">Other Games</h2>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-gray-200 text-sm drop-shadow-md">
+                      All {filteredGames.filter((game) => game.p_type === "OT").length}
+                    </span>
+                    <button
+                      onClick={() => prevPage("OT")}
+                      className="w-8 h-8 bg-black/60 border border-yellow-500/30 rounded-lg flex items-center justify-center text-yellow-400 hover:bg-black/80 transition-colors"
+                    >
+                      ‹
+                    </button>
+                    <button
+                      onClick={() => nextPage("OT")}
+                      className="w-8 h-8 bg-black/60 border border-yellow-500/30 rounded-lg flex items-center justify-center text-yellow-400 hover:bg-black/80 transition-colors"
+                    >
+                      ›
+                    </button>
+                  </div>
+                </div>
+                <div className="grid grid-cols-3 gap-3 md:gap-4">
+                  {getCategoryGames("OT").map((game) => (
+                    <div
+                      key={`others-grid-${game.g_code}`}
+                      className="relative cursor-pointer hover:scale-105 transition-all duration-300 group"
+                      onClick={() => launchGame(game.g_code, game.p_type, game.gameName, game.Pcode)}
+                    >
+                      <div className="relative w-full aspect-[3/4] bg-gradient-to-br from-black via-gray-900 to-black rounded-lg md:rounded-2xl overflow-hidden shadow-lg md:shadow-2xl border border-yellow-500/30">
+                        <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/10 via-transparent to-yellow-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+                        <div className="relative w-full h-full p-2 md:p-4 flex items-center justify-center">
+                          <JEImage gCode={game.g_code} alt={game.gameName} prefer="small" />
+                        </div>
+
+                        <div className="absolute top-1 md:top-2 right-1 md:right-2">
+                          <span className="bg-black/70 backdrop-blur-sm text-yellow-300 text-xs px-1.5 md:px-2 py-0.5 md:py-1 rounded-full border border-yellow-500/30">
+                            {getGameTypeLabel(game.p_type)}
+                          </span>
+                        </div>
+
+                        <div className="absolute bottom-0 left-0 right-0 h-12 md:h-16 bg-gradient-to-t from-black/80 to-transparent" />
+
+                        <div className="absolute bottom-1 md:bottom-2 left-1 md:left-2 right-1 md:right-2 text-center">
+                          <h3 className="text-yellow-300 font-bold text-xs md:text-sm drop-shadow-lg truncate">
+                            {game.gameName}
+                          </h3>
+                        </div>
+
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-yellow-400/10 to-transparent -skew-x-12 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* All Games Section (fallback when search is active) */}
+            {filteredGames.length === 0 && (
+              <div className="text-center py-16">
+                <div className="text-6xl mb-4">🎮</div>
+                <h3 className="text-2xl font-bold mb-2 text-white drop-shadow-lg">No games found</h3>
+                <p className="text-gray-300 drop-shadow-md">Try adjusting your filter criteria</p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      <BottomNavigation />
+    </div>
+  )
+}
