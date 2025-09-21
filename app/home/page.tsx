@@ -501,7 +501,7 @@ export default function HomePage() {
     <div className="min-h-screen bg-linear-65 from-burgundy-800 to-burgundy-960 text-white">
       <div className="fixed bottom-18 right-4 z-50 animate-bounce">
         <img
-          src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/design-mode-images/1000282551-unscreen-%281%29-1757152743414-1757152800749%281%29-im0mYeMnK8MolbQOGrvOqYt8aewCm1.gif"
+          src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/design-mode-images/1000282551-unscreen-%281%29-1757152743414-1757152800749%281%29%281%29-FaBORnJow22yCeJSbeedPRyz1RlqwN.gif"
           alt="Casino promotion"
           className="w-16 h-auto rounded-lg shadow-lg cursor-pointer hover:scale-110 transition-transform"
           onClick={handleGifClick}
@@ -666,7 +666,7 @@ export default function HomePage() {
         
 
         {/* Profile Section */}
-        <div className="bg-black/90 border-b border-yellow-500/30 px-4 py-3 flex items-center justify-between">
+        <div className="bg-black/90 border-b border-yellow-500/30 flex items-center justify-between px-[9px] py-2.5">
           {/* Left Side - Avatar & Username */}
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-yellow-500/50">
@@ -688,14 +688,14 @@ export default function HomePage() {
               href="/wallet"
               className="px-2 py-1 rounded-full bg-gradient-to-r from-yellow-600 to-yellow-400 text-black font-bold text-xs shadow-lg hover:scale-105 transition-transform flex items-center space-x-2"
             >
-              <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/design-mode-images/Deposit-D0r-Ek-R4a%281%29-XCg8by3zTaBkIbUHFxfiluLb30NSwc.png" alt="Deposit" className="w-full h-6" />
+              <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/design-mode-images/Deposit-D0r-Ek-R4a%281%29%281%29-P4pXns1VDWm7ypIuU3Iotqj4EmXvqr.png" alt="Deposit" className="w-full h-6" />
               <span className="text-black">Deposit</span>
             </Link>
             <Link
               href="/wallet"
               className="px-2 py-1 rounded-full bg-gradient-to-r from-yellow-600 to-yellow-400 text-black font-bold text-xs shadow-lg hover:scale-105 transition-transform flex items-center space-x-2"
             >
-              <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/design-mode-images/Withdraw-DHhv-Ss-MY%281%29-qMxw2UNAod2m5OFDFHsZaPnUVwUEOh.png" alt="Withdraw" className="w-full h-6" />
+              <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/design-mode-images/Withdraw-DHhv-Ss-MY%281%29%281%29-mbDuqs68cvffApcwMkvRgrQXQ4ffM0.png" alt="Withdraw" className="w-full h-6" />
               <span className="text-black">Withdraw</span>
             </Link>
           </div>

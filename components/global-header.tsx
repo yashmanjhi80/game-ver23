@@ -54,7 +54,7 @@ export default function GlobalHeader() {
         <div className="flex items-center space-x-3">
           <Link href="/home">
             <img
-              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/design-mode-images/Picsart-25-08-19-19-18-32-062%281%29-VtwQKavW8MyWViHB0HNvPcJeV9WUWD.png"
+              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/design-mode-images/Picsart-25-08-19-19-18-32-062%281%29%281%29-FBFaFsphAY1Z1oZhjAJnKb1ovtX9zi.png"
               alt="Logo"
               className="h-8 w-auto cursor-pointer"
             />
