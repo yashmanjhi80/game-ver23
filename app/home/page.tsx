@@ -501,7 +501,7 @@ export default function HomePage() {
     <div className="min-h-screen bg-linear-65 from-burgundy-800 to-burgundy-960 text-white">
       <div className="fixed bottom-18 right-4 z-50 animate-bounce">
         <img
-          src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/design-mode-images/1000282551-unscreen-%281%29-1757152743414-1757152800749%281%29%281%29-FaBORnJow22yCeJSbeedPRyz1RlqwN.gif"
+          src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/design-mode-images/1000282551-unscreen-%281%29-1757152743414-1757152800749%281%29%281%29-oi6cw9gYnMOwQfQDrsqdD8hSRZbVly.gif"
           alt="Casino promotion"
           className="w-16 h-auto rounded-lg shadow-lg cursor-pointer hover:scale-110 transition-transform"
           onClick={handleGifClick}
@@ -688,14 +688,14 @@ export default function HomePage() {
               href="/wallet"
               className="px-2 py-1 rounded-full bg-gradient-to-r from-yellow-600 to-yellow-400 text-black font-bold text-xs shadow-lg hover:scale-105 transition-transform flex items-center space-x-2"
             >
-              <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/design-mode-images/Deposit-D0r-Ek-R4a%281%29%281%29-P4pXns1VDWm7ypIuU3Iotqj4EmXvqr.png" alt="Deposit" className="w-full h-6" />
+              <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/design-mode-images/Deposit-D0r-Ek-R4a%281%29%281%29-9ZU24SxQv79hFMGkKP4zIJONYwv6Yk.png" alt="Deposit" className="w-full h-6" />
               <span className="text-black">Deposit</span>
             </Link>
             <Link
               href="/wallet"
               className="px-2 py-1 rounded-full bg-gradient-to-r from-yellow-600 to-yellow-400 text-black font-bold text-xs shadow-lg hover:scale-105 transition-transform flex items-center space-x-2"
             >
-              <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/design-mode-images/Withdraw-DHhv-Ss-MY%281%29%281%29-mbDuqs68cvffApcwMkvRgrQXQ4ffM0.png" alt="Withdraw" className="w-full h-6" />
+              <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/design-mode-images/Withdraw-DHhv-Ss-MY%281%29%281%29-s8CVch47R1UyzTK4NMq1M4V2tO5hLm.png" alt="Withdraw" className="w-full h-6" />
               <span className="text-black">Withdraw</span>
             </Link>
           </div>

@@ -105,23 +105,23 @@ export default function HistoryPage() {
         <div className="flex space-x-2">
           <button
             onClick={() => setActiveTab("deposit")}
-            className={`flex-1 py-3 px-4 rounded-full text-sm font-medium transition-all ${
+            className={`flex-1 rounded-full text-sm font-medium transition-all p-0 ${
               activeTab === "deposit"
                 ? "bg-yellow-400 text-black"
                 : "bg-black/50 text-yellow-400 border border-yellow-500/30 hover:bg-yellow-500/10"
             }`}
           >
-            Deposit History
+            Deposit 
           </button>
           <button
             onClick={() => setActiveTab("withdraw")}
-            className={`flex-1 py-3 px-4 rounded-full text-sm font-medium transition-all ${
+            className={`flex-1 rounded-full text-sm font-medium transition-all p-1 ${
               activeTab === "withdraw"
                 ? "bg-yellow-400 text-black"
                 : "bg-black/50 text-yellow-400 border border-yellow-500/30 hover:bg-yellow-500/10"
             }`}
           >
-            Withdraw History
+            Withdraw 
           </button>
         </div>
       </div>
