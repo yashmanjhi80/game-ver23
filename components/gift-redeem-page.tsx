@@ -1,8 +1,6 @@
-import { X } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import giftIcon from "../assets/gift-icon.png"
-import coinIcon from "../assets/coin-icon.png"
+import Image from "next/image"
 
 const GiftRedeemPage = () => {
   // Mock history data
@@ -27,36 +25,37 @@ const GiftRedeemPage = () => {
   return (
     <div className="min-h-screen bg-red-100 bg-background">
       {/* Header */}
-    
 
       {/* Main Content */}
       <div className=" bg-[#450b00] px-0">
         {/* Welcome Section */}
         <div className="px-6 pt-4 pb-3">
-          <img src={giftIcon} alt="gift" className="w-25 h-20 pl-8 m-auto" />
+          <div className="flex justify-center mb-4">
+            <Image src="/images/gift-icon.png" alt="gift" width={120} height={80} className="object-contain" />
+          </div>
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-base font-medium text-foreground mb-1">Hi</h2>
-              <p className="text-sm text-muted-foreground">We have a gift for you</p>
+              <h2 className="text-base font-medium text-white mb-1">Hi</h2>
+              <p className="text-sm text-gray-300">We have a gift for you</p>
             </div>
-            <img src={coinIcon} alt="coin" className="w-15 h-15" />
+            <Image src="/images/coin-icon.png" alt="coin" width={60} height={60} className="object-contain" />
           </div>
         </div>
       </div>
 
       {/* Gift Code Form */}
       <div className="bg-[#450b00] px-6 pb-5 ">
-        <h3 className="text-sm font-medium text-foreground mb-8 ">Please enter the gift code below</h3>
+        <h3 className="text-sm font-medium text-white mb-6">Please enter the gift code below</h3>
 
-        <div className="space-y-3">
+        <div className="space-y-4">
           <Input
             placeholder="Please enter gift code"
-            className="w-full h-12 bg-yellow-700 bg-opacity-50 border-yellow-300 border-x-4 rounded-xl px-6 text-sm text-foreground placeholder:text-muted-foreground"
+            className="w-full h-12 bg-yellow-700 bg-opacity-50 border-yellow-300 border-2 rounded-xl px-6 text-sm text-white placeholder:text-gray-300"
           />
           {/* redeem Button */}
           <div className="flex justify-center relative">
             <Button
-              className="bg-gradient-to-b from-yellow-300 via-golden to-yellow-600 text-black font-bold py-4 px-12 rounded-full text-base hover:from-yellow-400 hover:via-golden hover:to-yellow-700 transition-all duration-300 shadow-lg border border-yellow-400 relative overflow-hidden"
+              className="bg-gradient-to-b from-yellow-300 via-yellow-400 to-yellow-600 text-black font-bold py-4 px-12 rounded-full text-base hover:from-yellow-400 hover:via-yellow-500 hover:to-yellow-700 transition-all duration-300 shadow-lg border border-yellow-400 relative overflow-hidden"
               size="lg"
               data-testid="button-withdraw"
             >
@@ -66,32 +65,33 @@ const GiftRedeemPage = () => {
             </Button>
           </div>
 
-          <hr className=" border-t-2 border-dotted" style={{ borderColor: "gold" }} />
+          <hr className="border-t-2 border-dotted border-yellow-400 my-6" />
 
           <div>
-            <h2 className=" mb-2 text-center  "> History </h2>
+            <h2 className="mb-4 text-center text-white text-lg font-medium">History</h2>
 
-            <div className="pb-80 max-w-md p-4 border rounded shadow-md bg-yellow-950">
-              <div className="rounded-lgpy-2">
-                <div className="flex justify-between text-sm text-white">
-                  <span>12-5-2025 12:12</span>
-                  <span className="text-green-600 font-semibold">+200</span>
+            <div className="max-w-md mx-auto p-4 border border-yellow-600 rounded-lg shadow-md bg-yellow-950 bg-opacity-50">
+              <div className="space-y-3">
+                <div className="py-2">
+                  <div className="flex justify-between text-sm text-white">
+                    <span>12-5-2025 12:12</span>
+                    <span className="text-green-400 font-semibold">+200</span>
+                  </div>
+                  <hr className="border-t border-dotted border-yellow-400 mt-2" />
                 </div>
-                <hr className="border-t-2 border-dotted mt-2" style={{ borderColor: "gold" }} />
-              </div>
-              <div className="py-2">
-                <div className="flex justify-between text-sm text-white">
-                  <span>13-5-2025 09:30</span>
-                  <span className="text-green-600 font-semibold">+150</span>
+                <div className="py-2">
+                  <div className="flex justify-between text-sm text-white">
+                    <span>13-5-2025 09:30</span>
+                    <span className="text-green-400 font-semibold">+150</span>
+                  </div>
+                  <hr className="border-t border-dotted border-yellow-400 mt-2" />
                 </div>
-                <hr className="border-t-2 border-dotted mt-2" style={{ borderColor: "gold" }} />
-              </div>
-              <div className="py-2">
-                <div className="flex justify-between text-sm text-red-50">
-                  <span>14-5-2025 18:45</span>
-                  <span className="text-green-600 font-semibold">+300</span>
+                <div className="py-2">
+                  <div className="flex justify-between text-sm text-white">
+                    <span>14-5-2025 18:45</span>
+                    <span className="text-green-400 font-semibold">+300</span>
+                  </div>
                 </div>
-                <hr className="border-t-2 border-dotted mt-2" style={{ borderColor: "gold" }} />
               </div>
             </div>
           </div>

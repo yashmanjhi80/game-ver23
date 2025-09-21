@@ -6,10 +6,10 @@ import { Home, Crown, Wallet, Users, UserCircle } from "lucide-react"
 
 const navigationItems = [
   { href: "/home", icon: Home, label: "Home", activeColor: "text-yellow-400" },
-  { href: "/vip", icon: Crown, label: "VIP", activeColor: "text-rose-300" },
-  { href: "/wallet", icon: Wallet, label: "Wallet", activeColor: "text-rose-300" },
-  { href: "/agent", icon: Users, label: "Agent", activeColor: "text-rose-300" },
-  { href: "/profile", icon: UserCircle, label: "Profile", activeColor: "text-rose-300" },
+  { href: "/vip", icon: Crown, label: "VIP", activeColor: "text-yellow-400" },
+  { href: "/wallet", icon: Wallet, label: "Wallet", activeColor: "text-yellow-400" },
+  { href: "/agent", icon: Users, label: "Agent", activeColor: "text-yellow-400" },
+  { href: "/profile", icon: UserCircle, label: "Profile", activeColor: "text-yellow-400" },
 ]
 
 export default function BottomNavigation() {
