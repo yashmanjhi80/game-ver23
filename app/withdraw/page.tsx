@@ -7,7 +7,6 @@ import { BalanceCards } from "@/components/balance-cards"
 import { AmountSelection } from "@/components/amount-selection"
 import { BankAccountSection } from "@/components/bank-account-section"
 import { Button } from "@/components/ui/button"
-import Link from "next/link"
 import BottomNavigation from "@/components/bottom-navigation"
 
 interface UserCredentials {
@@ -92,10 +91,16 @@ export default function WithdrawalPage() {
   }
 
   return (
-    <div className="max-w-sm mx-auto bg-linear-65 from-burgundy-800 to-burgundy-960 min-h-screen">
-    
-        {/* Header */}
+    <div className="max-w-sm mx-auto bg-gradient-to-b from-red-900 to-red-950 min-h-screen">
+      <div className="flex items-center justify-between p-4 bg-gradient-to-r from-red-800 to-red-900">
+        <button onClick={handleGoBack} className="text-white">
+          <ArrowLeft className="w-6 h-6" />
+        </button>
+        <h1 className="text-white text-lg font-semibold">Withdraw</h1>
+        <div className="w-6 h-6" /> {/* Spacer for center alignment */}
+      </div>
 
+      <div className="p-4">
         {/* Balance Cards */}
         <BalanceCards
           cashBalance={isLoadingBalance ? 0 : cashBalance}
@@ -128,6 +133,7 @@ export default function WithdrawalPage() {
           </Button>
         </div>
       </div>
+
       <BottomNavigation />
     </div>
   )

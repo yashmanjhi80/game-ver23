@@ -49,7 +49,6 @@ export default function GlobalHeader() {
   return (
     <header className="sticky top-0 z-40 border-b backdrop-blur-md border-yellow-500/20 p-3 bg-burgundy-800">
       <div className="max-w-6xl mx-auto flex items-center justify-between">
-        
         {/* LEFT: Logo + Username */}
         <div className="flex items-center space-x-3">
           <Link href="/home">
@@ -59,7 +58,8 @@ export default function GlobalHeader() {
               className="h-8 w-auto cursor-pointer"
             />
           </Link>
-
+        </div>
+        {/* END OF LEFT SECTION */}
 
         {/* RIGHT: Balance pill (clickable) */}
         <div className="flex items-center space-x-2">
@@ -71,11 +71,7 @@ export default function GlobalHeader() {
               ₹
             </div>
             <span className="text-white font-medium">
-              {isLoadingBalance ? (
-                <span className="animate-pulse text-yellow-400">...</span>
-              ) : (
-                formatBalance(balance)
-              )}
+              {isLoadingBalance ? <span className="animate-pulse text-yellow-400">...</span> : formatBalance(balance)}
             </span>
             <div className="w-6 h-6 flex items-center justify-center rounded-full bg-green-500 text-white hover:bg-green-600">
               <Plus size={16} />
