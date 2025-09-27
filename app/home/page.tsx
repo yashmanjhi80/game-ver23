@@ -501,7 +501,7 @@ export default function HomePage() {
     <div className="min-h-screen bg-linear-65 from-burgundy-800 to-burgundy-960 text-white">
       <div className="fixed bottom-18 right-4 z-50 animate-bounce">
         <img
-          src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/design-mode-images/1000282551-unscreen-%281%29-1757152743414-1757152800749%281%29%281%29%281%29-7d8cJLxOdX6E99muTpQo06gC0J8Dwr.gif"
+          src="/images/design-mode/1000282551-unscreen-%281%29-1757152743414-1757152800749%281%29%281%29%281%29.gif"
           alt="Casino promotion"
           className="w-16 h-auto rounded-lg shadow-lg cursor-pointer hover:scale-110 transition-transform"
           onClick={handleGifClick}
@@ -658,49 +658,7 @@ export default function HomePage() {
       )}
 
       {/* Header */}
-      <header
-        className={`sticky top-0 z-40 bg-black/90 backdrop-blur-md border-b border-yellow-500/20 ${
-          isHorizontal ? "p-2" : "p-3 md:p-4"
-        }`}
-      >
-        
-
-        {/* Profile Section */}
-        <div className="bg-black/90 border-b border-yellow-500/30 flex items-center justify-between px-[9px] py-2.5">
-          {/* Left Side - Avatar & Username */}
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-yellow-500/50">
-              <Link href="/profile">
-                <RandomAvatarImg username={username} size={40} className="object-cover w-full h-full" alt="Profile" />
-              </Link>
-            </div>
-            <div className="flex flex-col">
-              <span className="text-yellow-300 font-semibold text-sm">{username || "Player12345"}</span>
-              <span className="text-xs text-black px-1.5 py-0.5 rounded-full bg-gradient-to-r from-yellow-600 to-yellow-400 font-bold shadow-lg hover:scale-105 transition-transform">
-                VIP 0
-              </span>
-            </div>
-          </div>
-
-          {/* Right Side - Deposit & Withdraw */}
-          <div className="flex items-center space-x-2">
-            <Link
-              href="/wallet"
-              className="px-2 py-1 rounded-full bg-gradient-to-r from-yellow-600 to-yellow-400 text-black font-bold text-xs shadow-lg hover:scale-105 transition-transform flex items-center space-x-2"
-            >
-              <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/design-mode-images/Deposit-D0r-Ek-R4a%281%29%281%29%281%29-voajSxsmiuMhsi8guTykwHgtlTFNRz.png" alt="Deposit" className="w-full h-6" />
-              <span className="text-black">Deposit</span>
-            </Link>
-            <Link
-              href="/wallet"
-              className="px-2 py-1 rounded-full bg-gradient-to-r from-yellow-600 to-yellow-400 text-black font-bold text-xs shadow-lg hover:scale-105 transition-transform flex items-center space-x-2"
-            >
-              <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/design-mode-images/Withdraw-DHhv-Ss-MY%281%29%281%29%281%29-WIJnCaKHygwujXZKkRYaRUSKf6ePez.png" alt="Withdraw" className="w-full h-6" />
-              <span className="text-black">Withdraw</span>
-            </Link>
-          </div>
-        </div>
-      </header>
+      
 
       {/* Floating Welcome Notification */}
       {showWelcomeNotification && (
@@ -901,8 +859,8 @@ export default function HomePage() {
                     >
                       <div className="relative w-full aspect-[3/4] bg-gradient-to-br from-black via-gray-900 to-black rounded-xl overflow-hidden shadow-lg border border-yellow-500/30">
                         <JEImage gCode={game.g_code} alt={game.gameName} />
-                        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-2">
-                          <h3 className="text-yellow-300 font-bold text-xs text-center truncate">{game.gameName}</h3>
+                        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-2 opacity-0">
+                          <h3 className="text-yellow-300 font-bold text-xs text-center truncate opacity-0">{game.gameName}</h3>
                         </div>
                       </div>
                     </div>
@@ -948,7 +906,7 @@ export default function HomePage() {
                     >
                       <div className="relative w-full aspect-[3/4] bg-gradient-to-br from-black via-gray-900 to-black rounded-xl overflow-hidden shadow-lg border border-yellow-500/30">
                         <JEImage gCode={game.g_code} alt={game.gameName} />
-                        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-2">
+                        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-2 opacity-0">
                           <h3 className="text-yellow-300 font-bold text-xs text-center truncate">{game.gameName}</h3>
                         </div>
                       </div>
@@ -995,8 +953,8 @@ export default function HomePage() {
                     >
                       <div className="relative w-full aspect-[3/4] bg-gradient-to-br from-black via-gray-900 to-black rounded-xl overflow-hidden shadow-lg border border-yellow-500/30">
                         <JEImage gCode={game.g_code} alt={game.gameName} />
-                        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-2">
-                          <h3 className="text-yellow-300 font-bold text-xs text-center truncate">{game.gameName}</h3>
+                        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-2 opacity-0">
+                          <h3 className="text-yellow-300 font-bold text-xs text-center truncate opacity-0">{game.gameName}</h3>
                         </div>
                       </div>
                     </div>
@@ -1043,20 +1001,20 @@ export default function HomePage() {
                       <div className="relative w-full aspect-[3/4] bg-gradient-to-br from-black via-gray-900 to-black rounded-lg md:rounded-2xl overflow-hidden shadow-lg md:shadow-2xl border border-yellow-500/30">
                         <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/10 via-transparent to-yellow-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
-                        <div className="relative w-full h-full p-2 md:p-4 flex items-center justify-center">
+                        <div className="relative w-full h-full md:p-4 flex items-center justify-center p-0">
                           <JEImage gCode={game.g_code} alt={game.gameName} prefer="small" />
                         </div>
 
                         <div className="absolute top-1 md:top-2 right-1 md:right-2">
-                          <span className="bg-black/70 backdrop-blur-sm text-yellow-300 text-xs px-1.5 md:px-2 py-0.5 md:py-1 rounded-full border border-yellow-500/30">
+                          <span className="bg-black/70 backdrop-blur-sm text-yellow-300 text-xs px-1.5 md:px-2 py-0.5 md:py-1 rounded-full border border-yellow-500/30 opacity-0">
                             {getGameTypeLabel(game.p_type)}
                           </span>
                         </div>
 
-                        <div className="absolute bottom-0 left-0 right-0 h-12 md:h-16 bg-gradient-to-t from-black/80 to-transparent" />
+                        <div className="absolute bottom-0 left-0 right-0 h-12 md:h-16 bg-gradient-to-t from-black/80 to-transparent opacity-0" />
 
                         <div className="absolute bottom-1 md:bottom-2 left-1 md:left-2 right-1 md:right-2 text-center">
-                          <h3 className="text-yellow-300 font-bold text-xs md:text-sm drop-shadow-lg truncate">
+                          <h3 className="text-yellow-300 font-bold text-xs md:text-sm drop-shadow-lg truncate opacity-0">
                             {game.gameName}
                           </h3>
                         </div>

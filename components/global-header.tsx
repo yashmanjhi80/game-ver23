@@ -53,7 +53,7 @@ export default function GlobalHeader() {
         <div className="flex items-center space-x-3">
           <Link href="/home">
             <img
-              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/design-mode-images/Picsart-25-08-19-19-18-32-062%281%29%281%29%281%29-uwVSwKMQUFxKTLCrgSvp2pOUwME0eN.png"
+              src="/images/design-mode/Picsart-25-08-19-19-18-32-062%281%29%281%29%281%29.png"
               alt="Logo"
               className="h-8 w-auto cursor-pointer"
             />
@@ -82,7 +82,7 @@ export default function GlobalHeader() {
           <button
             onClick={refreshBalance}
             disabled={isLoadingBalance}
-            className="bg-black/60 hover:bg-black/80 border border-yellow-500/30 rounded-full p-2 transition-colors disabled:opacity-50"
+            className="bg-black/60 hover:bg-black/80 border border-yellow-500/30 rounded-full transition-colors disabled:opacity-50 p-1"
             title="Refresh Balance"
           >
             <RefreshCw size={16} className={`text-yellow-400 ${isLoadingBalance ? "animate-spin" : ""}`} />
