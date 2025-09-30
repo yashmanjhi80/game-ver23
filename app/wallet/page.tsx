@@ -1,5 +1,5 @@
 "use client"
-
+import Image from "next/image"
 import { useState } from "react"
 import { FileText, ShoppingCart, CreditCard, Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import Image from "next/image"
+import CashIcon from './asssets/cash-back.png'
 import BottomNavigation from "@/components/bottom-navigation"
 
 const WalletPage = () => {
@@ -109,6 +109,8 @@ const WalletPage = () => {
     "Vidharbha Konkan Gramin Bank",
     "Yes Bank",
   ]
+
+   const [cashbackSelected, setCashbackSelected] = useState<"apply" | "later">("later"); 
 
   const BankBindingForm = () => (
     <Dialog open={isBindBankOpen} onOpenChange={setIsBindBankOpen}>
@@ -282,46 +284,60 @@ const WalletPage = () => {
               </div>
             </div>
 
-            {/* Cashback Section */}
             <div>
-              <h3 className="text-sm font-medium text-gray-400 mb-3">Recharge Cashback</h3>
-              <div className="grid grid-cols-2 gap-3">
-                <Card className="bg-[#450b00] border-yellow-500/30 transition-colors cursor-pointer hover:bg-[#5a0f00] border-2">
-                  <div className="grid grid-cols-2 items-center text-center p-2">
-                    <div className="flex items-center justify-center">
-                      <Image
-                        src="/images/cash-back.png"
-                        alt="Cashback"
-                        width={32}
-                        height={32}
-                        className="object-contain"
-                      />
-                    </div>
-                    <span className="text-white font-medium">Apply</span>
-                  </div>
-                </Card>
-                <Card className="bg-[#450b00] border-yellow-500/30 transition-colors cursor-pointer hover:bg-[#5a0f00] border-2">
-                  <div className="flex items-center justify-center p-4">
-                    <span className="text-white font-medium">Later</span>
-                  </div>
-                </Card>
-              </div>
-            </div>
+      <h3 className="text-sm font-medium text-muted-foreground mb-3">Recharge Cashback</h3>
+      <div className="grid grid-cols-2 gap-3">
+        {/* Apply Cashback Card */}
+        <Card
+          className={`bg-card border-border transition-colors cursor-pointer border-x-0 ${
+            cashbackSelected === "apply"
+              ? "border-yellow-500 bg-yellow-500 bg-opacity-30"
+              : ""
+          }`}
+          onClick={() => setCashbackSelected("apply")}
+        >
+          <div className="grid grid-cols-2 items-center text-center">
+            <span className="grid grid-cols-2 items-center justify-center text-sm font-medium">
+              <Image src={CashIcon} alt="Share" className="m-3 ml-7 h-8" />
+            </span>
+            <span className="mr-7">Apply</span>
+          </div>
+        </Card>
 
-            {/* Amount Summary */}
-            <Card className="p-4 bg-gradient-to-r from-yellow-500/10 to-yellow-600/10 border-yellow-500/30">
-              <div className="flex items-center justify-between">
-                <div className="space-y-1">
-                  <div className="text-sm text-gray-400">Deposit Amount</div>
-                  <div className="text-xl font-bold text-yellow-400">₹{selectedAmount}</div>
-                </div>
-                <div className="text-2xl font-bold text-gray-400">+</div>
-                <div className="space-y-1 text-right">
-                  <div className="text-sm text-gray-400">Cashback amount</div>
-                  <div className="text-xl font-bold text-yellow-400">₹{Math.floor(selectedAmount * 0.1)}</div>
-                </div>
-              </div>
-            </Card>
+        {/* Later Card */}
+        <Card
+          className={`bg-card border-border transition-colors cursor-pointer border-x-0 ${
+            cashbackSelected === "later"
+              ? "border-yellow-500 bg-yellow-500 bg-opacity-30"
+              : ""
+          }`}
+          onClick={() => setCashbackSelected("later")}
+        >
+          <div className="flex items-center justify-center mt-4">Later</div>
+        </Card>
+      </div>
+
+      {/* Conditionally render Amount Summary if Apply selected */}
+      {cashbackSelected === "apply" && (
+        <Card className="rounded-lg overflow-hidden border border-[#f0c46c] p-0 shadow-sm bg-gradient-to-r from-[#3d040b] to-[#381c1f] mt-4">
+          <div className="flex items-center justify-between bg-gradient-to-b from-[#ffe36d] to-[#ffc947] px-3 py-0.5">
+            <div className="text-[14px] font-medium text-[#000000]">Deposit Amount</div>
+            <div className="text-[14px] font-medium text-[#000000]">Cashback amount</div>
+          </div>
+          <div className="flex items-center justify-between bg-gradient-to-r from-[#641c06] to-[#300509] px-4 py-2">
+            <div className="flex flex-col items-start">
+              <div className="text-[17px] font-semibold text-[#ffe36d] drop-shadow-sm">₹{selectedAmount}</div>
+            </div>
+            <div className="text-[26px] font-bold text-[#ffe36d] mx-2">+</div>
+            <div className="flex flex-col items-end">
+              <div className="text-[17px] font-semibold text-[#ffe36d] drop-shadow-sm">₹{Math.floor(selectedAmount * 0.1)}</div>
+            </div>
+          </div>
+        </Card>
+      )}
+    </div>
+
+
 
             {/* Pay Button */}
             <div className="flex justify-center relative">
