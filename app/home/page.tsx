@@ -399,7 +399,15 @@ export default function HomePage() {
     }
   }
 
- 
+  const claimReward = (day: number) => {
+    const newClaimedRewards = [...claimedRewards, day]
+    setClaimedRewards(newClaimedRewards)
+    localStorage.setItem("todayClaimedRewards", JSON.stringify(newClaimedRewards))
+
+    // Add reward to balance (simplified - in real app would call API)
+    const reward = dailyRewards[day - 1]
+    console.log(`Claimed ${reward.amount} ${reward.type}!`)
+  }
 
   const handleBannerClick = (banner: any) => {
     if (banner.name === "Daily Rewards" || banner.type === "PROMO") {
@@ -583,6 +591,56 @@ export default function HomePage() {
                   <p className="text-yellow-200 text-xs drop-shadow-md">Claim your daily rewards!</p>
                 </div>
 
+                {/* Rewards Grid */}
+                <div className="grid grid-cols-2 gap-2 mb-4">
+                  {dailyRewards.map((reward) => {
+                    const isClaimed = claimedRewards.includes(reward.day)
+                    return (
+                      <div
+                        key={reward.day}
+                        className={`relative bg-black/40 backdrop-blur-sm rounded-xl p-2 border transition-all ${
+                          isClaimed
+                            ? "border-green-500/50 bg-green-900/20"
+                            : "border-yellow-500/30 hover:border-yellow-400/50"
+                        }`}
+                      >
+                        {/* Day Number */}
+                        <div className="absolute -top-1 -left-1 w-5 h-5 bg-yellow-600 rounded-full flex items-center justify-center text-black text-xs font-bold">
+                          {reward.day}
+                        </div>
+
+                        {/* Reward Image */}
+                        <div className="flex justify-center mb-1">
+                          <img
+                            src={reward.image || "/placeholder.svg"}
+                            alt={`${reward.amount} ${reward.type}`}
+                            className="w-10 h-10 object-contain"
+                          />
+                        </div>
+
+                        {/* Reward Amount */}
+                        <div className="text-center mb-1">
+                          <p className="text-yellow-300 font-bold text-xs">
+                            {reward.amount} {reward.type === "coins" ? "Coins" : "Rupees"}
+                          </p>
+                        </div>
+
+                        {/* Claim Button */}
+                        <button
+                          onClick={() => claimReward(reward.day)}
+                          disabled={isClaimed}
+                          className={`w-full py-1 px-2 rounded-lg text-xs font-bold transition-colors ${
+                            isClaimed
+                              ? "bg-green-600/50 text-green-200 cursor-not-allowed"
+                              : "bg-yellow-600 hover:bg-yellow-500 text-black"
+                          }`}
+                        >
+                          {isClaimed ? "Claimed" : "Claim"}
+                        </button>
+                      </div>
+                    )
+                  })}
+                </div>
 
                 {/* Close Button */}
                 <div className="text-center">
