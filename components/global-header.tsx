@@ -54,7 +54,7 @@ export default function GlobalHeader() {
         <div className="flex items-center space-x-3">
           <Link href="/home">
             <img
-              src="Logo"
+              src={DomainIcon.src}
               alt="Logo"
               className="h-6 w-auto "
             />
@@ -85,7 +85,7 @@ export default function GlobalHeader() {
             <span className="text-white font-extrabold ">
               {isLoadingBalance ? <span className="animate-pulse text-yellow-400">...</span> : formatBalance(balance)}
             </span>
-            <div className="w-full h-8 px-4 flex  items-center justify-center rounded-lg bg-orange-500 text-white hover:bg-yellow-600">Deposit
+            <div className="w-full flex items-center justify-center rounded-lg bg-orange-500 text-white hover:bg-yellow-600 px-1.5 h-6">Deposit
              
             </div>
           </Link>

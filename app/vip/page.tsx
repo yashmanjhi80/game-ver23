@@ -5,6 +5,8 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Gift, Crown, Calendar, TrendingUp, Clock, Zap, X } from "lucide-react";
 import { useState } from "react";
+import Image from "next/image"
+import BottomNavigation from "@/components/bottom-navigation"
 import firstDepositPromo from "./assets/b-1.png";
 import vipCashbackPromo from "./assets/b-2.png";
 import dailyRewardsPromo from "./assets/b-3.png";
@@ -17,19 +19,19 @@ const PromoVipPage = () => {
       id: 1,
       title: "First Deposit",
       image: firstDepositPromo,
-      url: "https://example.com/first-deposit"
+      url: firstDepositPromo
     },
     {
       id: 2,
       title: "VIP Cashback",
       image: vipCashbackPromo,
-      url: "https://example.com/vip-cashback"
+      url: vipCashbackPromo
     },
     {
       id: 3,
       title: "Daily Rewards",
       image: dailyRewardsPromo,
-      url: "https://example.com/daily-rewards"
+      url: dailyRewardsPromo
     }
   ];
 
@@ -117,7 +119,7 @@ const PromoVipPage = () => {
         {activeTab === "promo" ? (
           /* Promo Section */
           <div className="space-y-6">
-            <div className="space-y-4">
+            <div className="space-y-4 pb-[71px]">
               {promoCards.map((promo) => (
                 <Card 
                   key={promo.id}
@@ -126,11 +128,11 @@ const PromoVipPage = () => {
                   onClick={() => handlePromoClick(promo.url)}
                 >
                   <div className="relative h-40 w-full">
-                    <img 
-                     
-                      alt={promo.title}
-                      className="w-full h-full object-cover rounded-lg"
-                    />
+<Image
+  src={promo.url}
+  alt="Logo"
+  className="w-max h-max"
+/>
                     <div className="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent rounded-lg" />
                     <div className="absolute bottom-4 left-4">
                       <h3 className="text-white font-bold text-lg">{promo.title}</h3>
@@ -266,6 +268,8 @@ const PromoVipPage = () => {
           
         )}
       </div>
+            {/* ✅ Bottom Navigation */}
+      <BottomNavigation />
       
     </div>
 

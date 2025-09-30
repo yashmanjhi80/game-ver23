@@ -3,10 +3,15 @@
 import { RefreshCw, Wallet, Plus, Flame, Gamepad2, Spade, Fish, Zap, HotelIcon } from "lucide-react"
 import { useState, useEffect } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { NgameCardsData, gameCardsData, bannerData } from "@/data/games"
 import BottomNavigation from "@/components/bottom-navigation"
 import React from "react"
 import { RandomAvatarImg } from "@/components/random-avatar"
+import hot from "./asssets/hot.png"
+import fish from "./asssets/fish.png"
+import cards from "./asssets/cards.png"
+import jili from "./asssets/JILI.png"
 
 interface UserCredentials {
   username: string
@@ -762,8 +767,7 @@ export default function HomePage() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="w-6 h-6 bg-gradient-to-r from-yellow-500 to-red-500 rounded-lg flex items-center justify-center">
-                      <span className="text-white">🎰</span>
-                     
+                                  <Image src={hot} alt="Logo 1" className="h-8 w-auto" />
                     </div>
                     <h2 className="text-xl md:text-2xl  text-yellow-300 drop-shadow-lg">Slots </h2>
                      <h2 className="text-xl md:text-2xl  text-white drop-shadow-lg"> Games</h2>
@@ -811,7 +815,7 @@ export default function HomePage() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="w-6 h-6 bg-gradient-to-r from-yellow-500 to-red-500 rounded-lg flex items-center justify-center">
-                      <span className="text-white">🐟</span>
+                      <Image src={fish} alt="Logo 1" className="h-8 w-auto" />
                     </div>
                     <h2 className="text-xl md:text-2xl font-bold text-white drop-shadow-lg">Fishing Games</h2>
                   </div>
@@ -858,7 +862,7 @@ export default function HomePage() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="w-6 h-6 bg-gradient-to-r from-yellow-500 to-red-500 rounded-lg flex items-center justify-center">
-                      <span className="text-white">🃏</span>
+                      <Image src={cards} alt="Logo 1" className="h-8 w-auto" />
                     </div>
                     <h2 className="text-xl md:text-2xl text-yellow-400 drop-shadow-lg">Cards  </h2>
                      <h2 className="text-xl md:text-2xl  text-white drop-shadow-lg">  Games</h2>
@@ -906,7 +910,7 @@ export default function HomePage() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="w-6 h-6 bg-gradient-to-r from-yellow-500 to-red-500 rounded-lg flex items-center justify-center">
-                      <span className="text-white">🎮</span>
+                      <Image src={jili} alt="Logo 1" className="h-8 w-auto" />
                     </div>
                     <h2 className="text-xl md:text-2xl text-yellow-400 drop-shadow-lg">Other </h2>
                       <h2 className="text-xl md:text-2xl  text-white drop-shadow-lg">Games </h2>
