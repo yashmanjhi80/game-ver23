@@ -1,6 +1,6 @@
 "use client"
 
-import { RefreshCw, Wallet, Plus, Grid3X3, Gamepad2, Spade, Fish, Zap } from "lucide-react"
+import { RefreshCw, Wallet, Plus, Flame, Gamepad2, Spade, Fish, Zap, HotelIcon } from "lucide-react"
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { NgameCardsData, gameCardsData, bannerData } from "@/data/games"
@@ -147,73 +147,7 @@ export default function HomePage() {
     OT: 0,
   })
 
-  const dailyRewards = [
-    {
-      day: 1,
-      type: "coins",
-      amount: 10,
-      image:
-        "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Picsart_25-09-06_17-23-49-344-C8WSvOAmvZcm8MEZ7A1QKwwVPSeZg0.png",
-    },
-    {
-      day: 2,
-      type: "coins",
-      amount: 20,
-      image:
-        "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Picsart_25-09-06_17-23-49-344-C8WSvOAmvZcm8MEZ7A1QKwwVPSeZg0.png",
-    },
-    {
-      day: 3,
-      type: "coins",
-      amount: 30,
-      image:
-        "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Picsart_25-09-06_17-23-49-344-C8WSvOAmvZcm8MEZ7A1QKwwVPSeZg0.png",
-    },
-    {
-      day: 4,
-      type: "coins",
-      amount: 40,
-      image:
-        "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Picsart_25-09-06_17-23-49-344-C8WSvOAmvZcm8MEZ7A1QKwwVPSeZg0.png",
-    },
-    {
-      day: 5,
-      type: "rupees",
-      amount: 5,
-      image:
-        "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Picsart_25-09-06_17-24-45-677-WY3Zvdd8eHYp3GtTlkLlfZtFop846v.png",
-    },
-    {
-      day: 6,
-      type: "rupees",
-      amount: 10,
-      image:
-        "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Picsart_25-09-06_17-24-45-677-WY3Zvdd8eHYp3GtTlkLlfZtFop846v.png",
-    },
-    {
-      day: 7,
-      type: "rupees",
-      amount: 25,
-      image:
-        "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Picsart_25-09-06_17-24-45-677-WY3Zvdd8eHYp3GtTlkLlfZtFop846v.png",
-    },
-  ]
-
-  // Check if device is in horizontal orientation
-  useEffect(() => {
-    const checkOrientation = () => {
-      setIsHorizontal(window.innerWidth > window.innerHeight && window.innerWidth >= 568)
-    }
-
-    checkOrientation()
-    window.addEventListener("resize", checkOrientation)
-    window.addEventListener("orientationchange", checkOrientation)
-
-    return () => {
-      window.removeEventListener("resize", checkOrientation)
-      window.removeEventListener("orientationchange", checkOrientation)
-    }
-  }, [])
+  
 
   useEffect(() => {
     const loadUserDataAndBalance = async () => {
@@ -748,7 +682,7 @@ export default function HomePage() {
         /* Vertical Layout - Redesigned with 3x3 Category Grids */
         <div className="max-w-6xl mx-auto p-3 md:p-6 space-y-6 md:space-y-8 pb-20 bg-gradient-to-br from-purple-900/20 via-red-900/20 to-black/20 backdrop-blur-sm">
           {/* Banner Slider */}
-          <div className="relative w-full h-40 md:h-60 lg:h-72 mb-6 md:mb-8 overflow-hidden rounded-xl md:rounded-2xl border border-yellow-500/30">
+          <div className="relative w-full  border-yellow-400 border-2 h-40 md:h-60 lg:h-72 mb-6 md:mb-8 overflow-hidden rounded-xl md:rounded-2xl ">
             <div
               className="flex transition-transform duration-500 ease-in-out h-full"
               style={{ transform: `translateX(-${currentBanner * 100}%)` }}
@@ -787,31 +721,31 @@ export default function HomePage() {
 
           <div className="space-y-4">
             {/* Category Filter Buttons */}
-            <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-2">
+            <div className="flex gap-4 overflow-x-auto scrollbar-hide pb-2">
               <button
                 onClick={() => setSelectedFilter("ALL")}
-                className={`flex items-center gap-2 px-4 py-2 rounded-xl whitespace-nowrap transition-colors border ${
+                className={`flex items-center gap-2 px-6 py-1 bg-[#450b00] rounded-sm whitespace-nowrap transition-colors  ${
                   selectedFilter === "ALL"
-                    ? "bg-yellow-600 text-black border-yellow-400 font-bold"
-                    : "bg-black/60 text-yellow-400 hover:bg-black/80 border-yellow-500/30"
+                    ? " text-yellow-400 "
+                    : " text-white/70"
                 }`}
               >
-                <Grid3X3 size={16} />
-                All Games
+                <Flame size={16} />
+               Hot
               </button>
               {[
                 { key: "SL", label: "Slots", icon: "🎰" },
-                { key: "FH", label: "Fishing", icon: "🐟" },
-                { key: "CB", label: "Cards", icon: "🃏" },
+                { key: "FH", label: "live", icon: "🃏" },
+                { key: "CB", label: "Cards", icon: "🐟" },
                 { key: "OT", label: "Others", icon: "🎮" },
               ].map((filter) => (
                 <button
                   key={filter.key}
                   onClick={() => setSelectedFilter(filter.key)}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-xl whitespace-nowrap transition-colors border ${
+                  className={`flex items-center gap-2 px-2  bg-[#450b00] rounded-sm whitespace-nowrap transition-colors  ${
                     selectedFilter === filter.key
-                      ? "bg-yellow-600 text-black border-yellow-400 font-bold"
-                      : "bg-black/60 text-yellow-400 hover:bg-black/80 border-yellow-500/30"
+                      ? "  text-yellow-400 "
+                      : "text-white/70  "
                   }`}
                 >
                   <span>{filter.icon}</span>
@@ -827,10 +761,12 @@ export default function HomePage() {
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
+                    <div className="w-6 h-6 bg-gradient-to-r from-yellow-500 to-red-500 rounded-lg flex items-center justify-center">
                       <span className="text-white">🎰</span>
+                     
                     </div>
-                    <h2 className="text-xl md:text-2xl font-bold text-white drop-shadow-lg">Slots Games</h2>
+                    <h2 className="text-xl md:text-2xl  text-yellow-300 drop-shadow-lg">Slots </h2>
+                     <h2 className="text-xl md:text-2xl  text-white drop-shadow-lg"> Games</h2>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="text-gray-200 text-sm drop-shadow-md">
@@ -838,13 +774,13 @@ export default function HomePage() {
                     </span>
                     <button
                       onClick={() => prevPage("SL")}
-                      className="w-8 h-8 bg-black/60 border border-yellow-500/30 rounded-lg flex items-center justify-center text-yellow-400 hover:bg-black/80 transition-colors"
+                      className="w-8 h-8 bg-black/60 border border-yellow-500/30 rounded-sm flex items-center justify-center text-yellow-400 hover:bg-black/80 transition-colors"
                     >
                       ‹
                     </button>
                     <button
                       onClick={() => nextPage("SL")}
-                      className="w-8 h-8 bg-black/60 border border-yellow-500/30 rounded-lg flex items-center justify-center text-yellow-400 hover:bg-black/80 transition-colors"
+                      className="w-8 h-8 bg-black/60 border border-yellow-500/30 rounded-sm flex items-center justify-center font-bold text-yellow-400 hover:bg-black/80 transition-colors"
                     >
                       ›
                     </button>
@@ -874,7 +810,7 @@ export default function HomePage() {
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-lg flex items-center justify-center">
+                    <div className="w-6 h-6 bg-gradient-to-r from-yellow-500 to-red-500 rounded-lg flex items-center justify-center">
                       <span className="text-white">🐟</span>
                     </div>
                     <h2 className="text-xl md:text-2xl font-bold text-white drop-shadow-lg">Fishing Games</h2>
@@ -921,10 +857,11 @@ export default function HomePage() {
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 bg-gradient-to-r from-red-500 to-orange-500 rounded-lg flex items-center justify-center">
+                    <div className="w-6 h-6 bg-gradient-to-r from-yellow-500 to-red-500 rounded-lg flex items-center justify-center">
                       <span className="text-white">🃏</span>
                     </div>
-                    <h2 className="text-xl md:text-2xl font-bold text-white drop-shadow-lg">Cards Casino Games</h2>
+                    <h2 className="text-xl md:text-2xl text-yellow-400 drop-shadow-lg">Cards  </h2>
+                     <h2 className="text-xl md:text-2xl  text-white drop-shadow-lg">  Games</h2>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="text-gray-200 text-sm drop-shadow-md">
@@ -932,13 +869,13 @@ export default function HomePage() {
                     </span>
                     <button
                       onClick={() => prevPage("CB")}
-                      className="w-8 h-8 bg-black/60 border border-yellow-500/30 rounded-lg flex items-center justify-center text-yellow-400 hover:bg-black/80 transition-colors"
+                      className="w-8 h-8 bg-black/60 border border-yellow-500/30 rounded-sm flex items-center justify-center text-yellow-400 hover:bg-black/80 transition-colors"
                     >
                       ‹
                     </button>
                     <button
                       onClick={() => nextPage("CB")}
-                      className="w-8 h-8 bg-black/60 border border-yellow-500/30 rounded-lg flex items-center justify-center text-yellow-400 hover:bg-black/80 transition-colors"
+                      className="w-8 h-8 bg-black/60 border border-yellow-500/30 rounded-sm flex items-center justify-center text-yellow-400 hover:bg-black/80 transition-colors"
                     >
                       ›
                     </button>
@@ -968,10 +905,11 @@ export default function HomePage() {
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 bg-gradient-to-r from-green-500 to-emerald-500 rounded-lg flex items-center justify-center">
+                    <div className="w-6 h-6 bg-gradient-to-r from-yellow-500 to-red-500 rounded-lg flex items-center justify-center">
                       <span className="text-white">🎮</span>
                     </div>
-                    <h2 className="text-xl md:text-2xl font-bold text-white drop-shadow-lg">Other Games</h2>
+                    <h2 className="text-xl md:text-2xl text-yellow-400 drop-shadow-lg">Other </h2>
+                      <h2 className="text-xl md:text-2xl  text-white drop-shadow-lg">Games </h2>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="text-gray-200 text-sm drop-shadow-md">
@@ -979,13 +917,13 @@ export default function HomePage() {
                     </span>
                     <button
                       onClick={() => prevPage("OT")}
-                      className="w-8 h-8 bg-black/60 border border-yellow-500/30 rounded-lg flex items-center justify-center text-yellow-400 hover:bg-black/80 transition-colors"
+                      className="w-8 h-8 bg-black/60 border border-yellow-500/30 rounded-sm flex items-center justify-center text-yellow-400 hover:bg-black/80 transition-colors"
                     >
                       ‹
                     </button>
                     <button
                       onClick={() => nextPage("OT")}
-                      className="w-8 h-8 bg-black/60 border border-yellow-500/30 rounded-lg flex items-center justify-center text-yellow-400 hover:bg-black/80 transition-colors"
+                      className="w-8 h-8 bg-black/60 border border-yellow-500/30 rounded-sm flex items-center justify-center text-yellow-400 hover:bg-black/80 transition-colors"
                     >
                       ›
                     </button>

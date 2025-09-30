@@ -54,7 +54,7 @@ export default function GlobalHeader() {
         <div className="flex items-center space-x-3">
           <Link href="/home">
             <img
-              src={DomainIcon}
+              src="Logo"
               alt="Logo"
               className="h-6 w-auto "
             />
@@ -72,17 +72,17 @@ export default function GlobalHeader() {
           <button
             onClick={refreshBalance}
             disabled={isLoadingBalance}
-            className="bg-orange/60 hover:bg-black/80 border border-yellow-500/30 rounded-lg transition-colors disabled:opacity-50 p-"
+            className="bg-orange/60  hover:bg-black/80 border border-yellow-500/30 rounded-lg transition-colors disabled:opacity-50 p-"
             title="Refresh Balance"
           >
-            <RefreshCw size={18} className={`text-orange-400 ${isLoadingBalance ? "animate-spin" : ""}`} />
+            <RefreshCw size={20} className={`text-orange-400 ${isLoadingBalance ? "animate-spin" : ""}`} />
           </button>
-            <div className="text-white font-semibold  ">
+            <div className="text-white font-bold  ">
               ₹
             </div>
 
             
-            <span className="text-white  ">
+            <span className="text-white font-extrabold ">
               {isLoadingBalance ? <span className="animate-pulse text-yellow-400">...</span> : formatBalance(balance)}
             </span>
             <div className="w-full h-8 px-4 flex  items-center justify-center rounded-lg bg-orange-500 text-white hover:bg-yellow-600">Deposit
