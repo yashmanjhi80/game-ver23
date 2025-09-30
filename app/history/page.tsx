@@ -1,197 +1,236 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { ChevronLeft, Calendar } from "lucide-react"
-import { useRouter } from "next/navigation"
+import { useState } from "react";
+import { X } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 
 interface Transaction {
-  _id: string
-  orderId: string
-  username: string
-  amount: number
-  walletProvider?: string
-  status: "pending" | "paid"
-  createdAt: string
-  type?: "deposit" | "withdraw" // Added type field for filtering
+  id: string;
+  date: string;
+  type: "Deposit" | "Withdrawal" | "Bonus";
+  channel: string;
+  amount: number;
+  status: "Completed" | "In Payment" | "Failed" | "Pending";
+  currency?: string;
 }
 
-interface UserCredentials {
-  username: string
-  password: string
-}
+const TransactionRecords = () => {
+  const [activeFilter, setActiveFilter] = useState<"Recharge" | "Withdraw" | "Bonus">("Recharge");
 
-export default function HistoryPage() {
-  const [transactions, setTransactions] = useState<Transaction[]>([])
-  const [selectedDate, setSelectedDate] = useState<string>("")
-  const [loading, setLoading] = useState(true)
-  const [username, setUsername] = useState<string>("")
-  const [activeTab, setActiveTab] = useState<"deposit" | "withdraw">("deposit") // Added tab state
-  const router = useRouter()
+  // Mock transaction data
+  const transactions: Transaction[] = [
+    {
+      id: "1",
+      date: "2025-09-19 12:07:10",
+      type: "Deposit",
+      channel: "FuntecPay",
+      amount: 2000,
+      status: "In Payment",
+    },
+    {
+      id: "2",
+      date: "2025-09-19 10:30:25",
+      type: "Withdrawal",
+      channel: "PhonePe",
+      amount: 1500,
+      status: "Completed",
+    },
+    {
+      id: "3",
+      date: "2025-09-19 09:15:42",
+      type: "Bonus",
+      channel: "Welcome Bonus",
+      amount: 500,
+      status: "Completed",
+    },
+    {
+      id: "4",
+      date: "2025-09-18 18:22:11",
+      type: "Deposit",
+      channel: "UPI",
+      amount: 5000,
+      status: "Completed",
+    },
+    {
+      id: "5",
+      date: "2025-09-18 16:45:33",
+      type: "Withdrawal",
+      channel: "Bank Transfer",
+      amount: 3000,
+      status: "Failed",
+    },
+  ];
 
-  // load user + fetch transactions
-  useEffect(() => {
-    const stored = localStorage.getItem("userCredentials")
-    if (!stored) {
-      router.push("/") // redirect if not logged in
-      return
+  const filteredTransactions = transactions.filter(transaction => {
+    if (activeFilter === "Recharge") return transaction.type === "Deposit";
+    if (activeFilter === "Withdraw") return transaction.type === "Withdrawal";
+    if (activeFilter === "Bonus") return transaction.type === "Bonus";
+    return true;
+  });
+
+  const getStatusVariant = (status: Transaction["status"]) => {
+    switch (status) {
+      case "Completed":
+        return "success";
+      case "In Payment":
+      case "Pending":
+        return "warning";
+      case "Failed":
+        return "destructive";
+      default:
+        return "secondary";
     }
+  };
 
-    const credentials: UserCredentials = JSON.parse(stored)
-    setUsername(credentials.username)
-
-    fetchTransactions(credentials.username)
-  }, [router])
-
-  const fetchTransactions = async (username: string) => {
-    try {
-      setLoading(true)
-      // hit proxy API route
-      const res = await fetch(`/api/auth/history?username=${encodeURIComponent(username)}`)
-
-      if (!res.ok) {
-        console.error("History fetch failed: HTTP", res.status, res.statusText)
-        return
-      }
-
-      const contentType = res.headers.get("content-type")
-      if (!contentType || !contentType.includes("application/json")) {
-        const text = await res.text()
-        console.error("History fetch failed: Non-JSON response:", text)
-        return
-      }
-
-      const data = await res.json()
-      if (data.success) {
-        setTransactions(data.transactions || [])
-        if (data.transactions.length > 0) {
-          const latest = new Date(data.transactions[0].createdAt)
-          setSelectedDate(latest.toISOString().split("T")[0])
-        }
-      } else {
-        console.error("History fetch failed:", data.message)
-      }
-    } catch (err) {
-      console.error("Error fetching history:", err)
-    } finally {
-      setLoading(false)
+  const getTypeColor = (type: Transaction["type"]) => {
+    switch (type) {
+      case "Deposit":
+        return "text-success";
+      case "Withdrawal":
+        return "text-destructive";
+      case "Bonus":
+        return "text-warning";
+      default:
+        return "text-foreground";
     }
-  }
+  };
 
-  const filtered = transactions.filter((t) => {
-    const matchesDate = t.createdAt.startsWith(selectedDate)
-    // For now, assume all transactions are deposits since we don't have withdraw history yet
-    // In a real app, you'd have a type field to distinguish
-    const matchesType = activeTab === "deposit" // Placeholder logic
-    return matchesDate && matchesType
-  })
+  const TransactionCard = ({ 
+    transaction, 
+    isLast = false 
+  }: { 
+    transaction: Transaction; 
+    isLast?: boolean; 
+  }) => (
+    <div className="w-full">
+      <div className="px-4 py-3">
+        <div className="text-xs text-muted-foreground mb-2">
+          {transaction.date}
+        </div>
+        
+        <div className="grid grid-cols-2 gap-3 mb-2">
+          <div>
+            <div className="text-xs text-muted-foreground">Type:</div>
+            <div className={`text-sm font-medium ${getTypeColor(transaction.type)}`}>
+              {transaction.type}
+            </div>
+          </div>
+          <div className="text-right">
+            <div className="text-xs text-muted-foreground">Amount:</div>
+            <div className="text-sm font-bold text-foreground">
+              {transaction.currency || "₹"} {transaction.amount.toLocaleString()}
+            </div>
+          </div>
+        </div>
+        
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <div className="text-xs text-muted-foreground">Channel:</div>
+            <div className="text-sm font-medium text-foreground">{transaction.channel}</div>
+          </div>
+          <div className="text-right">
+            <div className="text-xs text-muted-foreground">Status:</div>
+            <Badge 
+              variant={getStatusVariant(transaction.status) as any}
+              className="text-xs h-5"
+            >
+              {transaction.status}
+            </Badge>
+          </div>
+        </div>
+      </div>
+      
+      {!isLast && (
+        <div className="mx-4">
+          <div className="border-b border-dashed border-border/50" />
+        </div>
+      )}
+    </div>
+  );
 
-  const total = filtered.reduce((sum, t) => sum + (t.amount || 0), 0)
+  const TransactionFilters = () => {
+    const filters = [
+      { key: "Recharge" as const, label: "Recharge" },
+      { key: "Withdraw" as const, label: "Withdraw" },
+      { key: "Bonus" as const, label: "Bonus" },
+    ];
 
-  const formatCurrency = (amount: number) => `₹${amount}`
-
-  const handleBack = () => {
-    router.back()
-  }
+    return (
+      <div className="flex gap-2 mb-6">
+        {filters.map((filter) => (
+          <Button
+            key={filter.key}
+            variant={activeFilter === filter.key ? "default" : "secondary"}
+            onClick={() => setActiveFilter(filter.key)}
+            className={cn(
+              "flex-1 rounded-xl py-3 font-medium transition-all duration-200",
+              activeFilter === filter.key
+                ? "bg-success text-success-foreground shadow-lg"
+                : "bg-secondary/50 text-secondary-foreground hover:bg-secondary/80"
+            )}
+          >
+            {filter.label}
+          </Button>
+        ))}
+      </div>
+    );
+  };
 
   return (
-    <div className="min-h-screen bg-linear-65 from-burgundy-800 to-burgundy-960 to-burgundy-900 text-white">
-      {/* Header */}
-      <div className="px-4 py-3 bg-black/70 border-b border-yellow-500/20 flex items-center">
-        <ChevronLeft className="w-4 h-4 text-yellow-400 cursor-pointer" onClick={handleBack} />
-        <span className="ml-2 text-lg font-bold">Transaction History</span>
-      </div>
-
-      <div className="px-4 py-4 bg-black/70 border-b border-yellow-500/20">
-        <div className="flex space-x-2">
-          <button
-            onClick={() => setActiveTab("deposit")}
-            className={`flex-1 rounded-full text-sm font-medium transition-all p-0 ${
-              activeTab === "deposit"
-                ? "bg-yellow-400 text-black"
-                : "bg-black/50 text-yellow-400 border border-yellow-500/30 hover:bg-yellow-500/10"
-            }`}
+    <div 
+      className="min-h-screen relative overflow-hidden"
+      style={{ background: "var(--transaction-bg)" }}
+    >
+      {/* Background overlay */}
+      <div className="absolute inset-0 bg-gradient-to-br from-background/95 to-background/90" />
+      
+      {/* Content */}
+      <div className="relative z-10 py-6 max-w-md mx-auto">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-8 px-4">
+          <h1 className="text-xl font-bold text-foreground">Transaction Records</h1>
+          <Button 
+            variant="ghost" 
+            size="icon"
+            className="text-foreground hover:bg-secondary/20 rounded-full"
           >
-            Deposit 
-          </button>
-          <button
-            onClick={() => setActiveTab("withdraw")}
-            className={`flex-1 rounded-full text-sm font-medium transition-all p-1 ${
-              activeTab === "withdraw"
-                ? "bg-yellow-400 text-black"
-                : "bg-black/50 text-yellow-400 border border-yellow-500/30 hover:bg-yellow-500/10"
-            }`}
-          >
-            Withdraw 
-          </button>
+            <X className="h-6 w-6" />
+          </Button>
         </div>
-      </div>
 
-      {/* Date filter + total */}
-      <div className="px-4 py-3 bg-black/70 border-b border-yellow-500/20">
-        <div className="flex justify-between items-center">
-          <div className="flex items-center space-x-2">
-            <Calendar className="w-4 h-4 text-yellow-400" />
-            <input
-              type="date"
-              value={selectedDate}
-              onChange={(e) => setSelectedDate(e.target.value)}
-              className="bg-black text-yellow-400 border border-yellow-500/40 rounded px-2 py-1 text-sm focus:outline-none focus:border-yellow-400"
-            />
+        {/* Filters */}
+        <div className="px-4">
+          <TransactionFilters />
+        </div>
+
+        {/* Transaction List */}
+        <div className="bg-card">
+          {filteredTransactions.length > 0 ? (
+            filteredTransactions.map((transaction, index) => (
+              <TransactionCard
+                key={transaction.id}
+                transaction={transaction}
+                isLast={index === filteredTransactions.length - 1}
+              />
+            ))
+          ) : (
+            <div className="text-center py-12">
+              <p className="text-muted-foreground text-lg">No More Data</p>
+            </div>
+          )}
+        </div>
+
+        {/* No more data message for when there are transactions */}
+        {filteredTransactions.length > 0 && (
+          <div className="text-center py-8">
+            <p className="text-muted-foreground">No More Data</p>
           </div>
-          <span className="text-yellow-400 font-medium text-sm">Total: {formatCurrency(total)}</span>
-        </div>
-      </div>
-
-      {/* Transactions */}
-      <div>
-        {loading ? (
-          <div className="px-4 py-12 text-center text-yellow-400/70">Loading...</div>
-        ) : filtered.length > 0 ? (
-          filtered.map((t, i) => {
-            const date = new Date(t.createdAt)
-            const formattedDate = date.toISOString().split("T")[0]
-            const formattedTime = date.toTimeString().split(" ")[0]
-
-            return (
-              <div key={t._id}>
-                <div className="px-4 py-3 hover:bg-black/50 transition-all">
-                  <div className="flex items-center justify-between">
-                    {/* Left */}
-                    <div className="flex-1">
-                      <div className="flex items-center space-x-2 text-xs text-gray-400 mb-1">
-                        <span>{formattedDate}</span>
-                        <span>{formattedTime}</span>
-                      </div>
-                      <div className="text-xs text-yellow-500/80 font-mono mb-1">{t.orderId}</div>
-                      <div className="text-xs text-gray-400">
-                        {activeTab === "deposit" ? "Deposit" : "Withdraw"} - Online Payment
-                      </div>
-                    </div>
-
-                    {/* Right */}
-                    <div className="text-right">
-                      <div className="text-lg font-bold text-yellow-400 mb-1">
-                        {activeTab === "deposit" ? "+" : "-"}
-                        {formatCurrency(t.amount)}
-                      </div>
-                      <div
-                        className={`text-sm font-medium ${
-                          t.status === "pending" ? "text-orange-400" : "text-green-400"
-                        }`}
-                      >
-                        {t.status === "pending" ? "Pending" : "Success"}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                {i < filtered.length - 1 && <div className="border-b border-yellow-500/30"></div>}
-              </div>
-            )
-          })
-        ) : (
-          <div className="px-4 py-12 text-center text-yellow-400/60">No {activeTab} transactions found</div>
         )}
       </div>
     </div>
-  )
-}
+  );
+};
+
+export default TransactionRecords;
