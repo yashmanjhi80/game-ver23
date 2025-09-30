@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { Plus, RefreshCw } from "lucide-react"
+import DomainIcon from "./assets/domain.png"
 
 export default function GlobalHeader() {
   const [balance, setBalance] = useState(0)
@@ -53,40 +54,43 @@ export default function GlobalHeader() {
         <div className="flex items-center space-x-3">
           <Link href="/home">
             <img
-              src="/images/design-mode/Picsart-25-08-19-19-18-32-062%281%29%281%29%281%29.png"
+              src={DomainIcon}
               alt="Logo"
-              className="h-8 w-auto cursor-pointer"
+              className="h-6 w-auto "
             />
           </Link>
         </div>
         {/* END OF LEFT SECTION */}
 
         {/* RIGHT: Balance pill (clickable) */}
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center   space-x-5">
           <Link
             href="/deposit"
-            className="flex items-center bg-[#2a0f0f] px-3 py-1.5 rounded-full space-x-2 hover:scale-105 transition-transform"
+            className="flex items-center bg-black/ px-3 py-1.5 rounded-full space-x-2 hover:scale-105 transition-transform"
           >
-            <div className="w-6 h-6 flex items-center justify-center rounded-full bg-yellow-500 text-black font-bold">
-              ₹
-            </div>
-            <span className="text-white font-medium">
-              {isLoadingBalance ? <span className="animate-pulse text-yellow-400">...</span> : formatBalance(balance)}
-            </span>
-            <div className="w-6 h-6 flex items-center justify-center rounded-full bg-green-500 text-white hover:bg-green-600">
-              <Plus size={16} />
-            </div>
-          </Link>
-
-          {/* Refresh balance */}
+              {/* Refresh balance */}
           <button
             onClick={refreshBalance}
             disabled={isLoadingBalance}
-            className="bg-black/60 hover:bg-black/80 border border-yellow-500/30 rounded-full transition-colors disabled:opacity-50 p-1"
+            className="bg-orange/60 hover:bg-black/80 border border-yellow-500/30 rounded-lg transition-colors disabled:opacity-50 p-"
             title="Refresh Balance"
           >
-            <RefreshCw size={16} className={`text-yellow-400 ${isLoadingBalance ? "animate-spin" : ""}`} />
+            <RefreshCw size={18} className={`text-orange-400 ${isLoadingBalance ? "animate-spin" : ""}`} />
           </button>
+            <div className="text-white font-semibold  ">
+              ₹
+            </div>
+
+            
+            <span className="text-white  ">
+              {isLoadingBalance ? <span className="animate-pulse text-yellow-400">...</span> : formatBalance(balance)}
+            </span>
+            <div className="w-full h-8 px-4 flex  items-center justify-center rounded-lg bg-orange-500 text-white hover:bg-yellow-600">Deposit
+             
+            </div>
+          </Link>
+
+        
         </div>
       </div>
     </header>
