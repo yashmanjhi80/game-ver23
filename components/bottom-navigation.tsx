@@ -16,7 +16,7 @@ const navigationItems = [
     href: "/vip",
     normalIcon: "/images/navbar/vip-normal.png",
     activeIcon: "/images/navbar/vip-active.png",
-    label: "VIP",
+    label: "Promo",
     activeColor: "text-yellow-400",
   },
   {
@@ -47,7 +47,7 @@ export default function BottomNavigation() {
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 bg-[#2b0d0d] border-t border-red-900 z-50">
-      <div className="flex justify-around items-center py-2 px-4 max-w-md mx-auto">
+      <div className="flex justify-around items-center py-2  max-w-md mx-auto">
         {navigationItems.map((item, index) => {
           const isActive = pathname === item.href
           const isCenter = index === 2 // Wallet is center
@@ -60,13 +60,13 @@ export default function BottomNavigation() {
             >
               {isCenter ? (
                 <div className="relative flex flex-col items-center -mt-6">
-                  <div className="rounded-full bg-[#3a0f0f] flex items-center justify-center shadow-lg bg-[rgba(40,11,11,1)] size-12">
-                    <div className="w-10 h-10 rounded-full bg-[#5a1b1b] flex items-center justify-center p-0">
+                  <div className="rounded-full bg-black/ flex items-center justify-center shadow-lg bg-red-600/ size-8">
+                    <div className="w-8 h-8 rounded-full bg-[#5a1b1b]/80  border-yellow-700 border-2 flex items-center justify-center p-0">
                       <Image
                         src={isActive ? item.activeIcon : item.normalIcon}
                         alt={item.label}
-                        width={28}
-                        height={28}
+                        width={16}
+                        height={16}
                         className="object-contain leading-5"
                       />
                     </div>
@@ -80,8 +80,8 @@ export default function BottomNavigation() {
                   <Image
                     src={isActive ? item.activeIcon : item.normalIcon}
                     alt={item.label}
-                    width={22}
-                    height={22}
+                    width={16}
+                    height={16}
                     className="object-contain"
                   />
                   <span className={`text-xs mt-1 ${isActive ? item.activeColor : "text-rose-200/70"}`}>

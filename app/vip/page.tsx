@@ -1,371 +1,276 @@
 "use client"
 
-import type React from "react"
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { ArrowLeft, Crown, Coins, Gift, CreditCard, Gamepad2, Users, X } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import BottomNavigation from "@/components/bottom-navigation"
-import Image from "next/image"
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Gift, Crown, Calendar, TrendingUp, Clock, Zap, X } from "lucide-react";
+import { useState } from "react";
+import firstDepositPromo from "./assets/b-1.png";
+import vipCashbackPromo from "./assets/b-2.png";
+import dailyRewardsPromo from "./assets/b-3.png";
 
-type TabType = "bonus" | "benefits" | "rebate"
-
-interface VipTask {
-  id: string
-  title: string
-  description: string
-  icon: React.ComponentType<any>
-  progress: number
-  target: number
-  completed: boolean
-  subtasks?: { name: string; completed: boolean }[]
-}
-
-interface VipBenefit {
-  title: string
-  description: string
-  amount: string
-  icon: React.ComponentType<any>
-  progress?: number
-  target?: number
-}
-
-export default function VipPage() {
-  const router = useRouter()
-  const [activeTab, setActiveTab] = useState<TabType>("bonus")
-
-  // Mock user data - in real app this would come from user context/API
-  const currentVipLevel = 2
-  const username = "Player74835887"
-
-  const vipTasks: VipTask[] = [
+const PromoVipPage = () => {
+  const [activeTab, setActiveTab] = useState("promo");
+  // Promo data
+  const promoCards = [
     {
-      id: "recharge",
-      title: "Recharge More Than 200",
-      description: "Complete recharge to unlock VIP benefits",
-      icon: CreditCard,
-      progress: 0,
-      target: 200,
-      completed: false,
+      id: 1,
+      title: "First Deposit",
+      image: firstDepositPromo,
+      url: "https://example.com/first-deposit"
     },
     {
-      id: "recharge-withdraw",
-      title: "Complete One Recharge + One Withdrawal",
-      description: "Complete both actions to advance",
-      icon: Coins,
-      progress: 0,
-      target: 2,
-      completed: false,
-      subtasks: [
-        { name: "Recharge", completed: false },
-        { name: "Withdraw", completed: false },
-      ],
+      id: 2,
+      title: "VIP Cashback",
+      image: vipCashbackPromo,
+      url: "https://example.com/vip-cashback"
     },
     {
-      id: "agent-income",
-      title: "Agent Income Reaches More Than 10",
-      description: "Earn through agent referrals",
-      icon: Users,
-      progress: 0,
-      target: 10,
-      completed: false,
-    },
-  ]
-
-  const vipBenefits: VipBenefit[] = [
-    {
-      title: "Upgrade Bonus",
-      description: "Level up rewards",
-      amount: "₹375",
-      icon: Gift,
-    },
-    {
-      title: "This Week's Recharge Rebate",
-      description: "Minimum Recharge: 0/50",
-      amount: "₹2",
-      icon: CreditCard,
-      progress: 0,
-      target: 50,
-    },
-    {
-      title: "Withdrawal Benefits",
-      description: "Maximum withdrawal limit",
-      amount: "₹10000",
-      icon: Coins,
-    },
-    {
-      title: "Game Bet Rebate",
-      description: "Rebate on different games",
-      amount: "Up to 0.25%",
-      icon: Gamepad2,
-    },
-  ]
-
-  const gameRebates = [
-    { name: "Slot", rate: "0.22%" },
-    { name: "Card Games", rate: "0.25%" },
-    { name: "Live casino", rate: "0.22%" },
-    { name: "Sports", rate: "0.22%" },
-  ]
-
-  const renderTabContent = () => {
-    switch (activeTab) {
-      case "bonus":
-        return (
-          <div className="space-y-6">
-            {/* Hero VIP Card */}
-            <div className="relative bg-gradient-to-br from-blue-600/20 to-purple-600/20 rounded-2xl p-6 border border-blue-500/20">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center space-x-4">
-                  <div className="relative">
-                    <Image src="/vip/badge-1.png" alt="VIP0 Badge" width={80} height={80} className="drop-shadow-lg" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-bold text-white">VIP 0</h3>
-                    <p className="text-sm text-gray-300">Become a VIP to Receive the Following Rewards:</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-3 gap-4 mt-4">
-                <div className="text-center">
-                  <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-2">
-                    <Coins className="w-6 h-6 text-yellow-400" />
-                  </div>
-                  <p className="text-xs text-gray-300">VIP Bonus</p>
-                </div>
-                <div className="text-center">
-                  <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-2">
-                    <CreditCard className="w-6 h-6 text-yellow-400" />
-                  </div>
-                  <p className="text-xs text-gray-300">Withdrawal Benefits</p>
-                </div>
-                <div className="text-center">
-                  <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-2">
-                    <Gift className="w-6 h-6 text-yellow-400" />
-                  </div>
-                  <p className="text-xs text-gray-300">Bet Rebate</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Deposit Button */}
-            <Button className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 rounded-full text-lg">
-              Deposit Now
-            </Button>
-
-            {/* VIP Levels */}
-            <div>
-              <h3 className="text-xl font-bold text-white mb-4">Become a VIP to Enjoy More Benefits!</h3>
-              <div className="grid grid-cols-4 gap-3">
-                {[0, 1, 2, 3].map((level) => (
-                  <div key={level} className="text-center">
-                    <div className="bg-gradient-to-br from-red-900/50 to-red-800/30 rounded-xl p-4 border border-red-700/30">
-                      <Image
-                        src={`/vip/badge-${level === 0 ? 1 : level + 1}.png`}
-                        alt={`VIP${level} Badge`}
-                        width={60}
-                        height={60}
-                        className="mx-auto mb-2"
-                      />
-                      <p className="text-sm font-semibold text-white">VIP{level}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Tasks */}
-            <div>
-              <h3 className="text-lg font-bold text-white mb-4">Complete Any of the Following Tasks to Become a VIP</h3>
-              <div className="space-y-3">
-                {vipTasks.map((task) => {
-                  const IconComponent = task.icon
-                  return (
-                    <div
-                      key={task.id}
-                      className="bg-gradient-to-r from-red-900/40 to-red-800/20 rounded-xl p-4 border border-red-700/30"
-                    >
-                      <div className="flex items-center space-x-3 mb-3">
-                        <IconComponent className="w-6 h-6 text-yellow-400" />
-                        <h4 className="font-semibold text-white flex-1">{task.title}</h4>
-                      </div>
-
-                      {task.subtasks ? (
-                        <div className="space-y-2">
-                          <div className="grid grid-cols-2 gap-3">
-                            {task.subtasks.map((subtask, index) => (
-                              <div key={index} className="flex items-center justify-between bg-black/20 rounded-lg p-3">
-                                <span className="text-sm text-gray-300">{subtask.name}</span>
-                                <div className="w-6 h-6 rounded-full bg-red-600 flex items-center justify-center">
-                                  <X className="w-4 h-4 text-white" />
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="space-y-2">
-                          <div className="flex justify-between text-sm">
-                            <span className="text-gray-300">{task.id === "recharge" ? "Recharge:" : "Progress:"}</span>
-                            <span className="text-gray-300">
-                              {task.progress}/{task.target}
-                            </span>
-                          </div>
-                          <div className="w-full bg-red-900/50 rounded-full h-2">
-                            <div
-                              className="bg-gradient-to-r from-red-600 to-red-500 h-2 rounded-full transition-all duration-300"
-                              style={{ width: `${(task.progress / task.target) * 100}%` }}
-                            />
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  )
-                })}
-              </div>
-            </div>
-          </div>
-        )
-
-      case "benefits":
-        return (
-          <div className="space-y-6">
-            {/* Current VIP Benefits */}
-            <div>
-              <h3 className="text-xl font-bold text-white mb-4">Current VIP Enjoys the Following Benefits</h3>
-              <div className="space-y-3">
-                {vipBenefits.map((benefit, index) => {
-                  const IconComponent = benefit.icon
-                  return (
-                    <div
-                      key={index}
-                      className="bg-gradient-to-r from-red-900/40 to-red-800/20 rounded-xl p-4 border border-red-700/30"
-                    >
-                      <div className="flex items-center space-x-3 mb-2">
-                        <IconComponent className="w-6 h-6 text-yellow-400" />
-                        <h4 className="font-semibold text-white">{benefit.title}</h4>
-                      </div>
-
-                      {benefit.progress !== undefined ? (
-                        <div className="space-y-2">
-                          <div className="flex justify-between text-sm">
-                            <span className="text-gray-300">{benefit.description}</span>
-                          </div>
-                          <div className="w-full bg-red-900/50 rounded-full h-2 mb-2">
-                            <div
-                              className="bg-gradient-to-r from-red-600 to-red-500 h-2 rounded-full"
-                              style={{ width: `${(benefit.progress! / benefit.target!) * 100}%` }}
-                            />
-                          </div>
-                          <p className="text-lg font-bold text-yellow-400">{benefit.amount}</p>
-                        </div>
-                      ) : benefit.title === "Game Bet Rebate" ? (
-                        <div className="space-y-2">
-                          <p className="text-sm text-gray-300 mb-3">{benefit.description}</p>
-                          <div className="grid grid-cols-2 gap-2">
-                            {gameRebates.map((game, gameIndex) => (
-                              <div key={gameIndex} className="flex justify-between text-sm">
-                                <span className="text-yellow-400">{game.name}:</span>
-                                <span className="text-yellow-400">{game.rate}</span>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      ) : (
-                        <p className="text-lg font-bold text-yellow-400">{benefit.amount}</p>
-                      )}
-                    </div>
-                  )
-                })}
-              </div>
-            </div>
-          </div>
-        )
-
-      case "rebate":
-        return (
-          <div className="space-y-6">
-            <div className="text-center">
-              <h3 className="text-xl font-bold text-white mb-4">VIP Rebate System</h3>
-              <p className="text-gray-300 mb-6">Earn rebates on all your gaming activities</p>
-            </div>
-
-            {/* Rebate Cards */}
-            <div className="space-y-4">
-              {gameRebates.map((game, index) => (
-                <div
-                  key={index}
-                  className="bg-gradient-to-r from-red-900/40 to-red-800/20 rounded-xl p-4 border border-red-700/30"
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <Gamepad2 className="w-6 h-6 text-yellow-400" />
-                      <span className="font-semibold text-white">{game.name}</span>
-                    </div>
-                    <span className="text-lg font-bold text-yellow-400">{game.rate}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="bg-gradient-to-r from-blue-900/40 to-purple-800/20 rounded-xl p-4 border border-blue-700/30">
-              <h4 className="font-semibold text-white mb-2">How Rebates Work</h4>
-              <ul className="text-sm text-gray-300 space-y-1">
-                <li>• Rebates are calculated on your total betting amount</li>
-                <li>• Higher VIP levels unlock better rebate rates</li>
-                <li>• Rebates are credited weekly to your account</li>
-                <li>• No minimum betting requirement</li>
-              </ul>
-            </div>
-          </div>
-        )
-
-      default:
-        return null
+      id: 3,
+      title: "Daily Rewards",
+      image: dailyRewardsPromo,
+      url: "https://example.com/daily-rewards"
     }
-  }
+  ];
+
+  // VIP levels data with formatted amounts
+  const formatAmount = (amount: string) => {
+    const numericAmount = parseInt(amount.replace('₹', '').replace(',', ''));
+    if (numericAmount >= 1000) {
+      return `₹${(numericAmount / 1000).toFixed(0)}k`;
+    }
+    return amount;
+  };
+
+  const vipLevels = [
+    { level: "VIP 1", deposit: "₹300", weekly: "0", monthly: "0", upgrade: "0", withdrawals: "2" },
+    { level: "VIP 2", deposit: formatAmount("2000"), weekly: "30", monthly: "50", upgrade: "115", withdrawals: "3" },
+    { level: "VIP 3", deposit: formatAmount("₹10000"), weekly: "30", monthly: "150", upgrade: "101", withdrawals: "3" },
+    { level: "VIP 4", deposit: formatAmount("₹30000"), weekly: "50", monthly: "250", upgrade: "201", withdrawals: "3" },
+    { level: "VIP 5", deposit: formatAmount("₹80000"), weekly: "80", monthly: "400", upgrade: "501", withdrawals: "3" },
+    { level: "VIP 6", deposit: formatAmount("₹150000"), weekly: "110", monthly: "550", upgrade: "701", withdrawals: "4" },
+    { level: "VIP 7", deposit: formatAmount("₹250000"), weekly: "140", monthly: "700", upgrade: "1001", withdrawals: "4" },
+    { level: "VIP 8", deposit: formatAmount("₹450000"), weekly: "190", monthly: "950", upgrade: "2001", withdrawals: "4" },
+    { level: "VIP 9", deposit: formatAmount("₹750000"), weekly: "240", monthly: "1200", upgrade: "3001", withdrawals: "5" },
+    { level: "VIP 10", deposit: formatAmount("₹1150000"), weekly: "290", monthly: "1450", upgrade: "4001", withdrawals: "5" },
+    { level: "VIP 11", deposit: formatAmount("₹1650000"), weekly: "370", monthly: "1850", upgrade: "5001", withdrawals: "5" },
+    { level: "VIP 12", deposit: formatAmount("₹2350000"), weekly: "450", monthly: "2250", upgrade: "7001", withdrawals: "6" },
+    { level: "VIP 13", deposit: formatAmount("₹3250000"), weekly: "530", monthly: "2650", upgrade: "9001", withdrawals: "6" },
+    { level: "VIP 14", deposit: formatAmount("₹4350000"), weekly: "650", monthly: "3250", upgrade: "11001", withdrawals: "6" },
+    { level: "VIP 15", deposit: formatAmount("₹5650000"), weekly: "770", monthly: "3850", upgrade: "13001", withdrawals: "7" },
+    { level: "VIP 16", deposit: formatAmount("₹7150000"), weekly: "890", monthly: "4450", upgrade: "15001", withdrawals: "7" },
+    { level: "VIP 17", deposit: formatAmount("₹8950000"), weekly: "1070", monthly: "5350", upgrade: "18001", withdrawals: "8" },
+    { level: "VIP 18", deposit: formatAmount("₹11050000"), weekly: "1350", monthly: "6750", upgrade: "21001", withdrawals: "8" },
+    { level: "VIP 19", deposit: formatAmount("₹13450000"), weekly: "1530", monthly: "7650", upgrade: "24001", withdrawals: "9" },
+    { level: "VIP 20", deposit: formatAmount("₹16150000"), weekly: "1780", monthly: "8900", upgrade: "27001", withdrawals: "9" }
+  ];
+
+  const handlePromoClick = (url: string) => {
+    window.open(url, '_blank');
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-red-950 via-red-900 to-red-950">
+    <div className="min-h-screen bg-[#450b00]" style={{ background: 'var()' }}>
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-red-800/50">
-        <button onClick={() => router.back()} className="p-2">
-          <ArrowLeft className="w-6 h-6 text-white" />
-        </button>
-        <h1 className="text-xl font-bold text-white flex items-center space-x-2">
-          <Crown className="w-6 h-6 text-yellow-400" />
-          <span>VIP Center</span>
+      <div className="bg-[#2b0d0d] px-5 py-3 flex items-center justify-between  ">
+        <div className="w-2"></div>
+        <h1 className=" text-white text-center flex justify-center items-center ">
+          {activeTab === "promo" ? "Promo" : "VIP"}
         </h1>
-        <div className="w-10" />
+        <div className="flex items-center gap-2">
+       
+        <a href="/wallet">
+  <X className="w-5 h-4 text-primary-foreground text-white" />
+</a>
+
+        </div>
       </div>
 
-      {/* Tabs */}
-      <div className="flex bg-gradient-to-r from-gray-800/50 to-gray-700/30 mx-4 mt-4 rounded-xl p-1 border border-gray-600/30">
-        {[
-          { key: "bonus" as TabType, label: "Bonus" },
-          { key: "benefits" as TabType, label: "Benefits" },
-          { key: "rebate" as TabType, label: "Rebate" },
-        ].map((tab) => (
-          <button
-            key={tab.key}
-            onClick={() => setActiveTab(tab.key)}
-            className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all ${
-              activeTab === tab.key
-                ? "bg-gradient-to-r from-red-600 to-red-500 text-white shadow-lg"
-                : "text-gray-300 hover:text-white"
-            }`}
+      <div className="p-2">
+        {/* Tab Navigation */}
+        <div className="flex gap-2 mb-6 bg-[#2b0d0d]">
+          <Button 
+            variant={activeTab === "promo" ? "default" : "outline"}
+            className={`flex-1 flex items-center justify-center gap-2 py-2 px-4 rounded-xl transition-all text-black font-bold bg-gradient-to-b from-yellow-300 via-golden to-yellow-600 border border-yellow-400 shadow-lg relative overflow-hidden ${
+      activeTab === "promo"
+        ? "hover:from-yellow-400 hover:via-golden hover:to-yellow-700 border-b-2 border-yellow-300"
+        : "hover:from-yellow-400 hover:via-golden hover:to-yellow-700 text-black"
+    }`}
+            onClick={() => setActiveTab("promo")}
           >
-            {tab.label}
-          </button>
-        ))}
-      </div>
+            Promo
+          </Button>
+          <Button 
+            variant={activeTab === "vip" ? "default" : "outline"}
+            className={`flex-1 flex items-center justify-center gap-2 py-2 px-4 rounded-xl transition-all text-black font-bold bg-gradient-to-b from-yellow-300 via-golden to-yellow-600 border border-yellow-400 shadow-lg relative overflow-hidden ${
+      activeTab === "vip"
+        ? "hover:from-yellow-400 hover:via-golden hover:to-yellow-700 border-b-2 border-yellow-300"
+        : "hover:from-yellow-400 hover:via-golden hover:to-yellow-700 text-black"
+    }`}
+            onClick={() => setActiveTab("vip")}
+          >
+            VIP
+          </Button>
+        </div>
 
-      {/* Content */}
-      <div className="p-4 pb-24">{renderTabContent()}</div>
+        {/* Content based on active tab */}
+        {activeTab === "promo" ? (
+          /* Promo Section */
+          <div className="space-y-6">
+            <div className="space-y-4">
+              {promoCards.map((promo) => (
+                <Card 
+                  key={promo.id}
+                  className="h-40 cursor-pointer transition-all duration-300 hover:scale-105 bg-transparent border-0 overflow-hidden"
+                  style={{ boxShadow: 'var(--shadow-game)' }}
+                  onClick={() => handlePromoClick(promo.url)}
+                >
+                  <div className="relative h-40 w-full">
+                    <img 
+                     
+                      alt={promo.title}
+                      className="w-full h-full object-cover rounded-lg"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent rounded-lg" />
+                    <div className="absolute bottom-4 left-4">
+                      <h3 className="text-white font-bold text-lg">{promo.title}</h3>
+                    </div>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          </div>
+        ) : (
+          /* VIP Section */
+          <div className="space-y-6">            
+            {/* Bonus Cards - 2 Grid Layout Rectangular */}
+            <div className="grid grid-cols-2 md:grid-cols-2 gap-2 mb-6">
+              {/* Upgrade Bonus */}
+              <Card className="p-4 bg-game-card border-game-burgundy h-24">
+                <div className="flex items-center justify-between h-full">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-full bg-yellow-400/20 border-yellow-400 border-y-2">
+                      <TrendingUp className="w-2 h-2 text-game-gold" />
+                    </div>
+                    <div>
+                      <p  className="text-white  text-xs ">Upgrade</p>
+                      <p className="text-game-gold text-xs font-bold">₹0</p>
+                    </div>
+                  </div>
+                  <Button  className="px-2 py-2 text-[10px] leading-none w-auto h-auto min-w-0 min-h-0 opacity-100">
+                          Claim
+                        </Button>
+                </div>
+              </Card>
 
-      <BottomNavigation />
+              {/* Weekly Bonus */}
+              <Card className="p-4 bg-game-card border-game-burgundy h-24">
+                <div className="flex items-center justify-between h-full">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-full  bg-yellow-400/20 border-yellow-400 border-y-2 ">
+                      <Calendar className="w-2 h-2 text-game-gold" />
+                    </div>
+                    <div>
+                      <h3 className="text-white text-xs ">Weekly</h3>
+                      <p className="text-game-gold text-xs font-bold">₹0 </p>
+                    </div>
+                  </div>
+                  <Button  className="px-2 py-2 text-[10px] leading-none w-auto h-auto min-w-0 min-h-0 opacity-100">
+                          Claim
+                        </Button>
+                </div>
+              </Card>
+
+              {/* Monthly Bonus */}
+              <Card className="p-4 bg-game-card border-game-burgundy h-24">
+                <div className="flex items-center justify-between h-full">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-full  bg-yellow-400/20 border-yellow-400 border-y-2">
+                      <Clock className="w-2 h-2 text-game-gold " />
+                    </div>
+                    <div>
+                      <h3 className="text-white text-xs ">Monthly </h3>
+                      <p className="text-game-gold text-xs font-bold">₹0 </p>
+                    </div>
+                  </div>
+                 <Button className="px-2 py-2 text-[10px] leading-none w-auto h-auto min-w-0 min-h-0 opacity-100">
+                          Claim
+                        </Button>
+
+                </div>
+              </Card>
+
+              {/* VIP Progress */}
+              <Card className="p-4 bg-game-card border-game-burgundy h-24">
+                <div className="flex items-center justify-between h-full">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-full  bg-yellow-400/20 border-yellow-400 border-y-2">
+                      <Crown className="w-2 h-2 text-game-gold" />
+                    </div>
+                    <div>
+                      <h3 className="text-white text-xs">Current</h3>
+                      <p className="text-game-gold text-lg font-bold">VIP 1</p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-xs text-game-gold-light">Next: VIP 2</p>
+                    <p className="text-xs text-white">₹2k needed</p>
+                  </div>
+                </div>
+              </Card>
+            </div>
+
+            {/* VIP Levels Table - Full Width */}
+            <div className="w-full -mx-4">
+              <h3 className="text-game-gold text-lg font-semibold mb-4 px-4">
+                Total deposit to upgrade Vip  level
+              </h3>
+              
+              <div className="w-full ml-4 bg-game-card border-y ">
+                <table className=" w-full text-xs">
+                  <thead>
+                    <tr className="border-b border-game-burgundy bg-game-burgundy/30">
+                      <th className="text-left p-1 text-game-gold font-medium">Level</th>
+                      <th className="text-left p-1 text-game-gold font-medium">Deposit</th>
+                      <th className="text-left p-1 text-game-gold font-medium">Weekly</th>
+                      <th className="text-left p-1 text-game-gold font-medium">Monthly</th>
+                      <th className="text-left p-1 text-game-gold font-medium">Upgrade</th>
+                      <th className="text-left p-1 text-game-gold font-medium">Withdrawal</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {vipLevels.map((level, index) => (
+                      <tr key={index} className="border-b border-game-burgundy/30 hover:bg-game-burgundy/20">
+                        <td className="p-2 text-white font-medium">{level.level}</td>
+                        <td className="p-2 text-yellow-500  font-semibold">{level.deposit}</td>
+                        <td className="p-2 text-white">{level.weekly}</td>
+                        <td className="p-2 text-white">{level.monthly}</td>
+                        <td className="p-2 text-white">{level.upgrade}</td>
+                        <td className="p-2 text-white">{level.withdrawals}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <div className="mt-4 px-4 text-xs text-white space-y-1">
+                <p>• Level-Up Bonus - Recharge to reach a new VIP level and get the bonus.</p>
+                <p>• Weekly Bonus - Last week's recharge ≥ 10x weekly bonus. Claim from Monday.</p>
+                <p>• Monthly Bonus - Last month's recharge ≥ 10x monthly bonus. Claim from 1st.</p>
+                <p>• All rewards need 10x wagering before withdrawal.</p>
+              </div>
+             
+
     </div>
-  )
-}
+          </div>
+          
+        )}
+      </div>
+      
+    </div>
+
+    
+  );
+};
+
+export default PromoVipPage;
