@@ -731,11 +731,11 @@ export default function HomePage() {
                 onClick={() => setSelectedFilter("ALL")}
                 className={`flex items-center gap-2 px-6 py-1 bg-[#450b00] rounded-sm whitespace-nowrap transition-colors  ${
                   selectedFilter === "ALL"
-                    ? " text-yellow-400 "
+                    ? " text-white "
                     : " text-white/70"
                 }`}
               >
-                <Flame size={16} />
+                <Flame className="text-yellow-400" size={18} />
                Hot
               </button>
               {[
@@ -749,8 +749,8 @@ export default function HomePage() {
                   onClick={() => setSelectedFilter(filter.key)}
                   className={`flex items-center gap-2 px-2  bg-[#450b00] rounded-sm whitespace-nowrap transition-colors  ${
                     selectedFilter === filter.key
-                      ? "  text-yellow-400 "
-                      : "text-white/70  "
+                      ? "  text-white "
+                      : "text-white/  "
                   }`}
                 >
                   <span>{filter.icon}</span>
@@ -862,7 +862,7 @@ export default function HomePage() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="w-6 h-6 bg-gradient-to-r from-yellow-500 to-red-500 rounded-lg flex items-center justify-center">
-                      <Image src={cards} alt="Logo 1" className="h-8 w-auto" />
+                      <Image src={cards} alt="Logo 1" className="h-6 w-auto" />
                     </div>
                     <h2 className="text-xl md:text-2xl text-yellow-400 drop-shadow-lg">Cards  </h2>
                      <h2 className="text-xl md:text-2xl  text-white drop-shadow-lg">  Games</h2>
@@ -909,8 +909,8 @@ export default function HomePage() {
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-6 h-6 bg-gradient-to-r from-yellow-500 to-red-500 rounded-lg flex items-center justify-center">
-                      <Image src={jili} alt="Logo 1" className="h-8 w-auto" />
+                    <div className="w-6 h-6 bg-gradient-to-r from-yellow-500/30 to-red-500 rounded-lg flex items-center justify-center">
+                      <Image src={jili} alt="Logo 1" className="h-6 w-auto" />
                     </div>
                     <h2 className="text-xl md:text-2xl text-yellow-400 drop-shadow-lg">Other </h2>
                       <h2 className="text-xl md:text-2xl  text-white drop-shadow-lg">Games </h2>
