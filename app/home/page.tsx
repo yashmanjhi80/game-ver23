@@ -343,9 +343,6 @@ export default function HomePage() {
     setClaimedRewards(newClaimedRewards)
     localStorage.setItem("todayClaimedRewards", JSON.stringify(newClaimedRewards))
 
-    // Add reward to balance (simplified - in real app would call API)
-    const reward = dailyRewards[day - 1]
-    console.log(`Claimed ${reward.amount} ${reward.type}!`)
   }
 
   const handleBannerClick = (banner: any) => {
@@ -391,7 +388,7 @@ export default function HomePage() {
       case "OT":
         return <Zap size={16} />
       default:
-        return <Grid3X3 size={16} />
+        
     }
   }
 
@@ -503,98 +500,8 @@ export default function HomePage() {
         </div>
       )}
 
-      {showDailyRewardsPopup && (
-        <div className="fixed inset-0 bg-black/95 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="relative max-w-sm w-full">
-            {/* Background Frame */}
-            <div
-              className="relative w-full h-[450px] bg-cover bg-center rounded-2xl overflow-hidden border border-yellow-500/30"
-              style={{
-                backgroundImage:
-                  "url(https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Picsart_25-09-06_17-12-10-877-FF8GV3aidsTY8ht6qTh2AO0sZhldAA.png)",
-              }}
-            >
-              {/* Close Button */}
-              <button
-                onClick={() => setShowDailyRewardsPopup(false)}
-                className="absolute top-4 right-4 w-8 h-8 bg-black/60 hover:bg-black/80 rounded-full flex items-center justify-center text-yellow-400 border border-yellow-500/30 transition-colors z-10"
-              >
-                ✕
-              </button>
-
-              {/* Content Container */}
-              <div className="absolute inset-0 p-4 pt-12">
-                {/* Title */}
-                <div className="text-center mb-4">
-                  <h2 className="text-xl font-bold text-yellow-400 drop-shadow-lg mb-1">Daily Rewards</h2>
-                  <p className="text-yellow-200 text-xs drop-shadow-md">Claim your daily rewards!</p>
-                </div>
-
-                {/* Rewards Grid */}
-                <div className="grid grid-cols-2 gap-2 mb-4">
-                  {dailyRewards.map((reward) => {
-                    const isClaimed = claimedRewards.includes(reward.day)
-                    return (
-                      <div
-                        key={reward.day}
-                        className={`relative bg-black/40 backdrop-blur-sm rounded-xl p-2 border transition-all ${
-                          isClaimed
-                            ? "border-green-500/50 bg-green-900/20"
-                            : "border-yellow-500/30 hover:border-yellow-400/50"
-                        }`}
-                      >
-                        {/* Day Number */}
-                        <div className="absolute -top-1 -left-1 w-5 h-5 bg-yellow-600 rounded-full flex items-center justify-center text-black text-xs font-bold">
-                          {reward.day}
-                        </div>
-
-                        {/* Reward Image */}
-                        <div className="flex justify-center mb-1">
-                          <img
-                            src={reward.image || "/placeholder.svg"}
-                            alt={`${reward.amount} ${reward.type}`}
-                            className="w-10 h-10 object-contain"
-                          />
-                        </div>
-
-                        {/* Reward Amount */}
-                        <div className="text-center mb-1">
-                          <p className="text-yellow-300 font-bold text-xs">
-                            {reward.amount} {reward.type === "coins" ? "Coins" : "Rupees"}
-                          </p>
-                        </div>
-
-                        {/* Claim Button */}
-                        <button
-                          onClick={() => claimReward(reward.day)}
-                          disabled={isClaimed}
-                          className={`w-full py-1 px-2 rounded-lg text-xs font-bold transition-colors ${
-                            isClaimed
-                              ? "bg-green-600/50 text-green-200 cursor-not-allowed"
-                              : "bg-yellow-600 hover:bg-yellow-500 text-black"
-                          }`}
-                        >
-                          {isClaimed ? "Claimed" : "Claim"}
-                        </button>
-                      </div>
-                    )
-                  })}
-                </div>
-
-                {/* Close Button */}
-                <div className="text-center">
-                  <button
-                    onClick={() => setShowDailyRewardsPopup(false)}
-                    className="bg-red-600 hover:bg-red-500 text-white px-4 py-1 rounded-lg font-bold text-sm transition-colors"
-                  >
-                    Close
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+    
+                      
 
       {/* Header */}
       
