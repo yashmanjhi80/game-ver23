@@ -15,16 +15,24 @@ export async function POST(request: NextRequest) {
 
     console.log("Proxying registration request to backend for user:", body.username)
 
+    // Construct payload dynamically
+    const payload: any = {
+      username: body.username,
+      email: body.email,
+      password: body.password,
+    }
+
+    // Only add referalID if it exists
+    if (body.referralId) {
+      payload.referralId = body.referralId
+    }
+
     const response = await fetch(getApiUrl("REGISTER"), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        username: body.username,
-        email: body.email,
-        password: body.password,
-      }),
+      body: JSON.stringify(payload),
     })
 
     const data = await response.json()
@@ -34,7 +42,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(data, { status: response.status })
   } catch (error: any) {
     console.error("Registration API route error:", error.message)
-    // Provide a more specific error message from the fetch error
     return NextResponse.json(
       { success: false, message: `Failed to connect to backend: ${error.message}` },
       { status: 500 },
