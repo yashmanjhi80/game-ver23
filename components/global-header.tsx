@@ -48,7 +48,7 @@ export default function GlobalHeader() {
   }, [])
 
   return (
-    <header className="sticky top-0 z-40 border-b backdrop-blur-md border-yellow-500/20 p-3 bg-burgundy-800">
+    <header className="sticky top-0 z-40 border-b backdrop-blur-md border-yellow-500/20 p-2 bg-burgundy-800">
       <div className="max-w-6xl mx-auto flex items-center justify-between">
         {/* LEFT: Logo + Username */}
         <div className="flex items-center space-x-3">
@@ -56,7 +56,7 @@ export default function GlobalHeader() {
             <img
               src={DomainIcon.src}
               alt="Logo"
-              className="h-6 w-auto "
+              className="h-4 w-auto "
             />
           </Link>
         </div>
@@ -66,26 +66,26 @@ export default function GlobalHeader() {
         <div className="flex items-center   space-x-5">
           <Link
             href="/deposit"
-            className="flex items-center bg-black/ px-3 py-1.5 rounded-full space-x-2 hover:scale-105 transition-transform"
+            className="flex items-center bg-black/  py-1.5 rounded-sm space-x-2  transition-transform"
           >
               {/* Refresh balance */}
           <button
             onClick={refreshBalance}
             disabled={isLoadingBalance}
-            className="bg-orange/60  hover:bg-black/80 border border-yellow-500/30 rounded-lg transition-colors disabled:opacity-50 p-"
+            className="bg-orange/60  hover:bg-black/80 border border-yellow-500/30 rounded-sm transition-colors disabled:opacity-50 p-"
             title="Refresh Balance"
           >
-            <RefreshCw size={20} className={`text-orange-400 ${isLoadingBalance ? "animate-spin" : ""}`} />
+            <RefreshCw size={16} className={`text-yellow-400 ${isLoadingBalance ? "animate-spin" : ""}`} />
           </button>
-            <div className="text-white font-bold  ">
+            <div className="text-white font-semibold  ">
               ₹
             </div>
 
             
-            <span className="text-white font-extrabold ">
+            <span className="text-white font-semibold ">
               {isLoadingBalance ? <span className="animate-pulse text-yellow-400">...</span> : formatBalance(balance)}
             </span>
-            <div className="w-full flex items-center justify-center rounded-lg bg-orange-500 text-white hover:bg-yellow-600 px-1.5 h-6">Deposit
+            <div className="w-full flex items-center  text-[12px] justify-center rounded-sm bg-orange-500 text-white hover:bg-yellow-600 px-1.5 py-2 h-5">Deposit
              
             </div>
           </Link>
