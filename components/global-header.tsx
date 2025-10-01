@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { Plus, RefreshCw } from "lucide-react"
-import DomainIcon from "./assets/domain.png"
+import DomainIcon from "./assets/Domain.png"
 
 export default function GlobalHeader() {
   const [balance, setBalance] = useState(0)
