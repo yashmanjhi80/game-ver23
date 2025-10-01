@@ -1,17 +1,17 @@
 "use client"
 
-import { RefreshCw, Wallet, Plus, Flame, Gamepad2, Spade, Fish, Zap, HotelIcon } from "lucide-react"
+import { Wallet, Flame, Gamepad2, Spade, Fish, Zap } from "lucide-react"
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { NgameCardsData, gameCardsData, bannerData } from "@/data/games"
 import BottomNavigation from "@/components/bottom-navigation"
 import React from "react"
-import { RandomAvatarImg } from "@/components/random-avatar"
 import hot from "./asssets/hot.png"
 import fish from "./asssets/fish.png"
 import cards from "./asssets/cards.png"
 import jili from "./asssets/JILI.png"
+import { useRouter } from "next/navigation"
 
 interface UserCredentials {
   username: string
@@ -152,7 +152,7 @@ export default function HomePage() {
     OT: 0,
   })
 
-  
+  const router = useRouter()
 
   useEffect(() => {
     const loadUserDataAndBalance = async () => {
@@ -176,6 +176,20 @@ export default function HomePage() {
 
     loadUserDataAndBalance()
   }, [])
+
+  useEffect(() => {
+    if (typeof window === "undefined") return
+    const params = new URLSearchParams(window.location.search)
+    const refer = params.get("refer")
+    if (refer) {
+      try {
+        localStorage.setItem("referralId", refer)
+      } catch (e) {
+        // ignore storage failures
+      }
+      router.replace(`/?register=1&refer=${encodeURIComponent(refer)}`)
+    }
+  }, [router])
 
   // Banner auto-slide effect (only for vertical view)
   useEffect(() => {
@@ -342,7 +356,6 @@ export default function HomePage() {
     const newClaimedRewards = [...claimedRewards, day]
     setClaimedRewards(newClaimedRewards)
     localStorage.setItem("todayClaimedRewards", JSON.stringify(newClaimedRewards))
-
   }
 
   const handleBannerClick = (banner: any) => {
@@ -388,7 +401,6 @@ export default function HomePage() {
       case "OT":
         return <Zap size={16} />
       default:
-        
     }
   }
 
@@ -434,7 +446,7 @@ export default function HomePage() {
   }
 
   return (
-    <div className="min-h-screen bg-linear-65 from-burgundy-800 to-burgundy-960 text-white">
+    <div className="min-h-screen bg-gradient-to-b from-burgundy-800 to-burgundy-960 text-white">
       <div className="fixed bottom-18 right-4 z-50 animate-bounce">
         <img
           src="/images/design-mode/1000282551-unscreen-%281%29-1757152743414-1757152800749%281%29%281%29%281%29.gif"
@@ -500,11 +512,7 @@ export default function HomePage() {
         </div>
       )}
 
-    
-                      
-
       {/* Header */}
-      
 
       {/* Floating Welcome Notification */}
       {showWelcomeNotification && (
@@ -530,25 +538,23 @@ export default function HomePage() {
                   ? "bg-yellow-600 text-black border-yellow-400"
                   : "bg-black/60 text-yellow-400 hover:bg-black/80 border-yellow-500/30"
               }`}
-            >
-              
-            </button>
+            ></button>
             {[
               { key: "SL", label: "Slots", icon: "🎰" },
               { key: "FH", label: "Fishing", icon: "🐟" },
               { key: "CB", label: "Cards", icon: "🃏" },
               { key: "OT", label: "Others", icon: "🎮" },
-            ].map((filter) => (
+            ].map((f) => (
               <button
-                key={filter}
-                onClick={() => setSelectedFilter(filter)}
+                key={f.key}
+                onClick={() => setSelectedFilter(f.key)}
                 className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors border ${
-                  selectedFilter === filter
+                  selectedFilter === f.key
                     ? "bg-yellow-600 text-black border-yellow-400"
                     : "bg-black/60 text-yellow-400 hover:bg-black/80 border-yellow-500/30"
                 }`}
               >
-                {getGameTypeIcon(filter)}
+                {getGameTypeIcon(f.key)}
               </button>
             ))}
           </div>
@@ -594,7 +600,7 @@ export default function HomePage() {
         /* Vertical Layout - Redesigned with 3x3 Category Grids */
         <div className="max-w-6xl mx-auto p-2 md:p-6 space-y-6 md:space-y-6 pb-20 bg-gradient-to-br from-purple-900/20 via-red-900/20 to-black/20 backdrop-blur-sm">
           {/* Banner Slider */}
-          <div className="relative w-full  border-yellow-400 border-1 h-40 md:h-60 lg:h-72 mb-6 md:mb-8 overflow-hidden rounded-xl md:rounded-2xl ">
+          <div className="relative w-full border border-yellow-400 h-40 md:h-60 lg:h-72 mb-6 md:mb-8 overflow-hidden rounded-xl md:rounded-2xl ">
             <div
               className="flex transition-transform duration-500 ease-in-out h-full"
               style={{ transform: `translateX(-${currentBanner * 100}%)` }}
@@ -612,7 +618,6 @@ export default function HomePage() {
                     loading="eager"
                   />
                   {/* Banner title overlay */}
-
                 </div>
               ))}
             </div>
@@ -636,14 +641,12 @@ export default function HomePage() {
             <div className="flex gap-4 overflow-x-auto scrollbar-hide pb-2">
               <button
                 onClick={() => setSelectedFilter("ALL")}
-                className={`flex items-center gap-2 px-6 py-1 bg-[#450b00] rounded-sm whitespace-nowrap transition-colors  ${
-                  selectedFilter === "ALL"
-                    ? " text-white "
-                    : " text-white/70"
+                className={`flex items-center gap-2 px-6 py-1 bg-[#450b00] rounded-sm whitespace-nowrap transition-colors ${
+                  selectedFilter === "ALL" ? " text-white " : " text-white/70 "
                 }`}
               >
                 <Flame className="text-yellow-400" size={18} />
-               Hot
+                Hot
               </button>
               {[
                 { key: "SL", label: "Slots", icon: "🎰" },
@@ -654,10 +657,8 @@ export default function HomePage() {
                 <button
                   key={filter.key}
                   onClick={() => setSelectedFilter(filter.key)}
-                  className={`flex items-center gap-2 px-2  bg-[#450b00] rounded-sm whitespace-nowrap transition-colors  ${
-                    selectedFilter === filter.key
-                      ? "  text-white "
-                      : "text-white/  "
+                  className={`flex items-center gap-2 px-2 bg-[#450b00] rounded-sm whitespace-nowrap transition-colors ${
+                    selectedFilter === filter.key ? " text-white " : " text-white/70 "
                   }`}
                 >
                   <span>{filter.icon}</span>
@@ -674,10 +675,10 @@ export default function HomePage() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="w-6 h-6 bg-gradient-to-r from-yellow-500/30 to-red-500 rounded-lg flex items-center justify-center">
-                                  <Image src={hot} alt="Logo 1" className="h-6 w-auto" />
+                      <Image src={hot || "/placeholder.svg"} alt="Logo 1" className="h-6 w-auto" />
                     </div>
-                    <h2 className="text-xl md:text-2xl  text-yellow-300 drop-shadow-lg">Slots </h2>
-                     <h2 className="text-xl md:text-2xl  text-white drop-shadow-lg"> Games</h2>
+                    <h2 className="text-xl md:text-2xl text-yellow-300 drop-shadow-lg">Slots </h2>
+                    <h2 className="text-xl md:text-2xl text-white drop-shadow-lg"> Games</h2>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="text-gray-200 text-sm drop-shadow-md">
@@ -707,7 +708,9 @@ export default function HomePage() {
                       <div className="relative w-full aspect-[3/4] bg-gradient-to-br from-black via-gray-900 to-black rounded-xl overflow-hidden shadow-lg border border-yellow-500/30">
                         <JEImage gCode={game.g_code} alt={game.gameName} />
                         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-2 opacity-0">
-                          <h3 className="text-yellow-300 font-bold text-xs text-center truncate opacity-0">{game.gameName}</h3>
+                          <h3 className="text-yellow-300 font-bold text-xs text-center truncate opacity-0">
+                            {game.gameName}
+                          </h3>
                         </div>
                       </div>
                     </div>
@@ -722,7 +725,7 @@ export default function HomePage() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="w-6 h-6 bg-gradient-to-r from-yellow-500 to-red-500 rounded-lg flex items-center justify-center">
-                      <Image src={fish} alt="Logo 1" className="h-8 w-auto" />
+                      <Image src={fish || "/placeholder.svg"} alt="Logo 1" className="h-8 w-auto" />
                     </div>
                     <h2 className="text-xl md:text-2xl font-bold text-white drop-shadow-lg">Fishing Games</h2>
                   </div>
@@ -769,10 +772,10 @@ export default function HomePage() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="w-6 h-6 bg-gradient-to-r from-yellow-500 to-red-500 rounded-lg flex items-center justify-center">
-                      <Image src={cards} alt="Logo 1" className="h-6 w-auto" />
+                      <Image src={cards || "/placeholder.svg"} alt="Logo 1" className="h-6 w-auto" />
                     </div>
-                    <h2 className="text-xl md:text-2xl text-yellow-400 drop-shadow-lg">Cards  </h2>
-                     <h2 className="text-xl md:text-2xl  text-white drop-shadow-lg">  Games</h2>
+                    <h2 className="text-xl md:text-2xl text-yellow-400 drop-shadow-lg">Cards </h2>
+                    <h2 className="text-xl md:text-2xl text-white drop-shadow-lg"> Games</h2>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="text-gray-200 text-sm drop-shadow-md">
@@ -780,13 +783,13 @@ export default function HomePage() {
                     </span>
                     <button
                       onClick={() => prevPage("CB")}
-                      className="w-8 h-8 bg-black/60 border border-yellow-500/30 rounded-sm flex items-center justify-center text-yellow-400 hover:bg-black/80 transition-colors"
+                      className="w-8 h-8 bg-black/60 border border-yellow-500/30 rounded-lg flex items-center justify-center text-yellow-400 hover:bg-black/80 transition-colors"
                     >
                       ‹
                     </button>
                     <button
                       onClick={() => nextPage("CB")}
-                      className="w-8 h-8 bg-black/60 border border-yellow-500/30 rounded-sm flex items-center justify-center text-yellow-400 hover:bg-black/80 transition-colors"
+                      className="w-8 h-8 bg-black/60 border border-yellow-500/30 rounded-lg flex items-center justify-center text-yellow-400 hover:bg-black/80 transition-colors"
                     >
                       ›
                     </button>
@@ -802,7 +805,9 @@ export default function HomePage() {
                       <div className="relative w-full aspect-[3/4] bg-gradient-to-br from-black via-gray-900 to-black rounded-xl overflow-hidden shadow-lg border border-yellow-500/30">
                         <JEImage gCode={game.g_code} alt={game.gameName} />
                         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-2 opacity-0">
-                          <h3 className="text-yellow-300 font-bold text-xs text-center truncate opacity-0">{game.gameName}</h3>
+                          <h3 className="text-yellow-300 font-bold text-xs text-center truncate opacity-0">
+                            {game.gameName}
+                          </h3>
                         </div>
                       </div>
                     </div>
@@ -817,10 +822,10 @@ export default function HomePage() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="w-6 h-6 bg-gradient-to-r from-yellow-500/30 to-red-500 rounded-lg flex items-center justify-center">
-                      <Image src={jili} alt="Logo 1" className="h-6 w-auto" />
+                      <Image src={jili || "/placeholder.svg"} alt="Logo 1" className="h-6 w-auto" />
                     </div>
                     <h2 className="text-xl md:text-2xl text-yellow-400 drop-shadow-lg">Other </h2>
-                      <h2 className="text-xl md:text-2xl  text-white drop-shadow-lg">Games </h2>
+                    <h2 className="text-xl md:text-2xl text-white drop-shadow-lg">Games </h2>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="text-gray-200 text-sm drop-shadow-md">

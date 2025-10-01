@@ -45,6 +45,26 @@ export default function GameLogin() {
     checkExistingLogin()
   }, [router])
 
+  // Prefill referral and switch to Create Account if ?refer= or ?register=1 present
+  useEffect(() => {
+    if (typeof window === "undefined") return
+    try {
+      const params = new URLSearchParams(window.location.search)
+      const urlRefer = params.get("refer") || ""
+      const storedRefer = localStorage.getItem("referralId") || ""
+      const effectiveRefer = urlRefer || storedRefer
+
+      if (effectiveRefer) {
+        setReferralId(effectiveRefer)
+        setIsCreateAccount(true)
+      } else if (params.get("register") === "1") {
+        setIsCreateAccount(true)
+      }
+    } catch {
+      // ignore malformed search params
+    }
+  }, [])
+
   useEffect(() => {
     if (backgroundMusicRef.current && isFeatureEnabled("MUSIC_ENABLED")) {
       backgroundMusicRef.current.volume = APP_CONFIG.AUDIO.BACKGROUND_MUSIC_VOLUME
