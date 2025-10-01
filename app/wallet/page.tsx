@@ -272,10 +272,10 @@ const WalletPage = () => {
                     variant={selectedAmount === amount ? "default" : "outline"}
                     size="sm"
                     onClick={() => setSelectedAmount(amount)}
-                    className={`h-12 ${
+                    className={`h-12 bg-black/30 text-white border-yellow-400/40 border-1  ${
                       selectedAmount === amount
-                        ? "bg-yellow-500 border-yellow-400 text-black hover:bg-yellow-600"
-                        : "bg-black/60 border-yellow-500/30 text-white hover:bg-black/80"
+                        ? "border-yellow-500 bg-yellow-500/60 "
+                        : ""
                     }`}
                   >
                     ₹ {amount.toLocaleString("en-IN")}
@@ -296,9 +296,9 @@ const WalletPage = () => {
           }`}
           onClick={() => setCashbackSelected("apply")}
         >
-          <div className="grid grid-cols-2 px-5 text-white  items-center text-center">
-            <span className="grid grid-cols-2  items-center justify-center text-sm font-medium">
-              <Image src={CashIcon} alt="Share" className="m-3 ml-7 h-6 w-6" />
+          <div className="grid grid-cols-2 px-3 text-white  items-center text-center">
+            <span className="grid grid-cols-2 gap-6 items-center justify-center text-sm ">
+              <Image src={CashIcon} alt="Share" className="m-3 ml-7 h-5 w-5" />
             </span>
             <span className="mr-7">Apply</span>
           </div>
