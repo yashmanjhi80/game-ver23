@@ -1,7 +1,7 @@
 "use client"
 import Image from "next/image"
-import { useState } from "react"
-import { FileText, ShoppingCart, CreditCard, Plus } from "lucide-react"
+import { useState, useEffect } from "react"
+import { FileText, ShoppingCart, CreditCard, Plus, CheckCircle, AlertCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -11,15 +11,134 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import CashIcon from './asssets/cash-back.png'
 import BottomNavigation from "@/components/bottom-navigation"
 
+interface UserCredentials {
+  username: string
+  password: string
+  user?: {
+    username: string
+    email: string
+  }
+  loginTime: string
+}
+
+
+
+
 const WalletPage = () => {
   const [activeTab, setActiveTab] = useState<"recharge" | "withdraw">("recharge")
   const [selectedAmount, setSelectedAmount] = useState<number>(200)
   const [selectedMethod, setSelectedMethod] = useState<string>("Fpay")
   const [isBindBankOpen, setIsBindBankOpen] = useState(false)
+  // ✅ New states for functionality
+  const [username, setUsername] = useState<string>("")
+  const [isProcessing, setIsProcessing] = useState(false)
+  const [paymentError, setPaymentError] = useState("")
+  const [paymentSuccess, setPaymentSuccess] = useState("")
 
   const amounts = [200, 300, 500, 800, 1000, 1500, 2000, 5000, 10000, 20000, 30000, 50000]
   const withdrawalAmounts = [100, 400, 600, 800, 1000, 2000, 5000, 10000]
   const paymentMethods = ["Fpay", "LGpay", "Other"]
+
+  
+  const MIN_DEPOSIT = 100
+  const MAX_DEPOSIT = 50000
+
+    useEffect(() => {
+    // Load user credentials from localStorage
+    const storedCredentials = localStorage.getItem("userCredentials")
+    if (storedCredentials) {
+      const credentials: UserCredentials = JSON.parse(storedCredentials)
+      setUsername(credentials.username)
+    }
+  }, [])
+
+  // Generate unique Order ID
+  const generateOrderId = () => {
+    const timestamp = Date.now()
+    const random = Math.floor(Math.random() * 1000).toString().padStart(3, "0")
+    return `ORD${timestamp}${random}`
+  }
+
+  // Handle payment / recharge
+  const handleRecharge = async () => {
+    if (!selectedAmount || selectedAmount < MIN_DEPOSIT) {
+      setPaymentError(`Minimum deposit amount is ₹${MIN_DEPOSIT}`)
+      return
+    }
+
+    if (selectedAmount > MAX_DEPOSIT) {
+      setPaymentError(`Maximum deposit amount is ₹${MAX_DEPOSIT}`)
+      return
+    }
+
+    if (!username) {
+      setPaymentError("Please login to continue")
+      return
+    }
+
+    setIsProcessing(true)
+    setPaymentError("")
+    setPaymentSuccess("")
+
+    try {
+      const orderId = generateOrderId()
+      const storedCredentials = localStorage.getItem("userCredentials")
+
+      if (!storedCredentials) {
+        setPaymentError("Please login to continue")
+        return
+      }
+
+      const credentials: UserCredentials = JSON.parse(storedCredentials)
+
+      const response = await fetch("/api/auth/create-payment", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          orderId,
+          amount: selectedAmount,
+          username: credentials.username,
+          password: credentials.password,
+          ip: "0.0.0.0",
+          remark: `Deposit for user ${credentials.username} via ${selectedMethod}`,
+        }),
+      })
+
+      const paymentData = await response.json()
+
+      if (paymentData.status === 1 && paymentData.data?.pay_url) {
+        setPaymentSuccess("Redirecting to payment gateway...")
+        window.open(paymentData.data.pay_url, "_blank", "noopener,noreferrer")
+
+        setTimeout(() => {
+          setPaymentSuccess("Payment initiated successfully! Complete the payment in the new window.")
+        }, 1000)
+      } else {
+        setPaymentError(paymentData.msg || "Failed to create payment")
+      }
+    } catch (error) {
+      console.error("Payment creation error:", error)
+      setPaymentError("Failed to create payment. Please try again.")
+    } finally {
+      setIsProcessing(false)
+    }
+  }
+
+  // Handle withdraw
+  const handleWithdraw = () => {
+    if (!username) {
+      setPaymentError("Please login to withdraw")
+      return
+    }
+    if (!selectedAmount || selectedAmount < 100) {
+      setPaymentError("Minimum withdrawal is ₹100")
+      return
+    }
+
+    setPaymentSuccess(`Withdrawal request of ₹${selectedAmount} submitted successfully!`)
+  }
 
   const banks = [
     "Abhyudaya Cooperative Bank",
@@ -180,6 +299,19 @@ const WalletPage = () => {
   return (
     <div className="min-h-screen bg-[#2b0d0d] pb-20 text-burgundy-800">
       {/* Header */}
+       {/* ✅ Payment status messages */}
+      {paymentError && (
+        <div className="bg-red-900/30 border border-red-500/50 rounded-xl p-4 m-4 backdrop-blur-sm flex items-center space-x-3">
+          <AlertCircle size={20} className="text-red-400" />
+          <p className="text-red-300">{paymentError}</p>
+        </div>
+      )}
+      {paymentSuccess && (
+        <div className="bg-green-900/30 border border-green-500/50 rounded-xl p-4 m-4 backdrop-blur-sm flex items-center space-x-3">
+          <CheckCircle size={20} className="text-green-400" />
+          <p className="text-green-300">{paymentSuccess}</p>
+        </div>
+      )}
       
 
       {/* Tab Navigation */}
@@ -272,10 +404,10 @@ const WalletPage = () => {
                     variant={selectedAmount === amount ? "default" : "outline"}
                     size="sm"
                     onClick={() => setSelectedAmount(amount)}
-                    className={`h-12 bg-black/30 text-white border-yellow-400/40 border-1  ${
+                    className={`h-12 ${
                       selectedAmount === amount
-                        ? "border-yellow-500 bg-yellow-500/60 "
-                        : ""
+                        ? "bg-yellow-500 border-yellow-400 text-black hover:bg-yellow-600"
+                        : "bg-black/60 border-yellow-500/30 text-white hover:bg-black/80"
                     }`}
                   >
                     ₹ {amount.toLocaleString("en-IN")}
@@ -286,19 +418,19 @@ const WalletPage = () => {
 
             <div>
       <h3 className="text-sm font-medium text-muted-foreground mb-3">Recharge Cashback</h3>
-      <div className="grid grid-cols-2 gap-3 ">
+      <div className="grid grid-cols-2 gap-3">
         {/* Apply Cashback Card */}
         <Card
-          className={` bg-black/30 border-yellow-400/40 border-1 ${
+          className={`bg-card border-border transition-colors cursor-pointer border-x-0 ${
             cashbackSelected === "apply"
-              ? "border-yellow-500 bg-yellow-500/60"
+              ? "border-yellow-500 bg-yellow-500 bg-opacity-30"
               : ""
           }`}
           onClick={() => setCashbackSelected("apply")}
         >
-          <div className="grid grid-cols-2 px-3 text-white  items-center text-center">
-            <span className="grid grid-cols-2 gap-6 items-center justify-center text-sm ">
-              <Image src={CashIcon} alt="Share" className="m-3 ml-7 h-5 w-5" />
+          <div className="grid grid-cols-2 items-center text-center">
+            <span className="grid grid-cols-2 items-center justify-center text-sm font-medium">
+              <Image src={CashIcon} alt="Share" className="m-3 ml-7 h-8" />
             </span>
             <span className="mr-7">Apply</span>
           </div>
@@ -306,14 +438,14 @@ const WalletPage = () => {
 
         {/* Later Card */}
         <Card
-          className={`bg-black/30 border-yellow-400/40 border-1  ${
+          className={`bg-card border-border transition-colors cursor-pointer border-x-0 ${
             cashbackSelected === "later"
-              ? "border-yellow-500 bg-yellow-500/60"
+              ? "border-yellow-500 bg-yellow-500 bg-opacity-30"
               : ""
           }`}
           onClick={() => setCashbackSelected("later")}
         >
-          <div className="flex items-center   text-white justify-center  mt-3">Later</div>
+          <div className="flex items-center justify-center mt-4">Later</div>
         </Card>
       </div>
 
@@ -341,14 +473,21 @@ const WalletPage = () => {
 
             {/* Pay Button */}
             <div className="flex justify-center relative">
-              <Button
+              {/* <Button
                 className="bg-gradient-to-b from-yellow-300 via-yellow-400 to-yellow-600 text-black font-bold py-4 px-16 rounded-full text-base hover:from-yellow-400 hover:via-yellow-500 hover:to-yellow-700 transition-all duration-300 shadow-lg border border-yellow-400 relative overflow-hidden"
                 size="lg"
               >
                 <div className="absolute inset-0 bg-gradient-to-b from-white/20 via-transparent to-black/10 rounded-full"></div>
                 <div className="absolute top-1 left-4 right-4 h-1 bg-gradient-to-r from-transparent via-white/40 to-transparent rounded-full"></div>
                 <span className="relative z-10 tracking-wide">Pay</span>
-              </Button>
+              </Button> */}
+                      <Button
+          onClick={activeTab === "recharge" ? handleRecharge : handleWithdraw}
+          disabled={isProcessing}
+          className="bg-gradient-to-b from-yellow-300 via-yellow-400 to-yellow-600 text-black font-bold px-16 py-4 rounded-full"
+        >
+          {isProcessing ? "Processing..." : activeTab === "recharge" ? `Recharge ₹${selectedAmount}` : `Withdraw ₹${selectedAmount}`}
+        </Button>
             </div>
           </>
         ) : (
