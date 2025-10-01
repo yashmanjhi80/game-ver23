@@ -6,7 +6,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { ArrowLeft, CreditCard } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
-import { Bell, Shield, Headphones, Gift, Settings, Ticket, LogOut, Camera, ChevronRight } from "lucide-react"
+import { Bell, Shield,Notebook , Headphones, Gift, Settings, Ticket, LogOut, Camera, ChevronRight } from "lucide-react"
 import BottomNavigation from "@/components/bottom-navigation"
 import { RandomAvatarForAvatar } from "@/components/random-avatar"
 import VipCard from "@/components/vip-card"
@@ -108,12 +108,12 @@ export default function ProfilePage() {
 
   const menuItems = [
     { icon: Bell, label: "Notifications", badge: 1, href: "/inbox" },
-    { icon: CreditCard, label: "Balance records", href: "/history" },
-    { icon: Shield, label: "Account & Security", href: "/about" },
+    { icon: CreditCard, label: "Transaction", href: "/transaction" },
+    { icon: Notebook, label: "Bets", href: "/bets" },
     { icon: Headphones, label: "Live Support", href: "/help" },
     { icon: Gift, label: "Gifts", href: "/gifts" },
-    { icon: Settings, label: "Settings", href: "/settings" },
-    { icon: Ticket, label: "Ticket", href: "/tickets" },
+ 
+      { icon: Settings, label: "Settings", href: "/settings" },
     { icon: LogOut, label: "Logout", onClick: handleLogout },
   ]
 
@@ -139,10 +139,7 @@ export default function ProfilePage() {
                   </AvatarFallback>
                 </Avatar>
               </div>
-              {/* Camera Badge */}
-              <div className="absolute -bottom-1 -right-1 bg-gold-500 rounded-full p-1.5">
-                <Camera className="w-4 h-4 text-burgundy-900" />
-              </div>
+             
             </div>
 
             {/* Player Info */}
