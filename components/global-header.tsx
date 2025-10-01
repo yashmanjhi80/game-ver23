@@ -56,7 +56,7 @@ export default function GlobalHeader() {
             <img
               src={DomainIcon.src}
               alt="Logo"
-              className="h-4 w-auto "
+              className="h-6 w-auto "
             />
           </Link>
         </div>
