@@ -624,7 +624,7 @@ export default function HomePage() {
                   : "bg-black/60 text-yellow-400 hover:bg-black/80 border-yellow-500/30"
               }`}
             >
-              <Grid3X3 size={16} />
+              
             </button>
             {[
               { key: "SL", label: "Slots", icon: "🎰" },
@@ -685,9 +685,9 @@ export default function HomePage() {
         </div>
       ) : (
         /* Vertical Layout - Redesigned with 3x3 Category Grids */
-        <div className="max-w-6xl mx-auto p-3 md:p-6 space-y-6 md:space-y-8 pb-20 bg-gradient-to-br from-purple-900/20 via-red-900/20 to-black/20 backdrop-blur-sm">
+        <div className="max-w-6xl mx-auto p-2 md:p-6 space-y-6 md:space-y-6 pb-20 bg-gradient-to-br from-purple-900/20 via-red-900/20 to-black/20 backdrop-blur-sm">
           {/* Banner Slider */}
-          <div className="relative w-full  border-yellow-400 border-2 h-40 md:h-60 lg:h-72 mb-6 md:mb-8 overflow-hidden rounded-xl md:rounded-2xl ">
+          <div className="relative w-full  border-yellow-400 border-1 h-40 md:h-60 lg:h-72 mb-6 md:mb-8 overflow-hidden rounded-xl md:rounded-2xl ">
             <div
               className="flex transition-transform duration-500 ease-in-out h-full"
               style={{ transform: `translateX(-${currentBanner * 100}%)` }}
@@ -766,8 +766,8 @@ export default function HomePage() {
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-6 h-6 bg-gradient-to-r from-yellow-500 to-red-500 rounded-lg flex items-center justify-center">
-                                  <Image src={hot} alt="Logo 1" className="h-8 w-auto" />
+                    <div className="w-6 h-6 bg-gradient-to-r from-yellow-500/30 to-red-500 rounded-lg flex items-center justify-center">
+                                  <Image src={hot} alt="Logo 1" className="h-6 w-auto" />
                     </div>
                     <h2 className="text-xl md:text-2xl  text-yellow-300 drop-shadow-lg">Slots </h2>
                      <h2 className="text-xl md:text-2xl  text-white drop-shadow-lg"> Games</h2>
