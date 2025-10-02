@@ -1,7 +1,7 @@
 "use client"
 import Image from "next/image"
 import { useState, useEffect } from "react"
-import { FileText, ShoppingCart, CreditCard, Plus, CheckCircle, AlertCircle } from "lucide-react"
+import { FileText, ShoppingCart, CreditCard,BadgeIndianRupee, Plus, CheckCircle, AlertCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -490,7 +490,44 @@ const WalletPage = () => {
             </div>
           </>
         ) : (
+          
           <>
+          
+           {/* Withdrawal Information */}
+
+{/* Bonus Cards - 2 Grid Layout Rectangular */}
+<div className="grid grid-cols-2 md:grid-cols-2 gap-2 mb-6">
+  {/* Cash Balance */}
+  <Card className="p-4 h-24 bg-gradient-to-r from-blue-700/60 to-blue-500/60 border-none">
+    <div className="flex items-center justify-between h-full">
+      <div className="flex items-center gap-3">
+        <div className="p-2 rounded-full bg-white/ ">
+          <CreditCard className="w-8 h-8 text-black/30" />
+        </div>
+        <div>
+          <p className="text-white text-[12px]">Cash balance</p>
+          <p className="text-white text-xs font-bold">₹0</p>
+        </div>
+      </div>
+    </div>
+  </Card>
+
+  {/* Withdrawable Balance */}
+  <Card className="p-4 h-24 bg-gradient-to-r from-green-700/60 to-green-500/60 border-none">
+    <div className="flex items-center justify-between h-full">
+      <div className="flex items-center gap-3">
+        <div className="p-2 rounded-full bg-white/ ">
+          <BadgeIndianRupee className="w-8 h-8 text-black/30" />
+        </div>
+        <div>
+          <h3 className="text-white text-[12px]">Withdrawable</h3>
+          <p className="text-white text-xs font-bold">₹0</p>
+        </div>
+      </div>
+    </div>
+  </Card>
+</div>
+
             {/* Bind Bank Card Section */}
             <Card
               className="p-4 bg-[#450b00] border-2 border-dashed border-yellow-500/50 hover:border-yellow-400/70 transition-colors cursor-pointer"
