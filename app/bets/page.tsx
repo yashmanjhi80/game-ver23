@@ -10,14 +10,14 @@ interface BetRecord {
 const sampleBetRecords: BetRecord[] = [
   { bettype: "Jili", time: "2025-09-18 15:15:42", betAmount: 50, winLoss: 80 },
   { bettype: "PG", time: "2025-09-18 15:15:41", betAmount: 50, winLoss: -30 },
-  { BetType: "evo", time: "2025-09-18 15:15:41", betAmount: 50, winLoss: -50 },
+  { bettype: "Evo", time: "2025-09-18 15:15:41", betAmount: 50, winLoss: -50 },
    {bettype: "Cbi", time: "2025-09-18 15:15:40", betAmount: 50, winLoss: 10 },
   {bettype: "Turbo", time: "2025-09-18 15:15:39", betAmount: 50, winLoss: 110 },
    {bettype: "Jdb", time: "2025-09-18 15:15:38", betAmount: 50, winLoss: 20 },
-  {bettype: "evo", time: "2025-09-18 15:15:37", betAmount: 50, winLoss: -30 },
-  {bettype: "Pg", time: "2025-09-18 15:15:36", betAmount: 50, winLoss: 75 },
+  {bettype: "Evo", time: "2025-09-18 15:15:37", betAmount: 50, winLoss: -30 },
+  {bettype: "PG", time: "2025-09-18 15:15:36", betAmount: 50, winLoss: 75 },
   {bettype: "Jili", time: "2025-09-18 15:15:35", betAmount: 50, winLoss: -25 },
-  {bettype: "game", time: "2025-09-18 15:15:34", betAmount: 50, winLoss: 45 },
+  {bettype: "GAME", time: "2025-09-18 15:15:34", betAmount: 50, winLoss: 45 },
 ];
 
 const BetRecords = () => {
@@ -38,39 +38,34 @@ const BetRecords = () => {
 
 
       {/* Records List */}
-      <div className="pb-4 bg-[]">
+      <div className="pb-4 ">
         {sampleBetRecords.map((record, index) => (
           <div key={index}>
-            <div className=" py-3 px-4">
-              <div className="space-y-2">
+            <div className=" py-3 px-3">
+              <div className="space-y-1">
                 {/* First Row */}
-                <div className="flex justify-between  text-yellow-400 items-start">
+                <div className="flex justify-between  text-white/90 items-start">
                   <div className="flex flex-col">
-                    <span className="text-xs text-white  text-muted-foreground">Bet Type:</span>
-                    <span className="text-sm text-foreground font-medium">{record.bettype}</span>
+                   
+                    <span className="text-sm  font-medium">{record.bettype}</span>
                   </div>
-                  <div className="flex flex-col  text-yellow-400 text-right">
-                    <span className="text-xs text-white  text-muted-foreground">Time:</span>
-                    <span className="text-sm text-foreground font-medium">{record.time}</span>
+                  <div className="flex flex-col text-white/90 text-right">
+                   
+                    <span className="text-sm font-medium">{record.time}</span>
                   </div>
                 </div>
-                
                 {/* Second Row */}
-                <div className="flex justify-between  text-yellow-400 text-yellow-400 items-start">
+                <div className="flex justify-between pb-4 border-yellow-400 border-b items-start">
                   <div className="flex flex-col">
-                    <span className="text-xs text-white  text-muted-foreground">Bet Amount:</span>
-                    <span className="text-sm text-foreground font-medium">₹ {record.betAmount}</span>
+                    <span className="text-sm text-white/90 font-medium">₹ {record.betAmount}</span>
                   </div>
-                  <div className="flex flex-col  text-yellow-400 text-right">
-                    <span className="text-xs text-white text-muted-foreground">Win/Loss:</span>
-                    <span 
+                  <div className="flex flex-col text-right">
+                    <span
                       className={`text-sm font-medium ${
-                        record.winLoss > 0 
-                          ? 'text-success' 
-                          : 'text-loss'
+                        record.winLoss > 0 ? 'text-green-500' : 'text-red-500'
                       }`}
                     >
-                      ₹ {record.winLoss > 0 ? record.winLoss : record.winLoss}
+                      ₹ {record.winLoss}
                     </span>
                   </div>
                 </div>
