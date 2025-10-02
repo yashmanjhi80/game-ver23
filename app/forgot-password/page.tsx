@@ -3,7 +3,7 @@
 import type React from "react"
 
 import { useState } from "react"
-import { ArrowLeft, Mail, CheckCircle } from "lucide-react"
+import { ArrowLeft, Mail, CheckCircle, Mails } from "lucide-react"
 import Link from "next/link"
 
 export default function ForgotPasswordPage() {
@@ -49,20 +49,21 @@ export default function ForgotPasswordPage() {
       <div className="absolute inset-0 bg-gradient-to-br from-black/80 via-yellow-900/20 to-black/90" />
 
       {/* Content */}
-      <div className="relative z-10 flex items-center justify-center min-h-screen p-4">
+      <div className="relative z-10 flex items-top justify-center min-h-screen p-4">
         <div className="w-full max-w-md">
           {/* Header */}
           <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold text-transparent bg-gradient-to-r from-yellow-400 to-yellow-300 bg-clip-text drop-shadow-lg mb-2 font-serif">
-              AURA7
-            </h1>
-            <p className="text-yellow-200 text-lg drop-shadow-md font-medium">Password Recovery</p>
+          
+         
+            
+            <p className="text-yellow-200  text-lg drop-shadow-md font-medium">Password Recovery</p>
           </div>
-
-          {/* Back Button */}
-          <Link href="/" className="text-yellow-300 hover:text-yellow-200 transition-colors">
+            {/* Back Button */}
+           <Link href="/" className="text-yellow-300 hover:text-yellow-200 absolute top-6 transition-colors p-0">
             <ArrowLeft size={24} />
           </Link>
+
+          
 
           {!isEmailSent ? (
             /* Reset Form */
@@ -76,8 +77,8 @@ export default function ForgotPasswordPage() {
 
               {/* Email Field */}
               <div className="relative">
-                <div className="relative w-full h-16 flex items-center px-8 bg-black/40 border border-yellow-500/30 rounded-lg backdrop-blur-sm">
-                  <Mail size={20} className="text-yellow-400 mr-3" />
+                <div className="relative w-full h-12 flex items-center px-6 bg-black/40 border border-yellow-500/30 rounded-lg backdrop-blur-sm">
+                  <Mails size={26} className="text-yellow-400 mr-3" />
                   <input
                     type="email"
                     placeholder="Enter your email address"
@@ -93,10 +94,10 @@ export default function ForgotPasswordPage() {
               {error && <p className="text-red-400 text-center text-sm font-semibold">{error}</p>}
 
               {/* Submit Button */}
-              <div className="pt-4">
+              <div className="pt-4 flex justify-center">
                 <button
                   type="submit"
-                  className="relative w-full h-16 flex items-center justify-center transition-all duration-200 hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 bg-gradient-to-r from-yellow-600 to-yellow-500 hover:from-yellow-700 hover:to-yellow-600 rounded-lg shadow-lg border border-yellow-400/30"
+                  className="bg-gradient-to-b   from-yellow-300 via-golden to-yellow-600 text-black font-bold py-2 px-16 rounded-full text-base hover:from-yellow-400 hover:via-golden hover:to-yellow-700 transition-all duration-300 shadow-lg border border-yellow-400 relative overflow-hidden0"
                   disabled={isLoading}
                 >
                   <span className="text-black text-xl font-bold drop-shadow-lg">
@@ -108,8 +109,8 @@ export default function ForgotPasswordPage() {
           ) : (
             /* Success Message */
             <div className="text-center space-y-6">
-              <div className="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mx-auto border border-green-500/30">
-                <CheckCircle size={40} className="text-green-400" />
+              <div className="w-12 h-12 p-0 bg-yellow-500/20 rounded-full flex items-center justify-center mx-auto">
+                <CheckCircle size={44} className="text-green-400" />
               </div>
 
               <div>
@@ -117,14 +118,14 @@ export default function ForgotPasswordPage() {
                 <p className="text-gray-300 text-sm mb-4">
                   We've sent a password reset link to <span className="text-yellow-300 font-semibold">{email}</span>
                 </p>
-                <p className="text-gray-400 text-xs">
+                <p className="text-gray-400 text-xs mb-16">
                   Didn't receive the email? Check your spam folder or try again in a few minutes.
                 </p>
               </div>
 
               <Link
                 href="/"
-                className="inline-block w-full h-16 flex items-center justify-center transition-all duration-200 hover:scale-105 active:scale-95 bg-gradient-to-r from-yellow-600 to-yellow-500 hover:from-yellow-700 hover:to-yellow-600 rounded-lg shadow-lg border border-yellow-400/30"
+                className="bg-gradient-to-b   from-yellow-300 via-golden to-yellow-600 text-black font-bold py-2 px-16 rounded-full text-base hover:from-yellow-400 hover:via-golden hover:to-yellow-700 transition-all duration-300 shadow-lg border border-yellow-400 relative overflow-hidden"
               >
                 <span className="text-black text-xl font-bold drop-shadow-lg">BACK TO LOGIN</span>
               </Link>
@@ -133,7 +134,7 @@ export default function ForgotPasswordPage() {
 
           {/* Footer */}
           <div className="mt-8 text-center">
-            <p className="text-yellow-300/70 text-sm">© 2024 AURA7. All rights reserved.</p>
+            <p className="text-yellow-300/70 text-sm">© 2026 AURA7. All rights reserved.</p>
           </div>
         </div>
       </div>
