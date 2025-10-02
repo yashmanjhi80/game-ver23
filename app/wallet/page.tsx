@@ -505,7 +505,7 @@ const WalletPage = () => {
           <CreditCard className="w-8 h-8 text-black/30" />
         </div>
         <div>
-          <p className="text-white text-[12px]">Cash balance</p>
+          <p className="text-white text-[10px]">Cash balance</p>
           <p className="text-white text-xs font-bold">₹0</p>
         </div>
       </div>
@@ -520,7 +520,7 @@ const WalletPage = () => {
           <BadgeIndianRupee className="w-8 h-8 text-black/30" />
         </div>
         <div>
-          <h3 className="text-white text-[12px]">Withdrawable</h3>
+          <h3 className="text-white text-[10px]">Withdrawable</h3>
           <p className="text-white text-xs font-bold">₹0</p>
         </div>
       </div>
