@@ -2,11 +2,11 @@
 
 import type React from "react"
 import { useState, useEffect, useRef } from "react"
-import { Eye, EyeOff, Volume2, VolumeX, ArrowLeft } from "lucide-react"
+import { Eye, EyeOff,LockKeyholeOpen,CircleUserRound, Volume2, VolumeX, ArrowLeft,  Mails, } from "lucide-react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { APP_CONFIG, getStorageKey, isFeatureEnabled } from "@/config/app"
-
+import Image from "next/image"
 export default function GameLogin() {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
@@ -314,7 +314,7 @@ export default function GameLogin() {
           {/* Title overlay on image */}
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="text-center">
-              
+               <Image src="/images/telegram-icon.png" alt="Telegram" width={44} height={44} className="rounded-" />
               <p className="text-yellow-200 text-2xl drop-shadow-lg font-medium">
                 Enter the Ultimate Gaming Experience
               </p>
@@ -340,14 +340,15 @@ export default function GameLogin() {
           <div className="relative z-10 flex items-center justify-center min-h-screen p-4 lg:p-8">
             <div className="w-full max-w-md">
               {/* Mobile Title (Only visible on mobile) */}
-              <div className="text-center mb-8 lg:hidden">
-                <h1 className="text-4xl font-bold text-transparent bg-gradient-to-r from-yellow-400 to-yellow-300 bg-clip-text drop-shadow-lg mb-2 font-serif">
-                  AURA7
-                </h1>
-                <p className="text-yellow-200 text-lg drop-shadow-md font-medium">
+              <div className="text-center h-10  p-0 flex items-center justify-center    mb-8 lg:hidden">
+                
+                 <Image src="/images/Domain.png" alt="logo" width={180} height={36} className="  " />
+               
+                
+              </div>
+              <p className="text-yellow-300  flex items-center justify-center text-sm drop-shadow-md font-medium">
                   Enter the Ultimate Gaming Experience
                 </p>
-              </div>
 
               {/* Back Button for Create Account */}
               {isCreateAccount && (
@@ -364,12 +365,13 @@ export default function GameLogin() {
               {!isCreateAccount ? (
                 <form onSubmit={handleLogin} className="space-y-6">
                   <div className="text-center mb-6">
-                    <h2 className="text-2xl font-bold text-yellow-400 drop-shadow-lg">Login</h2>
+                    <h3 className="text-2xl font-bold text-yellow-400 drop-shadow-lg">Login</h3>
                   </div>
 
                   {/* Username Field */}
                   <div className="relative">
-                    <div className="relative w-full h-16 flex items-center px-8 bg-black/40 border border-yellow-500/30 rounded-lg backdrop-blur-sm">
+                    <div className="relative w-full h-12 flex items-center px-4 bg-black/40 border border-yellow-500/30 rounded-lg backdrop-blur-sm">
+                      < CircleUserRound size={26} className="bg-red-400/ z-30 mr-4 text-yellow-400 " />
                       <input
                         type="text"
                         placeholder="Username"
@@ -378,13 +380,17 @@ export default function GameLogin() {
                         className="w-full bg-transparent text-white placeholder-yellow-300/70 text-lg font-medium outline-none"
                         required
                         disabled={isLoading}
+                      
                       />
+                        
+                   
                     </div>
                   </div>
 
                   {/* Password Field */}
                   <div className="relative">
-                    <div className="relative w-full h-16 flex items-center px-8 bg-black/40 border border-yellow-500/30 rounded-lg backdrop-blur-sm">
+                    <div className="relative w-full h-12 flex items-center px-4 bg-black/40 border border-yellow-500/30 rounded-lg backdrop-blur-sm">
+                      < LockKeyholeOpen size={26} className="bg-red-400/ z-30 mr-4 text-yellow-400 " />
                       <input
                         type={showPassword ? "text" : "password"}
                         placeholder="Password"
@@ -408,10 +414,10 @@ export default function GameLogin() {
                   {loginError && <p className="text-red-400 text-center text-sm font-semibold">{loginError}</p>}
 
                   {/* Login Button */}
-                  <div className="pt-4">
+                  <div className="flex  justify-center   pt-4">
                     <button
                       type="submit"
-                      className="relative w-full h-16 flex items-center justify-center transition-all duration-200 hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 bg-gradient-to-r from-yellow-600 to-yellow-500 hover:from-yellow-700 hover:to-yellow-600 rounded-lg shadow-lg border border-yellow-400/30"
+                      className="bg-gradient-to-b   from-yellow-300 via-golden to-yellow-600 text-black font-bold py-2 px-16 rounded-full text-base hover:from-yellow-400 hover:via-golden hover:to-yellow-700 transition-all duration-300 shadow-lg border border-yellow-400 relative overflow-hidden"
                       disabled={isLoading}
                     >
                       <span className="text-black text-xl font-bold drop-shadow-lg">
@@ -438,10 +444,10 @@ export default function GameLogin() {
                     <button
                       type="button"
                       onClick={switchToCreateAccount}
-                      className="relative w-full h-16 flex items-center justify-center transition-all duration-200 hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 bg-gradient-to-r from-yellow-600 to-yellow-500 hover:from-yellow-700 hover:to-yellow-600 rounded-lg shadow-lg border border-yellow-400/30"
+                      className="bg-gradient-to-b from-yellow-300 via-golden to-yellow-600 text-black font-bold py-2 px-16 rounded-full text-base hover:from-yellow-400 hover:via-golden hover:to-yellow-700 transition-all duration-300 shadow-lg border border-yellow-400 relative overflow-hidden"
                       disabled={isLoading}
                     >
-                      <span className="text-black text-lg font-bold drop-shadow-lg">CREATE ACCOUNT</span>
+                      <span className="text-black  font-bold drop-shadow-lg">CREATE ACCOUNT</span>
                     </button>
                   </div>
                 </form>
@@ -454,7 +460,8 @@ export default function GameLogin() {
 
                   {/* Username Field */}
                   <div className="relative">
-                    <div className="relative w-full h-16 flex items-center px-8 bg-black/40 border border-yellow-500/30 rounded-lg backdrop-blur-sm">
+                    <div className="relative w-full h-12 flex items-center px-6 bg-black/40 border border-yellow-500/30 rounded-lg backdrop-blur-sm">
+                        < CircleUserRound size={26} className="bg-red-400/ z-30 mr-4 text-yellow-400 " />
                       <input
                         type="text"
                         placeholder={`Username (${APP_CONFIG.VALIDATION.USERNAME.MIN_LENGTH}-${APP_CONFIG.VALIDATION.USERNAME.MAX_LENGTH} lowercase chars)`}
