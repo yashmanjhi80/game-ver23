@@ -419,18 +419,18 @@ const WalletPage = () => {
             <div>
       <h3 className="text-sm font-medium text-muted-foreground mb-3">Recharge Cashback</h3>
       <div className="grid grid-cols-2 gap-3">
-        {/* Apply Cashback Card */}
+       {/* Apply Cashback Card */}
         <Card
-          className={`bg-card border-border transition-colors cursor-pointer border-x-0 ${
+          className={` bg-black/30 border-yellow-400/40 border-1 ${
             cashbackSelected === "apply"
-              ? "border-yellow-500 bg-yellow-500 bg-opacity-30"
+              ? "border-yellow-500 bg-yellow-500/60"
               : ""
           }`}
           onClick={() => setCashbackSelected("apply")}
         >
-          <div className="grid grid-cols-2 items-center text-center">
-            <span className="grid grid-cols-2 items-center justify-center text-sm font-medium">
-              <Image src={CashIcon} alt="Share" className="m-3 ml-7 h-8" />
+          <div className="grid grid-cols-2 px-3 text-white  items-center text-center">
+            <span className="grid grid-cols-2 gap-6 items-center justify-center text-sm ">
+              <Image src={CashIcon} alt="Share" className="m-3 ml-7 h-5 w-5" />
             </span>
             <span className="mr-7">Apply</span>
           </div>
@@ -438,14 +438,14 @@ const WalletPage = () => {
 
         {/* Later Card */}
         <Card
-          className={`bg-card border-border transition-colors cursor-pointer border-x-0 ${
+          className={`bg-black/30 border-yellow-400/40 border-1  ${
             cashbackSelected === "later"
-              ? "border-yellow-500 bg-yellow-500 bg-opacity-30"
+              ? "border-yellow-500 bg-yellow-500/60"
               : ""
           }`}
           onClick={() => setCashbackSelected("later")}
         >
-          <div className="flex items-center justify-center mt-4">Later</div>
+          <div className="flex items-center   text-white justify-center  mt-3">Later</div>
         </Card>
       </div>
 
@@ -468,7 +468,6 @@ const WalletPage = () => {
         </Card>
       )}
     </div>
-
 
 
             {/* Pay Button */}
