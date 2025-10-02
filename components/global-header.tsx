@@ -65,7 +65,7 @@ export default function GlobalHeader() {
         {/* RIGHT: Balance pill (clickable) */}
         <div className="flex items-center   space-x-5">
           <Link
-            href="/deposit"
+            href="/wallet"
             className="flex items-center bg-black/  py-1.5 rounded-sm space-x-2  transition-transform"
           >
               {/* Refresh balance */}
