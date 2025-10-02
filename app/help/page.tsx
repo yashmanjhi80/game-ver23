@@ -1,5 +1,5 @@
 "use client"
-
+import { X } from "lucide-react";
 import { ArrowLeft, MessageCircle, Mail, Phone, Clock, HelpCircle, Book, Shield } from "lucide-react"
 import Link from "next/link"
 import { useState } from "react"
@@ -44,15 +44,17 @@ export default function HelpPage() {
   return (
     <div className="min-h-screen bg-linear-65 from-burgundy-800 to-burgundy-960 to-black text-white pb-20">
       {/* Header */}
-      <header className="bg-black/80 backdrop-blur-sm border-b border-yellow-500/20 p-4">
-        <div className="max-w-4xl mx-auto flex items-center justify-between">
-          <Link href="/home" className="text-yellow-300 hover:text-yellow-200 transition-colors">
-            <ArrowLeft size={24} />
-          </Link>
-          <h1 className="text-2xl font-bold text-yellow-400">Help & Support</h1>
-          <div className="w-24"></div>
+      <div className="bg-[#2b0d0d] px-5 py-3 flex items-center justify-between">
+        <div className="w-2"></div>
+        <h1 className="text-white text-center flex justify-center items-center">
+         Help & Support
+        </h1>
+        <div className="flex items-center gap-2">
+          <a href="/profile">
+            <X className="w-5 h-4 text-white" />
+          </a>
         </div>
-      </header>
+      </div>
 
       <div className="max-w-4xl mx-auto p-6 space-y-8">
         {/* Hero Section */}
