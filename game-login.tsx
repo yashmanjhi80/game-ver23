@@ -314,9 +314,7 @@ export default function GameLogin() {
           {/* Title overlay on image */}
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="text-center">
-              <h1 className="text-6xl xl:text-7xl font-bold text-transparent bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 bg-clip-text drop-shadow-2xl mb-4 font-serif">
-                AURA7
-              </h1>
+              
               <p className="text-yellow-200 text-2xl drop-shadow-lg font-medium">
                 Enter the Ultimate Gaming Experience
               </p>

@@ -255,7 +255,7 @@ const AgentContent = ({ activeTab }: AgentContentProps) => {
         </div>
 
         <div className="text-center">
-          <p className="text-xs text-white/70 mb-2">Share to  Media</p>
+          <p className="text-xs text-white/70 mb-2">Share to  social Media</p>
           <div className="flex justify-center gap-3">
             <Button size="sm" className="rounded-lg w-12 h-12 p-0 bg-black/50 border border-gray-500">
               <Image src="/images/telegram-icon.png" alt="Telegram" width={44} height={44} className="rounded-" />
@@ -307,15 +307,13 @@ const AgentContent = ({ activeTab }: AgentContentProps) => {
             <div className="text-yellow-400 text-xl font-bold">0 People</div>
           </div>
           <div className="text-center">
-            <div className="text-white/70 text-sm mb-1">Total Number of Subordinates</div>
+            <div className="text-white/70 text-sm mb-1">Total Subordinates</div>
             <div className="text-yellow-400 text-xl font-bold">0 People</div>
           </div>
         </div>
 
         <div className="pt-4 border-t border-white/20">
-          <div className="text-sm text-white/70 mb-3">
-            Total Rewards: <span className="text-yellow-400">₹ 0</span>
-          </div>
+        
 
           <div className="grid grid-cols-2 gap-4">
             <div className="text-center">
