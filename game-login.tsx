@@ -2,7 +2,7 @@
 
 import type React from "react"
 import { useState, useEffect, useRef } from "react"
-import { Eye, EyeOff,LockKeyholeOpen,CircleUserRound, Volume2, VolumeX, ArrowLeft,  Mails, } from "lucide-react"
+import { Eye, EyeOff,LockKeyholeOpen,CircleUserRound, Volume2, VolumeX, ArrowLeft, HeartHandshake, Mails, } from "lucide-react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { APP_CONFIG, getStorageKey, isFeatureEnabled } from "@/config/app"
@@ -370,7 +370,7 @@ export default function GameLogin() {
 
                   {/* Username Field */}
                   <div className="relative">
-                    <div className="relative w-full h-12 flex items-center px-4 bg-black/40 border border-yellow-500/30 rounded-lg backdrop-blur-sm">
+                    <div className="relative w-full h-12 flex items-center px-6 bg-black/40 border border-yellow-500/30 rounded-lg backdrop-blur-sm">
                       < CircleUserRound size={26} className="bg-red-400/ z-30 mr-4 text-yellow-400 " />
                       <input
                         type="text"
@@ -389,7 +389,7 @@ export default function GameLogin() {
 
                   {/* Password Field */}
                   <div className="relative">
-                    <div className="relative w-full h-12 flex items-center px-4 bg-black/40 border border-yellow-500/30 rounded-lg backdrop-blur-sm">
+                    <div className="relative w-full h-12 flex items-center px-6 bg-black/40 border border-yellow-500/30 rounded-lg backdrop-blur-sm">
                       < LockKeyholeOpen size={26} className="bg-red-400/ z-30 mr-4 text-yellow-400 " />
                       <input
                         type={showPassword ? "text" : "password"}
@@ -478,7 +478,9 @@ export default function GameLogin() {
 
                   {/* Email Field */}
                   <div className="relative">
-                    <div className="relative w-full h-16 flex items-center px-8 bg-black/40 border border-yellow-500/30 rounded-lg backdrop-blur-sm">
+              
+                    <div className="relative w-full h-12 flex items-center px-6 bg-black/40 border border-yellow-500/30 rounded-lg backdrop-blur-sm">
+                        < Mails size={26} className="bg-red-400/ z-30 mr-4 text-yellow-400 " />
                       <input
                         type="email"
                         placeholder="Email"
@@ -493,7 +495,9 @@ export default function GameLogin() {
 
                   {/* Referral ID Field */}
                   <div className="relative">
-                    <div className="relative w-full h-16 flex items-center px-8 bg-black/40 border border-yellow-500/30 rounded-lg backdrop-blur-sm">
+                    <div className="relative w-full h-12 flex items-center px-6 bg-black/40 border border-yellow-500/30 rounded-lg backdrop-blur-sm">
+                     < HeartHandshake size={26} className="bg-red-400/ z-30 mr-4 text-yellow-400 " />
+
                       <input
                         type="text"
                         placeholder="Referral ID (Optional)"
@@ -507,7 +511,8 @@ export default function GameLogin() {
 
                   {/* Password Field */}
                   <div className="relative">
-                    <div className="relative w-full h-16 flex items-center px-8 bg-black/40 border border-yellow-500/30 rounded-lg backdrop-blur-sm">
+                    <div className="relative w-full h-12 flex items-center px-6 bg-black/40 border border-yellow-500/30 rounded-lg backdrop-blur-sm">
+                     < LockKeyholeOpen size={26} className="bg-red-400/ z-30 mr-4 text-yellow-400 " />
                       <input
                         type={showPassword ? "text" : "password"}
                         placeholder={`Password (min ${APP_CONFIG.VALIDATION.PASSWORD.MIN_LENGTH} chars)`}
@@ -531,7 +536,8 @@ export default function GameLogin() {
 
                   {/* Confirm Password Field */}
                   <div className="relative">
-                    <div className="relative w-full h-16 flex items-center px-8 bg-black/40 border border-yellow-500/30 rounded-lg backdrop-blur-sm">
+                    <div className="relative w-full h-12 flex items-center px-6 bg-black/40 border border-yellow-500/30 rounded-lg backdrop-blur-sm">
+                     < LockKeyholeOpen size={26} className="bg-red-400/ z-30 mr-4 text-yellow-400 " />
                       <input
                         type={showConfirmPassword ? "text" : "password"}
                         placeholder="Confirm Password"
@@ -555,10 +561,10 @@ export default function GameLogin() {
                   {registerError && <p className="text-red-400 text-center text-sm font-semibold">{registerError}</p>}
 
                   {/* Create Account Button */}
-                  <div className="pt-4">
+                  <div className="pt-4 flex justify-center">
                     <button
                       type="submit"
-                      className="relative w-full h-16 flex items-center justify-center transition-all duration-200 hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 bg-gradient-to-r from-yellow-600 to-yellow-500 hover:from-yellow-700 hover:to-yellow-600 rounded-lg shadow-lg border border-yellow-400/30"
+                      className="bg-gradient-to-b    from-yellow-300 via-golden to-yellow-600 text-black font-bold py-2 px-16 rounded-full text-base hover:from-yellow-400 hover:via-golden hover:to-yellow-700 transition-all duration-300 shadow-lg border border-yellow-400 relative overflow-hidden"
                       disabled={isLoading}
                     >
                       <span className="text-black text-xl font-bold drop-shadow-lg">
@@ -571,7 +577,7 @@ export default function GameLogin() {
 
               {/* Footer */}
               <div className="mt-8 text-center">
-                <p className="text-yellow-300/70 text-sm">© 2024 AURA7. All rights reserved.</p>
+                <p className="text-yellow-300/70 text-sm">© 2026 AURA7. All rights reserved.</p>
               </div>
             </div>
           </div>
