@@ -1,9 +1,8 @@
-"use client"
+"use client";
 
 import { useState } from "react";
-import { X } from "lucide-react";
+import { X, HelpCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
 interface Transaction {
@@ -12,55 +11,28 @@ interface Transaction {
   type: "Deposit" | "Withdrawal" | "Bonus";
   channel: string;
   amount: number;
-  status: "Completed" | "In Payment" | "Failed" | "Pending";
+  status:
+    | "Pending"
+    | "Success"
+    | "Failed"
+    | "Reviewing"
+    | "Processing"
+    | "Received";
   currency?: string;
 }
 
 const TransactionRecords = () => {
   const [activeFilter, setActiveFilter] = useState<"Recharge" | "Withdraw" | "Bonus">("Recharge");
+  const [showReasonPrompt, setShowReasonPrompt] = useState(false);
 
-  // Mock transaction data
   const transactions: Transaction[] = [
-    {
-      id: "1",
-      date: "2025-09-19 12:07:10",
-      type: "Deposit",
-      channel: "FuntecPay",
-      amount: 2000,
-      status: "In Payment",
-    },
-    {
-      id: "2",
-      date: "2025-09-19 10:30:25",
-      type: "Withdrawal",
-      channel: "PhonePe",
-      amount: 1500,
-      status: "Completed",
-    },
-    {
-      id: "3",
-      date: "2025-09-19 09:15:42",
-      type: "Bonus",
-      channel: "Welcome Bonus",
-      amount: 500,
-      status: "Completed",
-    },
-    {
-      id: "4",
-      date: "2025-09-18 18:22:11",
-      type: "Deposit",
-      channel: "UPI",
-      amount: 5000,
-      status: "Completed",
-    },
-    {
-      id: "5",
-      date: "2025-09-18 16:45:33",
-      type: "Withdrawal",
-      channel: "Bank Transfer",
-      amount: 3000,
-      status: "Failed",
-    },
+    { id: "1", date: "2025-09-19 12:07:10", type: "Deposit", channel: "LGpay", amount: 2000, status: "Pending" },
+    { id: "2", date: "2025-09-19 10:30:25", type: "Withdrawal", channel: "Fpay", amount: 1500, status: "Success" },
+    { id: "3", date: "2025-09-19 09:15:42", type: "Bonus", channel: "Welcome Bonus", amount: 500, status: "Received" },
+    { id: "4", date: "2025-09-18 18:22:11", type: "Deposit", channel: "Fpay", amount: 5000, status: "Success" },
+    { id: "5", date: "2025-09-18 16:45:33", type: "Withdrawal", channel: "Bank Transfer", amount: 3000, status: "Failed" },
+    { id: "6", date: "2025-09-19 10:30:25", type: "Withdrawal", channel: "PhonePe", amount: 1500, status: "Reviewing" },
+    { id: "7", date: "2025-09-19 10:30:25", type: "Withdrawal", channel: "PhonePe", amount: 1500, status: "Processing" },
   ];
 
   const filteredTransactions = transactions.filter(transaction => {
@@ -70,81 +42,71 @@ const TransactionRecords = () => {
     return true;
   });
 
-  const getStatusVariant = (status: Transaction["status"]) => {
-    switch (status) {
-      case "Completed":
-        return "success";
-      case "In Payment":
-      case "Pending":
-        return "warning";
-      case "Failed":
-        return "destructive";
-      default:
-        return "secondary";
+  const getStatusColor = (type: Transaction["type"], status: Transaction["status"]) => {
+    if (type === "Deposit") {
+      if (status === "Success") return "bg-green-600";
+      if (status === "Failed") return "bg-red-600";
+      return "bg-orange-500";
     }
+    if (type === "Withdrawal") {
+      if (status === "Reviewing") return "bg-orange-500";
+      if (status === "Processing") return "bg-blue-400";
+      if (status === "Success") return "bg-green-600";
+      return "bg-red-600";
+    }
+    if (type === "Bonus") {
+      return "bg-green-600";
+    }
+    return "bg-gray-500";
   };
 
-  const getTypeColor = (type: Transaction["type"]) => {
-    switch (type) {
-      case "Deposit":
-        return "text-success";
-      case "Withdrawal":
-        return "text-destructive";
-      case "Bonus":
-        return "text-warning";
-      default:
-        return "text-foreground";
-    }
-  };
-
-  const TransactionCard = ({ 
-    transaction, 
-    isLast = false 
-  }: { 
-    transaction: Transaction; 
-    isLast?: boolean; 
+  const TransactionCard = ({
+    transaction,
+    isLast = false,
+  }: {
+    transaction: Transaction;
+    isLast?: boolean;
   }) => (
-    <div className="w-full">
-      <div className="px-4 py-3">
-        <div className="text-xs text-muted-foreground mb-2">
-          {transaction.date}
-        </div>
-        
+    <div className="w-full text-white/70">
+      <div className="px-3 py-2">
+        <div className="text-xs mb-2">{transaction.date}</div>
+
         <div className="grid grid-cols-2 gap-3 mb-2">
           <div>
-            <div className="text-xs text-muted-foreground">Type:</div>
-            <div className={`text-sm font-medium ${getTypeColor(transaction.type)}`}>
-              {transaction.type}
-            </div>
+            <div className="text-xs">Type:</div>
+            <div className="text-sm font-medium">{transaction.type}</div>
           </div>
           <div className="text-right">
-            <div className="text-xs text-muted-foreground">Amount:</div>
-            <div className="text-sm font-bold text-foreground">
+            <div className="text-xs">Amount:</div>
+            <div className="text-sm font-bold text-yellow-400">
               {transaction.currency || "₹"} {transaction.amount.toLocaleString()}
             </div>
           </div>
         </div>
-        
-        <div className="grid grid-cols-2 gap-3">
+
+        <div className="grid grid-cols-2 gap-3 mb-2">
           <div>
-            <div className="text-xs text-muted-foreground">Channel:</div>
-            <div className="text-sm font-medium text-foreground">{transaction.channel}</div>
+            <div className="text-xs">Channel:</div>
+            <div className="text-sm font-medium">{transaction.channel}</div>
           </div>
-          <div className="text-right">
-            <div className="text-xs text-muted-foreground">Status:</div>
-            <Badge 
-              variant={getStatusVariant(transaction.status) as any}
-              className="text-xs h-5"
-            >
+          <div className="text-right flex items-center justify-end gap-2">
+            <div className="text-xs">Status:</div>
+            <span className={`text-xs px-2 py-1 rounded ${getStatusColor(transaction.type, transaction.status)}`}>
               {transaction.status}
-            </Badge>
+            </span>
+            {transaction.type === "Withdrawal" && transaction.status === "Failed" && (
+              <HelpCircle
+                className="w-4 h-4 text-yellow-400 border border-yellow-400 rounded-full cursor-pointer"
+                onClick={() => setShowReasonPrompt(true)}
+              />
+            )}
           </div>
         </div>
       </div>
-      
+
       {!isLast && (
         <div className="mx-4">
-          <div className="border-b border-dashed border-border/50" />
+          <div className="border-b border-dashed border-white/30" />
         </div>
       )}
     </div>
@@ -158,17 +120,14 @@ const TransactionRecords = () => {
     ];
 
     return (
-      <div className="flex gap-2 mb-6">
+      <div className="flex gap-2 mb-4 px-0">
         {filters.map((filter) => (
           <Button
             key={filter.key}
-            variant={activeFilter === filter.key ? "default" : "secondary"}
             onClick={() => setActiveFilter(filter.key)}
             className={cn(
-              "flex-1 rounded-xl py-3 font-medium transition-all duration-200",
-              activeFilter === filter.key
-                ? "bg-success text-success-foreground shadow-lg"
-                : "bg-secondary/50 text-secondary-foreground hover:bg-secondary/80"
+              "flex-1 rounded-sm py text-[12px] font-sm transition-all border border-white/30 bg-transparent text-white",
+              activeFilter === filter.key && "bg-red-600 text-white"
             )}
           >
             {filter.label}
@@ -179,34 +138,25 @@ const TransactionRecords = () => {
   };
 
   return (
-    <div 
-      className="min-h-screen relative overflow-hidden"
-      style={{ background: "var(--transaction-bg)" }}
-    >
-      {/* Background overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-background/95 to-background/90" />
-      
-      {/* Content */}
-      <div className="relative z-10 py-6 max-w-md mx-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8 px-4">
-          <h1 className="text-xl font-bold text-foreground">Transaction Records</h1>
-          <Button 
-            variant="ghost" 
-            size="icon"
-            className="text-foreground hover:bg-secondary/20 rounded-full"
-          >
-            <X className="h-6 w-6" />
-          </Button>
+    <div className="min-h-screen bg-[#450b00]">
+      <div className="relative z-10 h-full bg-black/ max-w-md mx-auto">
+        <div className="bg-[#2b0d0d] px-5 py-3 flex items-center justify-between">
+          <div className="w-2"></div>
+          <h1 className="text-white text-center flex justify-center items-center text-sm font-semibold">
+            Transaction
+          </h1>
+          <div className="flex items-center gap-2">
+            <a href="/wallet">
+              <X className="w-5 h-4 text-white" />
+            </a>
+          </div>
         </div>
 
-        {/* Filters */}
         <div className="px-4">
           <TransactionFilters />
         </div>
 
-        {/* Transaction List */}
-        <div className="bg-card">
+        <div>
           {filteredTransactions.length > 0 ? (
             filteredTransactions.map((transaction, index) => (
               <TransactionCard
@@ -216,19 +166,34 @@ const TransactionRecords = () => {
               />
             ))
           ) : (
-            <div className="text-center py-12">
-              <p className="text-muted-foreground text-lg">No More Data</p>
+            <div className="text-center py-20">
+              <p className="text-lg text-white/70">No More Data</p>
             </div>
           )}
         </div>
 
-        {/* No more data message for when there are transactions */}
         {filteredTransactions.length > 0 && (
-          <div className="text-center py-8">
-            <p className="text-muted-foreground">No More Data</p>
+          <div className="text-center py-2">
+            <p className="text-muted-foreground text-white/50 text-xs">No More Data</p>
           </div>
         )}
       </div>
+
+      {/* Reason Prompt */}
+      {showReasonPrompt && (
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+          <div className="bg-[#450b00]/60 border border-yellow-400 rounded-md p-4 w-80 relative text-white">
+            <button
+              className="absolute top-2 right-2 text-white"
+              onClick={() => setShowReasonPrompt(false)}
+            >
+              <X className="w-4 h-4" />
+            </button>
+            <h2 className="text-sm font-semibold mb-2">Reason:</h2>
+            <p className="text-xs text-white/70">Added through admin panel</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
