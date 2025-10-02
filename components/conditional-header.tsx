@@ -6,7 +6,7 @@ import GlobalHeader from "./global-header"
 export default function ConditionalHeader() {
   const pathname = usePathname()
 
-  if (pathname === "/") {
+  if (pathname === "/" || pathname === "/forgot-password") {
     return null
   }
 
