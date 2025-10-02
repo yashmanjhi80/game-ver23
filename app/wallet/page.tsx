@@ -506,7 +506,7 @@ const WalletPage = () => {
         </div>
         <div>
           <p className="text-white text-[10px]">Cash balance</p>
-          <p className="text-white text-xs font-bold">₹0</p>
+          <p className="text-yellow-400/90 text-xs font-bold">₹0</p>
         </div>
       </div>
     </div>
@@ -521,7 +521,7 @@ const WalletPage = () => {
         </div>
         <div>
           <h3 className="text-white text-[10px]">Withdrawable</h3>
-          <p className="text-white text-xs font-bold">₹0</p>
+          <p className="text-yellow-400/90 text-xs font-bold">₹0</p>
         </div>
       </div>
     </div>

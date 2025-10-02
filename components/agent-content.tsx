@@ -210,7 +210,7 @@ const AgentContent = ({ activeTab }: AgentContentProps) => {
 
         <div className="grid grid-cols-2 gap-4 mb-4">
           <div className="text-center">
-            <div className="text-yellow-400 text-sm font-bold">₹ 80/People</div>
+            <div className="text-yellow-400 text-sm font-bold">₹ 50/People</div>
             <div className="text-white/70 text-xs">Invitation Reward</div>
           </div>
           <div className="text-center">
@@ -255,16 +255,16 @@ const AgentContent = ({ activeTab }: AgentContentProps) => {
         </div>
 
         <div className="text-center">
-          <p className="text-xs text-white/70 mb-2">Share to Social Media</p>
+          <p className="text-xs text-white/70 mb-2">Share to  Media</p>
           <div className="flex justify-center gap-3">
-            <Button size="sm" className="rounded-lg w-12 h-12 p-2 bg-black/50 border border-gray-500 hover:bg-black/60">
-              <Image src="/images/telegram-icon.png" alt="Telegram" width={32} height={32} className="rounded-full" />
+            <Button size="sm" className="rounded-lg w-12 h-12 p-0 bg-black/50 border border-gray-500">
+              <Image src="/images/telegram-icon.png" alt="Telegram" width={44} height={44} className="rounded-" />
             </Button>
-            <Button size="sm" className="rounded-lg w-12 h-12 p-2 bg-black/50 border border-gray-500 hover:bg-black/60">
-              <Image src="/images/whatsapp-icon.jpg" alt="WhatsApp" width={32} height={32} className="rounded-lg" />
+            <Button size="sm" className="rounded-lg w-12 h-12 p-0 bg-black/50 border border-gray-500">
+              <Image src="/images/whatsapp-icon.png" alt="WhatsApp" width={44} height={44} className="rounded-" />
             </Button>
-            <Button size="sm" className="rounded-lg w-12 h-12 p-2 bg-black/50 border border-gray-500 hover:bg-black/60">
-              <Image src="/images/share-icon.png" alt="Share Link" width={32} height={32} className="rounded-full" />
+            <Button size="sm" className="rounded-lg w-12 h-12 p-0 bg-black/50 border border-gray-500">
+              <Image src="/images/share-icon.png" alt="Share Link" width={44} height={44} className="rounded-" />
             </Button>
           </div>
         </div>
