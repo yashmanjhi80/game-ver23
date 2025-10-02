@@ -24,7 +24,7 @@ const GiftRedeemPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-red-100 bg-background">
+    <div className="min-h-screen bg-red-100 ">
       {/* Header */}
       <div className="bg-[#2b0d0d] px-5 py-3 flex items-center justify-between">
         <div className="w-2"></div>
@@ -32,7 +32,7 @@ const GiftRedeemPage = () => {
           Bets
         </h1>
         <div className="flex items-center gap-2">
-          <a href="/wallet">
+          <a href="/profile">
             <X className="w-5 h-4 text-white" />
           </a>
         </div>

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { X, HelpCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import link from "next/link"
 
 interface Transaction {
   id: string;
@@ -146,7 +147,7 @@ const TransactionRecords = () => {
             Transaction
           </h1>
           <div className="flex items-center gap-2">
-            <a href="/wallet">
+            <a href="/profile">
               <X className="w-5 h-4 text-white" />
             </a>
           </div>
@@ -174,7 +175,7 @@ const TransactionRecords = () => {
 
         {filteredTransactions.length > 0 && (
           <div className="text-center py-2">
-            <p className="text-muted-foreground text-white/50 text-xs">No More Data</p>
+            <p className=" text-white/50 text-xs">No More Data</p>
           </div>
         )}
       </div>

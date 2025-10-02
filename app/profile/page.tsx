@@ -6,7 +6,17 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { ArrowLeft, CreditCard } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
-import { Bell, Shield,Notebook , Headphones, Gift, Settings, Ticket, LogOut, Camera, ChevronRight } from "lucide-react"
+import {
+  Bell,
+  Shield,
+  Notebook,
+  Headphones,
+  Gift,
+  Power,
+  Settings,
+  LogOut,
+  ChevronRight,
+} from "lucide-react"
 import BottomNavigation from "@/components/bottom-navigation"
 import { RandomAvatarForAvatar } from "@/components/random-avatar"
 import VipCard from "@/components/vip-card"
@@ -61,7 +71,7 @@ export default function ProfilePage() {
     try {
       setIsLoadingBalance(true)
       const response = await fetch(
-        `/api/auth/balance?username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`,
+        `/api/auth/balance?username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`
       )
       const data = await response.json()
 
@@ -112,24 +122,18 @@ export default function ProfilePage() {
     { icon: Notebook, label: "Bets", href: "/bets" },
     { icon: Headphones, label: "Live Support", href: "/help" },
     { icon: Gift, label: "Gifts", href: "/gifts" },
- 
-      { icon: Settings, label: "Settings", href: "/settings" },
-    { icon: LogOut, label: "Logout", onClick: handleLogout },
+    { icon: Settings, label: "Settings", href: "/settings" },
   ]
 
   const vipLevel = ((username?.charCodeAt(0) || 0) % 6) + 1
   const vipProgress = ((username?.length || 1) * 13) % 100
 
   return (
-    <div className="min-h-screen bg-linear-65 from-burgundy-800 to-burgundy-960">
-
-
-      <div className="max-w-md mx-auto px-4 py-6 pb-20">
+    <div className="min-h-screen bg-[#450b00]">
+      <div className="max-w-md bg-[#450b00] mx-auto px-3 py-6 pb-20">
         {/* Profile Header */}
         <div className="text-center mb-8">
-          {/* Profile Info */}
           <div className="flex items-center space-x-4 mb-6">
-            {/* Profile Avatar with Badge */}
             <div className="relative">
               <div className="profile-avatar w-20 h-20 rounded-full p-1 card-shadow">
                 <Avatar className="w-full h-full">
@@ -139,10 +143,8 @@ export default function ProfilePage() {
                   </AvatarFallback>
                 </Avatar>
               </div>
-             
             </div>
 
-            {/* Player Info */}
             <div className="flex-1 text-left">
               <div className="flex items-center space-x-2 mb-1">
                 <span className="text-lg font-semibold text-white">{username || "Player74835887"}</span>
@@ -170,9 +172,7 @@ export default function ProfilePage() {
             const IconComponent = item.icon
 
             const handleClick = () => {
-              if (item.onClick) {
-                item.onClick()
-              } else if (item.href) {
+              if (item.href) {
                 router.push(item.href)
               }
             }
@@ -199,7 +199,18 @@ export default function ProfilePage() {
             )
           })}
         </div>
+
+        {/* Logout Button at Bottom Center */}
+        <div className="flex justify-center mt-8">
+          <button
+            onClick={handleLogout}
+            className="bg-gradient-to-b from-yellow-300 via-yellow-400 to-yellow-600 text-black font-bold py-2 px-12 rounded-full text-base hover:from-yellow-400 hover:via-yellow-500 hover:to-yellow-700 transition-all duration-300 shadow-lg border border-yellow-400 relative overflow-hidden"
+          >
+            Logout
+          </button>
+        </div>
       </div>
+
       <BottomNavigation />
     </div>
   )

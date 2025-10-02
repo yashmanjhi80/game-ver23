@@ -30,7 +30,7 @@ const BetRecords = () => {
           Bets
         </h1>
         <div className="flex items-center gap-2">
-          <a href="/wallet">
+          <a href="/profile">
             <X className="w-5 h-4 text-white"  />
           </a>
         </div>
