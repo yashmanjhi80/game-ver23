@@ -3,18 +3,14 @@
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { ArrowLeft, CreditCard } from "lucide-react"
+import { CreditCard } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
-import Link from "next/link"
 import {
   Bell,
-  Shield,
   Notebook,
   Headphones,
   Gift,
-  Power,
   Settings,
-  LogOut,
   ChevronRight,
 } from "lucide-react"
 import BottomNavigation from "@/components/bottom-navigation"
@@ -24,42 +20,79 @@ import VipCard from "@/components/vip-card"
 interface UserCredentials {
   username: string
   password: string
-  user?: {
-    username: string
-    email: string
-  }
-  loginTime: string
+}
+
+interface UserData {
+  username: string
+  email: string
+  balance: string
+  vip: number
+  vipProgress: number
 }
 
 export default function ProfilePage() {
-  const [userCredentials, setUserCredentials] = useState<UserCredentials | null>(null)
+  const [userData, setUserData] = useState<UserData | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
   const router = useRouter()
-  const [balance, setBalance] = useState<string>("Loading...")
-  const [isLoadingBalance, setIsLoadingBalance] = useState(true)
-  const [showBalance, setShowBalance] = useState(true)
-  const [username, setUsername] = useState<string>("")
 
+  // ✅ Load user data (from localStorage first, then API)
   useEffect(() => {
-    const loadUserDataAndBalance = async () => {
+    const loadUserData = async () => {
       try {
         const storedCredentials = localStorage.getItem("userCredentials")
+        const storedUser = localStorage.getItem("userData")
+
+        if (storedUser) {
+          // Show cached data instantly
+          setUserData(JSON.parse(storedUser))
+          setIsLoading(false)
+        }
+
         if (storedCredentials) {
           const credentials: UserCredentials = JSON.parse(storedCredentials)
-          setUsername(credentials.username)
-          await fetchBalance(credentials.username, credentials.password)
+          await fetchUserData(credentials.username, credentials.password)
         } else {
-          setBalance("0")
-          setIsLoadingBalance(false)
+          setIsLoading(false)
         }
       } catch (error) {
         console.error("Error loading user data:", error)
-        setBalance("Error")
-        setIsLoadingBalance(false)
+        setIsLoading(false)
       }
     }
 
-    loadUserDataAndBalance()
+    loadUserData()
   }, [])
+
+  // ✅ Fetch from API and update state + localStorage
+  const fetchUserData = async (username: string, password: string) => {
+    try {
+      setIsLoading(true)
+      const response = await fetch("https://game.zyronetworks.shop/get-user", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      })
+      const data = await response.json()
+
+      if (data.success && data.user) {
+        const user: UserData = {
+          username: data.user.username,
+          email: data.user.email,
+          balance: data.user.balance,
+          vip: data.user.vip,
+          vipProgress: data.user.vipProgress,
+        }
+        setUserData(user)
+        localStorage.setItem("userData", JSON.stringify(user))
+      } else {
+        console.error("Failed to fetch user data:", data.message)
+      }
+    } catch (error) {
+      console.error("Error fetching user data:", error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   const handleLogout = () => {
     localStorage.removeItem("userCredentials")
@@ -67,52 +100,13 @@ export default function ProfilePage() {
     router.push("/")
   }
 
-  const fetchBalance = async (username: string, password: string) => {
-    try {
-      setIsLoadingBalance(true)
-      const response = await fetch(
-        `/api/auth/balance?username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`
-      )
-      const data = await response.json()
-
-      if (data.success) {
-        const balanceValue = data.balance || data.rawResponse || "0"
-        setBalance(balanceValue.toString())
-      } else {
-        setBalance("Error")
-        console.error("Balance fetch failed:", data.message)
-      }
-    } catch (error) {
-      console.error("Error fetching balance:", error)
-      setBalance("Error")
-    } finally {
-      setIsLoadingBalance(false)
-    }
-  }
-
-  useEffect(() => {
-    const storedCredentials = localStorage.getItem("userCredentials")
-    if (storedCredentials) {
-      setUserCredentials(JSON.parse(storedCredentials))
-    }
-  }, [])
-
   const formatBalance = (balance: string) => {
-    if (balance === "Loading..." || balance === "Error") return balance
+    if (!balance) return "0"
     try {
       const num = Number.parseFloat(balance)
-      if (isNaN(num)) return balance
-      return num.toLocaleString()
+      return isNaN(num) ? balance : num.toLocaleString()
     } catch {
       return balance
-    }
-  }
-
-  const refreshBalance = async () => {
-    const storedCredentials = localStorage.getItem("userCredentials")
-    if (storedCredentials) {
-      const credentials: UserCredentials = JSON.parse(storedCredentials)
-      await fetchBalance(credentials.username, credentials.password)
     }
   }
 
@@ -125,9 +119,6 @@ export default function ProfilePage() {
     { icon: Settings, label: "Settings", href: "/settings" },
   ]
 
-  const vipLevel = ((username?.charCodeAt(0) || 0) % 6) + 1
-  const vipProgress = ((username?.length || 1) * 13) % 100
-
   return (
     <div className="min-h-screen bg-[#450b00]">
       <div className="max-w-md bg-[#450b00] mx-auto px-3 py-6 pb-20">
@@ -137,9 +128,9 @@ export default function ProfilePage() {
             <div className="relative">
               <div className="profile-avatar w-20 h-20 rounded-full p-1 card-shadow">
                 <Avatar className="w-full h-full">
-                  <RandomAvatarForAvatar username={username} alt="Profile Avatar" className="object-cover" />
+                  <RandomAvatarForAvatar username={userData?.username || "Player"} alt="Profile Avatar" className="object-cover" />
                   <AvatarFallback className="bg-burgundy-700 text-gold-400 text-lg font-semibold">
-                    {username ? username.substring(0, 2).toUpperCase() : "P7"}
+                    {userData?.username ? userData.username.substring(0, 2).toUpperCase() : "P7"}
                   </AvatarFallback>
                 </Avatar>
               </div>
@@ -147,22 +138,26 @@ export default function ProfilePage() {
 
             <div className="flex-1 text-left">
               <div className="flex items-center space-x-2 mb-1">
-                <span className="text-lg font-semibold text-white">{username || "Player74835887"}</span>
+                <span className="text-lg font-semibold text-white">
+                  {userData?.username || "Player74835887"}
+                </span>
                 <ChevronRight className="w-5 h-5 text-gray-400" />
               </div>
-              <div className="text-sm text-gray-400 mb-2">uid:{username || "74835887"}</div>
+              <div className="text-sm text-gray-400 mb-2">
+                uid:{userData?.username || "74835887"}
+              </div>
               <div className="text-lg font-bold text-gold-400">
-                ₹{isLoadingBalance ? "Loading..." : formatBalance(balance)}
+                ₹{isLoading ? "Loading..." : formatBalance(userData?.balance || "0")}
               </div>
             </div>
           </div>
         </div>
 
-        {/* VIP Card */}
+        {/* ✅ VIP Card (real data) */}
         <VipCard
-          level={vipLevel as 1 | 2 | 3 | 4 | 5 | 6}
-          username={username}
-          progress={vipProgress}
+          level={(userData?.vip || 0) as 1 | 2 | 3 | 4 | 5 | 6}
+          username={userData?.username || ""}
+          progress={userData?.vipProgress || 0}
           className="mb-6"
         />
 
@@ -200,7 +195,7 @@ export default function ProfilePage() {
           })}
         </div>
 
-        {/* Logout Button at Bottom Center */}
+        {/* Logout Button */}
         <div className="flex justify-center mt-8">
           <button
             onClick={handleLogout}

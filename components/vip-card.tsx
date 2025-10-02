@@ -3,7 +3,7 @@
 import Image from "next/image"
 import { cn } from "@/lib/utils"
 
-type VipLevel = 1 | 2 | 3 | 4 | 5 | 6
+type VipLevel = 0 | 1 | 2 | 3 | 4 | 5 | 6
 
 export interface VipCardProps {
   level: VipLevel
@@ -13,6 +13,7 @@ export interface VipCardProps {
 }
 
 const badgeByLevel: Record<VipLevel, string> = {
+  0: "/vip/badge-1-.png",
   1: "/vip/badge-1.png",
   2: "/vip/badge-2.png",
   3: "/vip/badge-3.png",
@@ -22,6 +23,7 @@ const badgeByLevel: Record<VipLevel, string> = {
 }
 
 const bgByLevel: Record<VipLevel, string> = {
+  0: "/vip/bg-0-.png", // bronze gradient
   1: "/vip/bg-0.png", // bronze gradient
   2: "/vip/bg-1.png", // silver/gray gradient
   3: "/vip/bg-3.png", // gold gradient
@@ -31,6 +33,7 @@ const bgByLevel: Record<VipLevel, string> = {
 }
 
 const levelNames: Record<VipLevel, string> = {
+  0: "Newbie",
   1: "Bronze",
   2: "Silver",
   3: "Gold",
