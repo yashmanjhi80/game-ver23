@@ -720,7 +720,7 @@ export default function HomePage() {
               </div>
 
               <a
-                href="/promo"
+                href="/vip"
                 className="flex flex-col items-center text-xs text-yellow-200"
               >
                 <img src="/assets/vip.png" alt="VIP" className="w-5 h-5 mb-1" />
