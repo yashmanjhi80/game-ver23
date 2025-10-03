@@ -23,7 +23,12 @@ export default function GameLogin() {
   const router = useRouter()
   const backgroundMusicRef = useRef<HTMLAudioElement>(null)
   const buttonClickSoundRef = useRef<HTMLAudioElement>(null)
-
+// Add new state variables at the top
+const [isEmailVerified, setIsEmailVerified] = useState(false)
+const [verificationCodeSent, setVerificationCodeSent] = useState(false)
+const [verificationCode, setVerificationCode] = useState("")
+const [verifyEmailError, setVerifyEmailError] = useState("")
+const [isVerifyingEmail, setIsVerifyingEmail] = useState(false)
   // Check if user is already logged in and redirect to home
   useEffect(() => {
     const checkExistingLogin = () => {
@@ -182,76 +187,114 @@ export default function GameLogin() {
     }
   }
 
-  const handleRegister = async (e: React.FormEvent) => {
-    e.preventDefault()
-    await playButtonClickSound()
-
-    setRegisterError("")
-    setIsLoading(true)
-
-    // Basic validation
-    if (!username || !email || !password || !confirmPassword) {
-      setRegisterError("All fields are required.")
-      setIsLoading(false)
-      return
-    }
-
-    if (password !== confirmPassword) {
-      setRegisterError("Passwords do not match.")
-      setIsLoading(false)
-      return
-    }
-
-    if (password.length < APP_CONFIG.VALIDATION.PASSWORD.MIN_LENGTH) {
-      setRegisterError(`Password must be at least ${APP_CONFIG.VALIDATION.PASSWORD.MIN_LENGTH} characters long.`)
-      setIsLoading(false)
-      return
-    }
-
-    // Username validation using config
-    const trimmedUsername = username.toLowerCase().trim()
-    if (
-      trimmedUsername.length < APP_CONFIG.VALIDATION.USERNAME.MIN_LENGTH ||
-      trimmedUsername.length > APP_CONFIG.VALIDATION.USERNAME.MAX_LENGTH
-    ) {
-      setRegisterError(
-        `Username must be ${APP_CONFIG.VALIDATION.USERNAME.MIN_LENGTH}-${APP_CONFIG.VALIDATION.USERNAME.MAX_LENGTH} characters long.`,
-      )
-      setIsLoading(false)
-      return
-    }
-
-    try {
-      const data = await makeApiRequest("/register", {
-        username: trimmedUsername,
-        email: email.toLowerCase().trim(),
-        password,
-        referralId: referralId.trim() || undefined,
-      })
-
-      console.log("Registration successful!", data)
-      await new Promise((resolve) => setTimeout(resolve, 500))
-
-      // Clear form fields
-      setUsername("")
-      setPassword("")
-      setEmail("")
-      setReferralId("")
-      setConfirmPassword("")
-
-      // Switch back to login form after successful registration
-      setIsCreateAccount(false)
-
-      // Show success message and pre-fill username for login
-      setUsername(trimmedUsername)
-      alert("Account created successfully! Please login with your credentials.")
-    } catch (error: any) {
-      console.error("Registration error:", error)
-      setRegisterError(error.message || "Registration failed. Please try again.")
-    } finally {
-      setIsLoading(false)
-    }
+  // Function to send verification code
+const handleSendVerificationCode = async () => {
+  if (!email) {
+    setVerifyEmailError("Please enter your email first.")
+    return
   }
+
+  setIsVerifyingEmail(true)
+  setVerifyEmailError("")
+
+  try {
+    const response = await fetch("https://game.zyronetworks.shop/send-verification-code", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: email.toLowerCase().trim() }),
+    })
+
+    const data = await response.json()
+    if (response.ok) {
+      setVerificationCodeSent(true)
+      alert("Verification code sent! Please check your email.")
+    } else {
+      throw new Error(data.message || "Failed to send verification code.")
+    }
+  } catch (error: any) {
+    console.error("Verification error:", error)
+    setVerifyEmailError(error.message || "Failed to send verification code.")
+  } finally {
+    setIsVerifyingEmail(false)
+  }
+}
+// Modify handleRegister to include verification code
+const handleRegister = async (e: React.FormEvent) => {
+  e.preventDefault()
+  await playButtonClickSound()
+
+  setRegisterError("")
+  setIsLoading(true)
+
+  // Validation
+  if (!username || !email || !password || !confirmPassword) {
+    setRegisterError("All fields are required.")
+    setIsLoading(false)
+    return
+  }
+
+  if (password !== confirmPassword) {
+    setRegisterError("Passwords do not match.")
+    setIsLoading(false)
+    return
+  }
+
+  if (!isEmailVerified) {
+    setRegisterError("Please verify your email before creating an account.")
+    setIsLoading(false)
+    return
+  }
+
+  if (password.length < APP_CONFIG.VALIDATION.PASSWORD.MIN_LENGTH) {
+    setRegisterError(`Password must be at least ${APP_CONFIG.VALIDATION.PASSWORD.MIN_LENGTH} characters long.`)
+    setIsLoading(false)
+    return
+  }
+
+  const trimmedUsername = username.toLowerCase().trim()
+  if (
+    trimmedUsername.length < APP_CONFIG.VALIDATION.USERNAME.MIN_LENGTH ||
+    trimmedUsername.length > APP_CONFIG.VALIDATION.USERNAME.MAX_LENGTH
+  ) {
+    setRegisterError(
+      `Username must be ${APP_CONFIG.VALIDATION.USERNAME.MIN_LENGTH}-${APP_CONFIG.VALIDATION.USERNAME.MAX_LENGTH} characters long.`,
+    )
+    setIsLoading(false)
+    return
+  }
+
+  try {
+    const data = await makeApiRequest("/register", {
+      username: trimmedUsername,
+      email: email.toLowerCase().trim(),
+      password,
+      referralId: referralId.trim() || undefined,
+      code: verificationCode.trim(), // add the verification code here
+    })
+
+    console.log("Registration successful!", data)
+    await new Promise((resolve) => setTimeout(resolve, 500))
+
+    // Clear form fields
+    setUsername("")
+    setPassword("")
+    setEmail("")
+    setReferralId("")
+    setConfirmPassword("")
+    setVerificationCode("")
+    setIsEmailVerified(false)
+    setVerificationCodeSent(false)
+
+    setIsCreateAccount(false)
+    setUsername(trimmedUsername)
+    alert("Account created successfully! Please login with your credentials.")
+  } catch (error: any) {
+    console.error("Registration error:", error)
+    setRegisterError(error.message || "Registration failed. Please try again.")
+  } finally {
+    setIsLoading(false)
+  }
+}
 
   const switchToCreateAccount = async () => {
     await playButtonClickSound()
@@ -561,17 +604,43 @@ export default function GameLogin() {
                   {registerError && <p className="text-red-400 text-center text-sm font-semibold">{registerError}</p>}
 
                   {/* Create Account Button */}
-                  <div className="pt-4 flex justify-center">
-                    <button
-                      type="submit"
-                      className="bg-gradient-to-b    from-yellow-300 via-golden to-yellow-600 text-black font-bold py-2 px-16 rounded-full text-base hover:from-yellow-400 hover:via-golden hover:to-yellow-700 transition-all duration-300 shadow-lg border border-yellow-400 relative overflow-hidden"
-                      disabled={isLoading}
-                    >
-                      <span className="text-black text-xl font-bold drop-shadow-lg">
-                        {isLoading ? "CREATING..." : "CREATE ACCOUNT"}
-                      </span>
-                    </button>
-                  </div>
+                  <div className="pt-4 flex flex-col items-center space-y-4">
+  {!verificationCodeSent ? (
+    <button
+      type="button"
+      onClick={handleSendVerificationCode}
+      className="bg-gradient-to-b from-yellow-300 via-golden to-yellow-600 text-black font-bold py-2 px-16 rounded-full text-base hover:from-yellow-400 hover:via-golden hover:to-yellow-700 transition-all duration-300 shadow-lg border border-yellow-400 relative overflow-hidden"
+      disabled={isVerifyingEmail || isLoading}
+    >
+      <span className="text-black text-xl font-bold drop-shadow-lg">
+        {isVerifyingEmail ? "SENDING..." : "VERIFY EMAIL"}
+      </span>
+    </button>
+  ) : (
+    <>
+      <input
+        type="text"
+        placeholder="Enter Verification Code"
+        value={verificationCode}
+        onChange={(e) => {
+          setVerificationCode(e.target.value)
+          setIsEmailVerified(e.target.value.trim().length > 0)
+        }}
+        className="w-full max-w-xs font-bold text-white text-lg px-4 py-2 rounded-lg border border-yellow-400"
+      />
+      <button
+        type="submit"
+        className="bg-gradient-to-b from-yellow-300 via-golden to-yellow-600 text-black font-bold py-2 px-16 rounded-full text-base hover:from-yellow-400 hover:via-golden hover:to-yellow-700 transition-all duration-300 shadow-lg border border-yellow-400 relative overflow-hidden disabled:opacity-50"
+        disabled={isLoading || !verificationCode.trim()}
+      >
+        <span className="text-black text-xl font-bold drop-shadow-lg">
+          {isLoading ? "CREATING..." : "CREATE ACCOUNT"}
+        </span>
+      </button>
+    </>
+  )}
+  {verifyEmailError && <p className="text-red-400 text-center text-sm font-semibold">{verifyEmailError}</p>}
+</div>
                 </form>
               )}
 
