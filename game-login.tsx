@@ -2,7 +2,7 @@
 
 import type React from "react"
 import { useState, useEffect, useRef } from "react"
-import { Eye, EyeOff,LockKeyholeOpen,CircleUserRound, Volume2, VolumeX, ArrowLeft, HeartHandshake, Mails, } from "lucide-react"
+import { Eye,CheckCircle, EyeOff,LockKeyholeOpen,CircleUserRound, Volume2, VolumeX, ArrowLeft, HeartHandshake, Mails, } from "lucide-react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { APP_CONFIG, getStorageKey, isFeatureEnabled } from "@/config/app"
@@ -203,11 +203,11 @@ const handleSendVerificationCode = async () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: email.toLowerCase().trim() }),
     })
+    
 
     const data = await response.json()
-    if (response.ok) {
-      setVerificationCodeSent(true)
-      alert("Verification code sent! Please check your email.")
+    if (response.ok) {setVerificationCodeSent(true);
+      setVerificationMessage("Verification code sent! Please check your email.");
     } else {
       throw new Error(data.message || "Failed to send verification code.")
     }
@@ -218,6 +218,14 @@ const handleSendVerificationCode = async () => {
     setIsVerifyingEmail(false)
   }
 }
+  const [verificationMessage, setVerificationMessage] = useState("");
+
+  useEffect(() => {
+    if (verificationMessage) {
+      const timer = setTimeout(() => setVerificationMessage(""), 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [verificationMessage]);
 // Modify handleRegister to include verification code
 const handleRegister = async (e: React.FormEvent) => {
   e.preventDefault()
@@ -330,6 +338,16 @@ const handleRegister = async (e: React.FormEvent) => {
       )}
       {/* Button Click Sound */}
       <audio ref={buttonClickSoundRef} src={APP_CONFIG.AUDIO.ASSETS.BUTTON_CLICK} />
+
+      {/*verification message */}
+      {verificationMessage && (
+        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 pointer-events-none animate-slide-in-top">
+          <div className="bg-black/40 border border-white rounded-xl p-2  backdrop-blur-sm flex items-center  animate-slide-out-right">
+            <CheckCircle size={44} className="text-green-400 pr-5" />
+            <p className="text-green-300 text-[12px]">{verificationMessage}</p>
+          </div>
+        </div>
+      )}
 
       {/* Music Toggle Button */}
       {isFeatureEnabled("MUSIC_ENABLED") && (

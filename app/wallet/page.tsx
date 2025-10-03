@@ -59,37 +59,48 @@ const WalletPage = () => {
     return `ORD${timestamp}${random}`
   }
 
-  // Handle payment / recharge
+//message animation
+  const showMessage = (type: "error" | "success", message: string) => {
+    if (type === "error") {
+      setPaymentError(message);
+      setTimeout(() => setPaymentError(""), 4000);
+    } else {
+      setPaymentSuccess(message);
+      setTimeout(() => setPaymentSuccess(""), 4000);
+    }
+  };
+
+  //recharge processs
   const handleRecharge = async () => {
     if (!selectedAmount || selectedAmount < MIN_DEPOSIT) {
-      setPaymentError(`Minimum deposit amount is ₹${MIN_DEPOSIT}`)
-      return
+      showMessage("error", `Minimum deposit amount is ₹${MIN_DEPOSIT}`);
+      return;
     }
 
     if (selectedAmount > MAX_DEPOSIT) {
-      setPaymentError(`Maximum deposit amount is ₹${MAX_DEPOSIT}`)
-      return
+      showMessage("error", `Maximum deposit amount is ₹${MAX_DEPOSIT}`);
+      return;
     }
 
     if (!username) {
-      setPaymentError("Please login to continue")
-      return
+      showMessage("error", "Please login to continue");
+      return;
     }
 
-    setIsProcessing(true)
-    setPaymentError("")
-    setPaymentSuccess("")
+    setIsProcessing(true);
+    setPaymentError("");
+    setPaymentSuccess("");
 
     try {
-      const orderId = generateOrderId()
-      const storedCredentials = localStorage.getItem("userCredentials")
+      const orderId = generateOrderId();
+      const storedCredentials = localStorage.getItem("userCredentials");
 
       if (!storedCredentials) {
-        setPaymentError("Please login to continue")
-        return
+        showMessage("error", "Please login to continue");
+        return;
       }
 
-      const credentials: UserCredentials = JSON.parse(storedCredentials)
+      const credentials: UserCredentials = JSON.parse(storedCredentials);
 
       const response = await fetch("/api/auth/create-payment", {
         method: "POST",
@@ -104,27 +115,27 @@ const WalletPage = () => {
           ip: "0.0.0.0",
           remark: `Deposit for user ${credentials.username} via ${selectedMethod}`,
         }),
-      })
+      });
 
-      const paymentData = await response.json()
+      const paymentData = await response.json();
 
       if (paymentData.status === 1 && paymentData.data?.pay_url) {
-        setPaymentSuccess("Redirecting to payment gateway...")
-        window.open(paymentData.data.pay_url, "_blank", "noopener,noreferrer")
+        showMessage("success", "Redirecting to payment gateway...");
+        window.open(paymentData.data.pay_url, "_blank", "noopener,noreferrer");
 
         setTimeout(() => {
-          setPaymentSuccess("Payment initiated successfully! Complete the payment in the new window.")
-        }, 1000)
+          showMessage("success", "Complete the payment in the new window.");
+        }, 1000);
       } else {
-        setPaymentError(paymentData.msg || "Failed to create payment")
+        showMessage("error", paymentData.msg || "Failed to create payment");
       }
     } catch (error) {
-      console.error("Payment creation error:", error)
-      setPaymentError("Failed to create payment. Please try again.")
+      console.error("Payment creation error:", error);
+      showMessage("error", "Failed to create payment. Please try again.");
     } finally {
-      setIsProcessing(false)
+      setIsProcessing(false);
     }
-  }
+  };
 
   // Handle withdraw
   const handleWithdraw = () => {
@@ -301,15 +312,15 @@ const WalletPage = () => {
       {/* Header */}
        {/* ✅ Payment status messages */}
       {paymentError && (
-        <div className="bg-red-900/30 border border-red-500/50 rounded-xl p-4 m-4 backdrop-blur-sm flex items-center space-x-3">
+        <div className="bg-black/40 border border-red-500 rounded-xl p-2 backdrop-blur-sm flex items-center space-x-3">
           <AlertCircle size={20} className="text-red-400" />
-          <p className="text-red-300">{paymentError}</p>
+          <p className="text-red-300 text-[12px] ">{paymentError}</p>
         </div>
       )}
       {paymentSuccess && (
-        <div className="bg-green-900/30 border border-green-500/50 rounded-xl p-4 m-4 backdrop-blur-sm flex items-center space-x-3">
+        <div className="bg-black/40 border border-white rounded-xl mx-2 p-2 backdrop-blur-sm flex items-center space-x-3">
           <CheckCircle size={20} className="text-green-400" />
-          <p className="text-green-300">{paymentSuccess}</p>
+          <p className="text-green-300 text-[12px] ">{paymentSuccess}</p>
         </div>
       )}
       

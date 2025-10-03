@@ -104,10 +104,10 @@ const GiftRedeemPage = () => {
         {historyData.map((item) => (
           <div
             key={item.id}
-            className="flex justify-between items-center px-6 py-4 text-sm text-white border-b border-yellow-400"
+            className="flex justify-between items-center px-6 py-4 text-sm text-white border-b border-yellow-800"
           >
             <span>{item.dateTime}</span>
-            <span className="text-green-400 font-semibold">+{item.amount}</span>
+            <span className="text-green-400 font-semibold">{item.amount}</span>
           </div>
         ))}
       </div>
