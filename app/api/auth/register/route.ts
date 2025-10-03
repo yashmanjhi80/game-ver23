@@ -20,6 +20,8 @@ export async function POST(request: NextRequest) {
       username: body.username,
       email: body.email,
       password: body.password,
+      code: body.code,
+
     }
 
     // Only add referalID if it exists
