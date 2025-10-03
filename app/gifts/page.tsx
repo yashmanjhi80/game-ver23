@@ -24,7 +24,7 @@ const GiftRedeemPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-red-100 ">
+    <div className=" bg-red-100 ">
       {/* Header */}
       <div className="bg-[#2b0d0d] px-5 py-3 flex items-center justify-between">
         <div className="w-2"></div>
@@ -41,7 +41,7 @@ const GiftRedeemPage = () => {
       {/* Main Content */}
       <div className="bg-[#450b00] px-0">
         {/* Welcome Section */}
-        <div className="px-6 pt-6 pb-4">
+        <div className="px-6 pt-6 pb-6">
           <div className="flex justify-center mb-4">
             <Image
               src="/images/gift-icon.png"
