@@ -707,14 +707,14 @@ export default function HomePage() {
             <div className="flex gap-3 overflow-x-auto scrollbar-hide pb-2">
               <button
                 onClick={() => setSelectedFilter("ALL")}
-                className={`flex items-center gap-1  pl-1 pr-10 bg-[#450b00] rounded-sm whitespace-nowrap transition-colors ${
+                className={`flex items-center gap-2 text-shadow-regal-blue pl-1 pr-10 bg-[#450b00] shodow-r rounded-sm whitespace-nowrap transition-colors ${
                   selectedFilter === "ALL" ? " text-white " : " text-white/70 "
                 }`}
               >
                 <Image
                   src={hotIcon}
                   alt="Hot"
-                  className=" w-6 h-5 bg-gradient-to-r p-0 from-yellow-500/30 to-red-500 rounded-lg flex items-start "
+                  className=" w-6 h-6 bg-gradient-to-r  from-yellow-500/30 to-red-500 rounded-lg flex items-start "
                 />
                 Hot
               </button>
@@ -731,7 +731,7 @@ export default function HomePage() {
                   className={`flex items-center gap-1 p-0 pl-1 pr-10 bg-[#450b00] rounded-sm whitespace-nowrap transition-colors ${
                     selectedFilter === filter.key
                       ? " text-white "
-                      : " text-white/70 "
+                      : " text-white "
                   }`}
                 >
                   <img
