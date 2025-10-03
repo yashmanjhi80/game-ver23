@@ -4,16 +4,15 @@ import { useState } from "react";
 import { X, HelpCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import link from "next/link";
 
 interface Transaction {
-  id: string;
-  date: string;
+  orderNumber?: string;
   type: "Deposit" | "Withdrawal" | "Bonus";
-  channel: string;
+  bonusType?: "Redeem Code" | "VIP Level" | "Welcome" | "Recharge";
+  date: string;
+  channel?: string;
   amount: number;
   status:
-    | "Pending"
     | "Success"
     | "Failed"
     | "Reviewing"
@@ -27,16 +26,71 @@ const TransactionRecords = () => {
   const [showReasonPrompt, setShowReasonPrompt] = useState(false);
 
   const transactions: Transaction[] = [
-    { id: "1", date: "2025-09-19 12:07:10", type: "Deposit", channel: "LGpay", amount: 2000, status: "Pending" },
-    { id: "2", date: "2025-09-19 10:30:25", type: "Withdrawal", channel: "Fpay", amount: 1500, status: "Success" },
-    { id: "3", date: "2025-09-19 09:15:42", type: "Bonus", channel: "Welcome Bonus", amount: 500, status: "Received" },
-    { id: "4", date: "2025-09-18 18:22:11", type: "Deposit", channel: "Fpay", amount: 5000, status: "Success" },
-    { id: "5", date: "2025-09-18 16:45:33", type: "Withdrawal", channel: "Bank Transfer", amount: 3000, status: "Failed" },
-    { id: "6", date: "2025-09-19 10:30:25", type: "Withdrawal", channel: "PhonePe", amount: 1500, status: "Reviewing" },
-    { id: "7", date: "2025-09-19 10:30:25", type: "Withdrawal", channel: "PhonePe", amount: 1500, status: "Processing" },
+    {
+      orderNumber: "000000000001ABC",
+      type: "Deposit",
+      date: "2025-09-19 12:07:10",
+      channel: "LGpay",
+      amount: 2000,
+      status: "Processing",
+    },
+    {
+      orderNumber: "000000000002XYZ",
+      type: "Withdrawal",
+      date: "2025-09-19 10:30:25",
+      channel: "Fpay",
+      amount: 1500,
+      status: "Success",
+    },
+    {
+      type: "Bonus",
+      bonusType: "Welcome",
+      date: "2025-09-19 09:15:42",
+      amount: 500,
+      status: "Received",
+    },
+    {
+      orderNumber: "000000000004QRS",
+      type: "Deposit",
+      date: "2025-09-18 18:22:11",
+      channel: "Fpay",
+      amount: 5000,
+      status: "Success",
+    },
+    {
+      orderNumber: "000000000005TUV",
+      type: "Withdrawal",
+      date: "2025-09-18 16:45:33",
+      channel: "Bank Transfer",
+      amount: 3000,
+      status: "Failed",
+    },
+    {
+      orderNumber: "000000000006ABC",
+      type: "Withdrawal",
+      date: "2025-09-19 10:30:25",
+      channel: "PhonePe",
+      amount: 1500,
+      status: "Reviewing",
+    },
+    {
+      orderNumber: "000000000007XYZ",
+      type: "Withdrawal",
+      date: "2025-09-19 10:30:25",
+      channel: "PhonePe",
+      amount: 1500,
+      status: "Processing",
+    },
+    {
+      type: "Bonus",
+      bonusType: "VIP Level",
+      date: "2025-09-17 14:22:10",
+      amount: 1000,
+      status: "Received",
+    },
   ];
 
-  const filteredTransactions = transactions.filter(transaction => {
+  const filteredTransactions = transactions.filter((transaction) => {
     if (activeFilter === "Recharge") return transaction.type === "Deposit";
     if (activeFilter === "Withdraw") return transaction.type === "Withdrawal";
     if (activeFilter === "Bonus") return transaction.type === "Bonus";
@@ -48,11 +102,11 @@ const TransactionRecords = () => {
       case "Success":
       case "Received":
         return "text-green-500";
-      case "Pending":
+   
       case "Reviewing":
-        return "text-orange-500";
-      case "Processing":
         return "text-blue-500";
+      case "Processing":
+        return "text-sky-500";
       case "Failed":
         return "text-red-500";
       default:
@@ -67,31 +121,42 @@ const TransactionRecords = () => {
     transaction: Transaction;
     isLast?: boolean;
   }) => (
-    <div className="w-full text-white">
-      <div className="px-3 py-2">
-        <div className="text-xs mb-2">{transaction.date}</div>
-
-        <div className="grid grid-cols-2 gap-3 mb-2">
-          <div>
-            <div className="text-xs">Type:</div>
-            <div className="text-sm font-medium">{transaction.type}</div>
-          </div>
-          <div className="text-right">
-            <div className="text-xs">Amount:</div>
-            <div className="text-sm font-bold text-yellow-400">
-              {transaction.currency || "₹"} {transaction.amount.toLocaleString()}
-            </div>
-          </div>
+    <div className="w-full text-white px-3 py-2">
+      <div className="flex flex-col gap-2">
+        <div className="flex justify-between text-xs text-white/70">
+          <span>Date</span>
+          <span>{transaction.date}</span>
         </div>
 
-        <div className="grid grid-cols-2 gap-3 mb-2">
-          <div>
-            <div className="text-xs">Channel:</div>
-            <div className="text-sm font-medium">{transaction.channel}</div>
+        {transaction.type === "Bonus" ? (
+          <div className="flex justify-between text-xs text-white/70">
+            <span>Type</span>
+            <span>{transaction.bonusType}</span>
           </div>
-          <div className="text-right flex items-center justify-end gap-2">
-            <div className="text-xs">Status:</div>
-            <span className={`text-xs font-semibold ${getStatusTextColor(transaction.status)}`}>
+        ) : (
+          <>
+            <div className="flex justify-between text-xs text-white/70">
+              <span>Order No</span>
+              <span>{transaction.orderNumber}</span>
+            </div>
+            <div className="flex justify-between text-xs text-white/70">
+              <span>Channel</span>
+              <span>{transaction.channel}</span>
+            </div>
+          </>
+        )}
+
+        <div className="flex justify-between text-sm">
+          <span className="text-white/70">Amount</span>
+          <span className="text-orange-400">
+            {transaction.currency || "₹"} {transaction.amount.toLocaleString()}
+          </span>
+        </div>
+
+        <div className="flex justify-between items-center text-sm">
+          <span className="text-white/70">Status</span>
+          <div className="flex items-center gap-1">
+            <span className={`font-semibold ${getStatusTextColor(transaction.status)}`}>
               {transaction.status}
             </span>
             {transaction.type === "Withdrawal" && transaction.status === "Failed" && (
@@ -104,11 +169,7 @@ const TransactionRecords = () => {
         </div>
       </div>
 
-      {!isLast && (
-        <div className="mx-4">
-          <div className="border-b border-dashed border-white/30" />
-        </div>
-      )}
+      {!isLast && <div className="mt-3 border-b border-dashed border-white/30" />}
     </div>
   );
 
@@ -160,7 +221,7 @@ const TransactionRecords = () => {
           {filteredTransactions.length > 0 ? (
             filteredTransactions.map((transaction, index) => (
               <TransactionCard
-                key={transaction.id}
+                key={transaction.orderNumber || `${transaction.bonusType}-${index}`}
                 transaction={transaction}
                 isLast={index === filteredTransactions.length - 1}
               />
@@ -179,7 +240,6 @@ const TransactionRecords = () => {
         )}
       </div>
 
-      {/* Reason Prompt */}
       {showReasonPrompt && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
           <div className="bg-[#450b00]/60 border border-yellow-400 rounded-md p-4 w-80 relative text-white">
@@ -189,13 +249,15 @@ const TransactionRecords = () => {
             >
               <X className="w-4 h-4" />
             </button>
-            <h2 className="text-sm font-semibold mb-2">Reason:</h2>
-            <p className="text-xs text-white">Added through admin panel</p>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-};
+               <h2 className="text-sm font-semibold mb-2">Reason:</h2>
+                        <p className="text-xs text-white">Added through admin panel</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            };
 
-export default TransactionRecords;
+            export default TransactionRecords;
+
+
