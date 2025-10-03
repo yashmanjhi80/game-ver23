@@ -880,7 +880,7 @@ export default function HomePage() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="w-6 h-6 bg-gradient-to-r from-yellow-500 to-red-500 rounded-lg flex items-center justify-center">
-                      <Image src={cardIcon} alt="Logo 1" className="h-6 w-auto" />
+                      <Image src={cardIcon} alt="Logo 1" className="h-6 w-6" />
                     </div>
                     <h2 className="text-xl md:text-2xl text-yellow-400 drop-shadow-lg">
                       Cards{" "}
@@ -947,7 +947,7 @@ export default function HomePage() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="w-6 h-6 bg-gradient-to-r from-yellow-500/30 to-red-500 rounded-lg flex items-center justify-center">
-              <Image src={bellIcon} alt="Logo 1" className="h-6 w-auto" />
+              <Image src={bellIcon} alt="Logo 1" className="h-6 w-6" />
                     </div>
                     <h2 className="text-xl md:text-2xl text-yellow-400 drop-shadow-lg">
                       Other{" "}
