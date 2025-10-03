@@ -666,7 +666,7 @@ export default function HomePage() {
         /* Vertical Layout - Redesigned with 3x3 Category Grids */
         <div className="max-w-6xl mx-auto p-2 md:p-6 space-y-6 md:space-y-6 pb-20 bg-gradient-to-br from-purple-900/20 via-red-900/20 to-black/20 backdrop-blur-sm">
           {/* Banner Slider */}
-          <div className="relative w-full border border-yellow-400 h-40 md:h-60 lg:h-72 mb-6 md:mb-8 overflow-hidden rounded-xl md:rounded-2xl ">
+          <div className="relative w-full border border-yellow-400 h-40 md:h-60 lg:h-72 mb-4 mt-2 md:mb-8 overflow-hidden rounded-xl md:rounded-2xl ">
             <div
               className="flex transition-transform duration-500 ease-in-out h-full"
               style={{ transform: `translateX(-${currentBanner * 100}%)` }}
@@ -703,6 +703,46 @@ export default function HomePage() {
           </div>
 
           <div className="space-y-4">
+            {/* vip status search , vip and wallet icon */}
+            <div className="flex items-center space-x-6 bg-white/ p-4 rounded-lg shadow-md">
+              <div className="bg-gradient-to-r from-red-500 to-orange-400/40 text-yellow-400 font-bold px-3 py-1 rounded-full text-sm">
+                VIP2
+              </div>
+                <div className="flex flex-row gap-5 absolute right-6 ">
+
+              <div className="flex flex-col items-center text-xs text-yellow-200">
+                <img
+                  src="/assets/search.png"
+                  alt="Search"
+                  className="w-5 h-5 mb-1"
+                />
+                <span>Search</span>
+              </div>
+
+              <a
+                href="/promo"
+                className="flex flex-col items-center text-xs text-yellow-200"
+              >
+                <img src="/assets/vip.png" alt="VIP" className="w-5 h-5 mb-1" />
+                <span>VIP</span>
+              </a>
+
+              <a
+                href="/wallet"
+                className="flex flex-col items-center text-xs text-yellow-200"
+              >
+                <img
+                  src="/assets/wallet.png"
+                  alt="Wallet"
+                  className="w-5 h-5 mb-1"
+                />
+                <span>Wallet</span>
+              </a>
+
+              </div>
+              </div>
+
+
             {/* Category Filter Buttons */}
             <div className="flex gap-3 overflow-x-auto scrollbar-hide pb-2">
               <button
@@ -947,7 +987,7 @@ export default function HomePage() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="w-6 h-6 bg-gradient-to-r from-yellow-500/30 to-red-500 rounded-lg flex items-center justify-center">
-              <Image src={bellIcon} alt="Logo 1" className="h-6 w-6" />
+                      <Image src={bellIcon} alt="Logo 1" className="h-6 w-6" />
                     </div>
                     <h2 className="text-xl md:text-2xl text-yellow-400 drop-shadow-lg">
                       Other{" "}
