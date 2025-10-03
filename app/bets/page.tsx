@@ -57,7 +57,7 @@ const BetRecords = () => {
                 {/* Second Row */}
                 <div className="flex justify-between pb-4 border-yellow-400 border-b items-start">
                   <div className="flex flex-col">
-                    <span className="text-sm text-white/90 font-medium">₹ {record.betAmount}</span>
+                    <span className="text-sm text-white/90 font-medium">Bet:  {record.betAmount}</span>
                   </div>
                   <div className="flex flex-col text-right">
                     <span

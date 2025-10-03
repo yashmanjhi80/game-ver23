@@ -1,32 +1,32 @@
-"use client"
+"use client";
 
-import { Wallet, Flame, Gamepad2, Spade, Fish, Zap } from "lucide-react"
-import { useState, useEffect } from "react"
-import Link from "next/link"
-import Image from "next/image"
-import { NgameCardsData, gameCardsData, bannerData } from "@/data/games"
-import BottomNavigation from "@/components/bottom-navigation"
-import React from "react"
-import hot from "./asssets/hot.png"
-import fish from "./asssets/fish.png"
-import cards from "./asssets/cards.png"
-import jili from "./asssets/JILI.png"
-import { useRouter } from "next/navigation"
+import { Wallet, Flame, Gamepad2, Spade, Fish, Zap } from "lucide-react";
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { NgameCardsData, gameCardsData, bannerData } from "@/data/games";
+import BottomNavigation from "@/components/bottom-navigation";
+import React from "react";
+import bellIcon from "@/public/assets/bell.png";
+import hotIcon from "@/public/assets/hot.png";
+import pgIcon from "@/public/assets/pg.png";
+import slotIcon from "@/public/assets/slot.png";
+import { useRouter } from "next/navigation";
 
 interface UserCredentials {
-  username: string
-  password: string
+  username: string;
+  password: string;
   user?: {
-    username: string
-    email: string
-  }
-  loginTime: string
+    username: string;
+    email: string;
+  };
+  loginTime: string;
 }
 
 interface GameLoadingState {
-  isLoading: boolean
-  progress: number
-  gameName: string
+  isLoading: boolean;
+  progress: number;
+  gameName: string;
 }
 
 function GameImage({
@@ -34,28 +34,33 @@ function GameImage({
   alt,
   prefer = "small",
 }: {
-  gCode: string
-  alt: string
-  prefer?: "small" | "large"
+  gCode: string;
+  alt: string;
+  prefer?: "small" | "large";
 }) {
   // Only use the provided test server, en-US images. Try both small and large folders.
-  const base = "https://test.zyronetworks.shop"
+  const base = "https://test.zyronetworks.shop";
   const smalls = [
     `${base}/images/small/JL/en-US/${gCode}.png`,
     `${base}/small/JL/en-US/${gCode}.png`,
     `${base}/images/small/JL/en-us/${gCode}.png`,
-  ]
+  ];
   const larges = [
     `${base}/images/large/JL/en-US/${gCode}.png`,
     `${base}/large/JL/en-US/${gCode}.png`,
     `${base}/images/large/JL/en-us/${gCode}.png`,
-  ]
+  ];
   // Neutral fallback still constrained to en-US on the same host
-  const neutrals = [`${base}/JL/en-US/${gCode}.png`, `${base}/JL/en-us/${gCode}.png`]
-  const candidates = (prefer === "small" ? [...smalls, ...larges] : [...larges, ...smalls]).concat(neutrals)
+  const neutrals = [
+    `${base}/JL/en-US/${gCode}.png`,
+    `${base}/JL/en-us/${gCode}.png`,
+  ];
+  const candidates = (
+    prefer === "small" ? [...smalls, ...larges] : [...larges, ...smalls]
+  ).concat(neutrals);
 
-  const [idx, setIdx] = React.useState(0)
-  const src = candidates[Math.min(idx, candidates.length - 1)]
+  const [idx, setIdx] = React.useState(0);
+  const src = candidates[Math.min(idx, candidates.length - 1)];
 
   return (
     <img
@@ -65,25 +70,26 @@ function GameImage({
       onError={() => setIdx((i) => (i + 1 < candidates.length ? i + 1 : i))}
       className="w-full h-full object-cover"
     />
-  )
+  );
 }
 
-function JEImage({
-  gCode,
-  alt,
-}: {
-  gCode: string
-  alt: string
-}) {
+function JEImage({ gCode, alt }: { gCode: string; alt: string }) {
   // Build: https://test.zyronetworks.shop/294x400/JL_294x400_GameIDNNN_en-US.png
-  const base = "https://test.zyronetworks.shop/294x400"
+  const base = "https://test.zyronetworks.shop/294x400";
   const pad3 = (n: string) => {
-    if (!n || n === undefined || n === null) return "000"
-    return n.toString().padStart(3, "0")
-  }
-  const src = `${base}/JL_294x400_GameID${pad3(gCode)}_en-US.png`
+    if (!n || n === undefined || n === null) return "000";
+    return n.toString().padStart(3, "0");
+  };
+  const src = `${base}/JL_294x400_GameID${pad3(gCode)}_en-US.png`;
 
-  return <img src={src || "/placeholder.svg"} alt={alt} loading="eager" className="w-full h-full object-cover" />
+  return (
+    <img
+      src={src || "/placeholder.svg"}
+      alt={alt}
+      loading="eager"
+      className="w-full h-full object-cover"
+    />
+  );
 }
 
 function JEBannerImage({
@@ -91,17 +97,17 @@ function JEBannerImage({
   alt,
   fallbackSrc,
 }: {
-  gCode: string
-  alt: string
-  fallbackSrc?: string
+  gCode: string;
+  alt: string;
+  fallbackSrc?: string;
 }) {
   // Build: https://test.zyronetworks.shop/590x193/JL_590x193_GameIDNNN_en-US.png
-  const base = "https://test.zyronetworks.shop/590x193"
+  const base = "https://test.zyronetworks.shop/590x193";
   const pad3 = (n: string) => {
-    if (!n || n === undefined || n === null) return "000"
-    return n.toString().padStart(3, "0")
-  }
-  const src = `${base}/JL_590x193_GameID${pad3(gCode)}_en-US.png`
+    if (!n || n === undefined || n === null) return "000";
+    return n.toString().padStart(3, "0");
+  };
+  const src = `${base}/JL_590x193_GameID${pad3(gCode)}_en-US.png`;
 
   return (
     <img
@@ -111,191 +117,200 @@ function JEBannerImage({
       className="w-full h-full object-cover"
       onError={(e) => {
         if (fallbackSrc && e.currentTarget.src !== fallbackSrc) {
-          e.currentTarget.src = fallbackSrc
+          e.currentTarget.src = fallbackSrc;
         }
       }}
     />
-  )
+  );
 }
 
 // Small utility to pick random items without mutating original
 function pickRandom<T>(arr: T[], count: number): T[] {
-  const copy = [...arr]
+  const copy = [...arr];
   for (let i = copy.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1))
-    ;[copy[i], copy[j]] = [copy[j], copy[i]]
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
   }
-  return copy.slice(0, Math.min(count, copy.length))
+  return copy.slice(0, Math.min(count, copy.length));
 }
 
 export default function HomePage() {
-  const [balance, setBalance] = useState<string>("Loading...")
-  const [username, setUsername] = useState<string>("")
-  const [userCredentials, setUserCredentials] = useState<UserCredentials | null>(null)
-  const [isLoadingBalance, setIsLoadingBalance] = useState(true)
+  const [balance, setBalance] = useState<string>("Loading...");
+  const [username, setUsername] = useState<string>("");
+  const [userCredentials, setUserCredentials] =
+    useState<UserCredentials | null>(null);
+  const [isLoadingBalance, setIsLoadingBalance] = useState(true);
   const [gameLoading, setGameLoading] = useState<GameLoadingState>({
     isLoading: false,
     progress: 0,
     gameName: "",
-  })
-  const [selectedFilter, setSelectedFilter] = useState("ALL")
-  const [currentBanner, setCurrentBanner] = useState(0)
-  const [showWelcomeNotification, setShowWelcomeNotification] = useState(false)
-  const [showInsufficientBalancePopup, setShowInsufficientBalancePopup] = useState(false)
-  const [showDailyRewardsPopup, setShowDailyRewardsPopup] = useState(false)
-  const [claimedRewards, setClaimedRewards] = useState<number[]>([])
-  const [isHorizontal, setIsHorizontal] = useState(false)
+  });
+  const [selectedFilter, setSelectedFilter] = useState("ALL");
+  const [currentBanner, setCurrentBanner] = useState(0);
+  const [showWelcomeNotification, setShowWelcomeNotification] = useState(false);
+  const [showInsufficientBalancePopup, setShowInsufficientBalancePopup] =
+    useState(false);
+  const [showDailyRewardsPopup, setShowDailyRewardsPopup] = useState(false);
+  const [claimedRewards, setClaimedRewards] = useState<number[]>([]);
+  const [isHorizontal, setIsHorizontal] = useState(false);
   const [categoryPages, setCategoryPages] = useState({
     SL: 0,
     FH: 0,
     CB: 0,
     OT: 0,
-  })
+  });
 
-  const router = useRouter()
+  const router = useRouter();
 
   useEffect(() => {
     const loadUserDataAndBalance = async () => {
       try {
-        const storedCredentials = localStorage.getItem("userCredentials")
+        const storedCredentials = localStorage.getItem("userCredentials");
         if (storedCredentials) {
-          const credentials: UserCredentials = JSON.parse(storedCredentials)
-          setUsername(credentials.username)
-          setUserCredentials(credentials)
-          await fetchBalance(credentials.username, credentials.password)
+          const credentials: UserCredentials = JSON.parse(storedCredentials);
+          setUsername(credentials.username);
+          setUserCredentials(credentials);
+          await fetchBalance(credentials.username, credentials.password);
         } else {
-          setBalance("0")
-          setIsLoadingBalance(false)
+          setBalance("0");
+          setIsLoadingBalance(false);
         }
       } catch (error) {
-        console.error("Error loading user data:", error)
-        setBalance("Error")
-        setIsLoadingBalance(false)
+        console.error("Error loading user data:", error);
+        setBalance("Error");
+        setIsLoadingBalance(false);
       }
-    }
+    };
 
-    loadUserDataAndBalance()
-  }, [])
+    loadUserDataAndBalance();
+  }, []);
 
   useEffect(() => {
-    if (typeof window === "undefined") return
-    const params = new URLSearchParams(window.location.search)
-    const refer = params.get("refer")
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    const refer = params.get("refer");
     if (refer) {
       try {
-        localStorage.setItem("referralId", refer)
+        localStorage.setItem("referralId", refer);
       } catch (e) {
         // ignore storage failures
       }
-      router.replace(`/?register=1&refer=${encodeURIComponent(refer)}`)
+      router.replace(`/?register=1&refer=${encodeURIComponent(refer)}`);
     }
-  }, [router])
+  }, [router]);
 
   // Banner auto-slide effect (only for vertical view)
   useEffect(() => {
     if (!isHorizontal) {
       const interval = setInterval(() => {
-        setCurrentBanner((prev) => (prev + 1) % bannerData.length)
-      }, 4000)
+        setCurrentBanner((prev) => (prev + 1) % bannerData.length);
+      }, 4000);
 
-      return () => clearInterval(interval)
+      return () => clearInterval(interval);
     }
-  }, [isHorizontal])
+  }, [isHorizontal]);
 
   // Show welcome notification on first load
   useEffect(() => {
-    const hasShownWelcome = localStorage.getItem("hasShownWelcome")
+    const hasShownWelcome = localStorage.getItem("hasShownWelcome");
     if (userCredentials && !hasShownWelcome) {
-      setShowWelcomeNotification(true)
-      localStorage.setItem("hasShownWelcome", "true")
+      setShowWelcomeNotification(true);
+      localStorage.setItem("hasShownWelcome", "true");
 
       const timer = setTimeout(() => {
-        setShowWelcomeNotification(false)
-      }, 3000)
+        setShowWelcomeNotification(false);
+      }, 3000);
 
-      return () => clearTimeout(timer)
+      return () => clearTimeout(timer);
     }
-  }, [userCredentials])
+  }, [userCredentials]);
 
   useEffect(() => {
     const checkDailyRewards = () => {
-      const today = new Date().toDateString()
-      const lastShown = localStorage.getItem("dailyRewardsLastShown")
-      const todaysClaimed = JSON.parse(localStorage.getItem("todayClaimedRewards") || "[]")
+      const today = new Date().toDateString();
+      const lastShown = localStorage.getItem("dailyRewardsLastShown");
+      const todaysClaimed = JSON.parse(
+        localStorage.getItem("todayClaimedRewards") || "[]",
+      );
 
       if (lastShown !== today && userCredentials) {
         // Reset claimed rewards for new day
-        localStorage.setItem("todayClaimedRewards", "[]")
-        setClaimedRewards([])
-        setShowDailyRewardsPopup(true)
-        localStorage.setItem("dailyRewardsLastShown", today)
+        localStorage.setItem("todayClaimedRewards", "[]");
+        setClaimedRewards([]);
+        setShowDailyRewardsPopup(true);
+        localStorage.setItem("dailyRewardsLastShown", today);
       } else {
-        setClaimedRewards(todaysClaimed)
+        setClaimedRewards(todaysClaimed);
       }
-    }
+    };
 
     if (userCredentials) {
-      checkDailyRewards()
+      checkDailyRewards();
     }
-  }, [userCredentials])
+  }, [userCredentials]);
 
   const fetchBalance = async (username: string, password: string) => {
     try {
-      setIsLoadingBalance(true)
+      setIsLoadingBalance(true);
       const response = await fetch(
         `/api/auth/balance?username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`,
-      )
-      const data = await response.json()
+      );
+      const data = await response.json();
 
       if (data.success) {
-        const balanceValue = data.balance || data.rawResponse || "0"
-        setBalance(balanceValue.toString())
+        const balanceValue = data.balance || data.rawResponse || "0";
+        setBalance(balanceValue.toString());
       } else {
-        setBalance("Error")
-        console.error("Balance fetch failed:", data.message)
+        setBalance("Error");
+        console.error("Balance fetch failed:", data.message);
       }
     } catch (error) {
-      console.error("Error fetching balance:", error)
-      setBalance("Error")
+      console.error("Error fetching balance:", error);
+      setBalance("Error");
     } finally {
-      setIsLoadingBalance(false)
+      setIsLoadingBalance(false);
     }
-  }
+  };
 
   const refreshBalance = async () => {
     if (userCredentials) {
-      await fetchBalance(userCredentials.username, userCredentials.password)
+      await fetchBalance(userCredentials.username, userCredentials.password);
     }
-  }
+  };
 
   const checkBalance = () => {
-    const numericBalance = Number.parseFloat(balance)
-    return !isNaN(numericBalance) && numericBalance >= 10
-  }
+    const numericBalance = Number.parseFloat(balance);
+    return !isNaN(numericBalance) && numericBalance >= 10;
+  };
 
-  const launchGame = async (gameCode: string, gameType: string, gameName: string, Pvcode: string) => {
+  const launchGame = async (
+    gameCode: string,
+    gameType: string,
+    gameName: string,
+    Pvcode: string,
+  ) => {
     if (!userCredentials) {
-      alert("Please login to play games")
-      return
+      alert("Please login to play games");
+      return;
     }
 
     if (!checkBalance()) {
-      setShowInsufficientBalancePopup(true)
-      return
+      setShowInsufficientBalancePopup(true);
+      return;
     }
-    console.log(Pvcode)
+    console.log(Pvcode);
     setGameLoading({
       isLoading: true,
       progress: 0,
       gameName: gameName,
-    })
+    });
 
     const progressInterval = setInterval(() => {
       setGameLoading((prev) => ({
         ...prev,
         progress: Math.min(prev.progress + Math.random() * 15, 90),
-      }))
-    }, 200)
+      }));
+    }, 200);
 
     try {
       const params = new URLSearchParams({
@@ -306,144 +321,157 @@ export default function HomePage() {
         gameid: gameCode,
         lang: "en-US",
         html5: "1",
-      })
+      });
 
-      console.log(params.toString())
+      console.log(params.toString());
 
-      const response = await fetch(`/api/auth/launch-game?${params.toString()}`)
-      const data = await response.json()
+      const response = await fetch(
+        `/api/auth/launch-game?${params.toString()}`,
+      );
+      const data = await response.json();
 
-      clearInterval(progressInterval)
-      setGameLoading((prev) => ({ ...prev, progress: 100 }))
+      clearInterval(progressInterval);
+      setGameLoading((prev) => ({ ...prev, progress: 100 }));
 
       if (data.success && data.data) {
         if (data.data.gameUrl || data.data.url) {
-          const gameUrl = data.data.gameUrl || data.data.url
+          const gameUrl = data.data.gameUrl || data.data.url;
           setTimeout(() => {
-            window.location.href = gameUrl
-          }, 500)
+            window.location.href = gameUrl;
+          }, 500);
         } else if (data.data.rawResponse) {
-          console.log("Game launch response:", data.data.rawResponse)
+          console.log("Game launch response:", data.data.rawResponse);
           setTimeout(() => {
-            setGameLoading({ isLoading: false, progress: 0, gameName: "" })
-            alert("Game launched! Check console for details.")
-          }, 500)
+            setGameLoading({ isLoading: false, progress: 0, gameName: "" });
+            alert("Game launched! Check console for details.");
+          }, 500);
         } else {
-          console.log("Game launch successful:", data.data)
+          console.log("Game launch successful:", data.data);
           setTimeout(() => {
-            setGameLoading({ isLoading: false, progress: 0, gameName: "" })
-            alert("Game launched successfully!")
-          }, 500)
+            setGameLoading({ isLoading: false, progress: 0, gameName: "" });
+            alert("Game launched successfully!");
+          }, 500);
         }
       } else {
-        console.error("Game launch failed:", data.message)
+        console.error("Game launch failed:", data.message);
         setTimeout(() => {
-          setGameLoading({ isLoading: false, progress: 0, gameName: "" })
-          alert(`Failed to launch game: ${data.message}`)
-        }, 500)
+          setGameLoading({ isLoading: false, progress: 0, gameName: "" });
+          alert(`Failed to launch game: ${data.message}`);
+        }, 500);
       }
     } catch (error) {
-      clearInterval(progressInterval)
-      console.error("Error launching game:", error)
+      clearInterval(progressInterval);
+      console.error("Error launching game:", error);
       setTimeout(() => {
-        setGameLoading({ isLoading: false, progress: 0, gameName: "" })
-        alert("Failed to launch game. Please try again.")
-      }, 500)
+        setGameLoading({ isLoading: false, progress: 0, gameName: "" });
+        alert("Failed to launch game. Please try again.");
+      }, 500);
     }
-  }
+  };
 
   const claimReward = (day: number) => {
-    const newClaimedRewards = [...claimedRewards, day]
-    setClaimedRewards(newClaimedRewards)
-    localStorage.setItem("todayClaimedRewards", JSON.stringify(newClaimedRewards))
-  }
+    const newClaimedRewards = [...claimedRewards, day];
+    setClaimedRewards(newClaimedRewards);
+    localStorage.setItem(
+      "todayClaimedRewards",
+      JSON.stringify(newClaimedRewards),
+    );
+  };
 
   const handleBannerClick = (banner: any) => {
     if (banner.name === "Daily Rewards" || banner.type === "PROMO") {
-      setShowDailyRewardsPopup(true)
+      setShowDailyRewardsPopup(true);
     }
-  }
+  };
 
   const formatBalance = (balance: string) => {
-    if (balance === "Loading..." || balance === "Error") return balance
+    if (balance === "Loading..." || balance === "Error") return balance;
     try {
-      const num = Number.parseFloat(balance)
-      if (isNaN(num)) return balance
-      return num.toLocaleString()
+      const num = Number.parseFloat(balance);
+      if (isNaN(num)) return balance;
+      return num.toLocaleString();
     } catch {
-      return balance
+      return balance;
     }
-  }
+  };
 
   const getGameTypeLabel = (type: string) => {
     switch (type) {
       case "SL":
-        return "Slots"
+        return "Slots";
       case "FH":
-        return "Fishing"
+        return "Fishing";
       case "CB":
-        return "Cards"
+        return "Cards";
       case "OT":
-        return "Others"
+        return "Others";
       default:
-        return "Game"
+        return "Game";
     }
-  }
+  };
 
   const getGameTypeIcon = (type: string) => {
     switch (type) {
       case "SL":
-        return <Gamepad2 size={16} />
+        return <Gamepad2 size={16} />;
       case "FH":
-        return <Fish size={16} />
+        return <Fish size={16} />;
       case "CB":
-        return <Spade size={16} />
+        return <Spade size={16} />;
       case "OT":
-        return <Zap size={16} />
+        return <Zap size={16} />;
       default:
     }
-  }
+  };
 
   const nextPage = (category: string) => {
-    const categoryGames = filteredGames.filter((game) => game.p_type === category)
-    const maxPages = Math.ceil(categoryGames.length / 9)
+    const categoryGames = filteredGames.filter(
+      (game) => game.p_type === category,
+    );
+    const maxPages = Math.ceil(categoryGames.length / 9);
     setCategoryPages((prev) => ({
       ...prev,
       [category]: (prev[category] + 1) % maxPages,
-    }))
-  }
+    }));
+  };
 
   const prevPage = (category: string) => {
-    const categoryGames = filteredGames.filter((game) => game.p_type === category)
-    const maxPages = Math.ceil(categoryGames.length / 9)
+    const categoryGames = filteredGames.filter(
+      (game) => game.p_type === category,
+    );
+    const maxPages = Math.ceil(categoryGames.length / 9);
     setCategoryPages((prev) => ({
       ...prev,
       [category]: prev[category] > 0 ? prev[category] - 1 : maxPages - 1,
-    }))
-  }
+    }));
+  };
 
   const getCategoryGames = (category: string) => {
-    const categoryGames = filteredGames.filter((game) => game.p_type === category)
-    const startIndex = categoryPages[category] * 9
-    return categoryGames.slice(startIndex, startIndex + 9)
-  }
+    const categoryGames = filteredGames.filter(
+      (game) => game.p_type === category,
+    );
+    const startIndex = categoryPages[category] * 9;
+    return categoryGames.slice(startIndex, startIndex + 9);
+  };
 
   const filteredGames = gameCardsData.filter((game) => {
-    const matchesFilter = selectedFilter === "ALL" || game.p_type === selectedFilter
-    return matchesFilter
-  })
+    const matchesFilter =
+      selectedFilter === "ALL" || game.p_type === selectedFilter;
+    return matchesFilter;
+  });
   const NfilteredGames = NgameCardsData.filter((game) => {
-    const matchesFilter = selectedFilter === "ALL" || game.p_type === selectedFilter
-    return matchesFilter
-  })
+    const matchesFilter =
+      selectedFilter === "ALL" || game.p_type === selectedFilter;
+    return matchesFilter;
+  });
 
   const handleGifClick = async () => {
     if (!userCredentials) {
-      alert("Please login to play games")
-      return
+      alert("Please login to play games");
+      return;
     }
-    launchGame("0", "LC", "Live Casino", "GE")
-  }
+    launchGame("0", "LC", "Live Casino", "GE");
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-burgundy-800 to-burgundy-960 text-white">
@@ -463,12 +491,18 @@ export default function HomePage() {
               <div className="w-16 h-16 bg-yellow-500/20 rounded-full flex items-center justify-center mx-auto mb-4 border border-yellow-500/30">
                 <Wallet size={32} className="text-yellow-400" />
               </div>
-              <h2 className="text-2xl font-bold text-yellow-400 mb-2">Insufficient Balance</h2>
-              <p className="text-yellow-200 mb-4">You need at least ₹10 to play games</p>
+              <h2 className="text-2xl font-bold text-yellow-400 mb-2">
+                Insufficient Balance
+              </h2>
+              <p className="text-yellow-200 mb-4">
+                You need at least ₹10 to play games
+              </p>
 
               <div className="bg-black/50 rounded-lg p-4 mb-6 border border-yellow-500/20">
                 <p className="text-gray-300 text-sm mb-1">Current Balance</p>
-                <p className="text-3xl font-bold text-yellow-400">₹{formatBalance(balance)}</p>
+                <p className="text-3xl font-bold text-yellow-400">
+                  ₹{formatBalance(balance)}
+                </p>
               </div>
 
               <div className="flex gap-3">
@@ -497,8 +531,12 @@ export default function HomePage() {
           <div className="text-center max-w-md mx-auto p-8">
             <div className="mb-8">
               <div className="w-24 h-24 border-4 border-yellow-500/30 border-t-yellow-400 rounded-full animate-spin mx-auto mb-6" />
-              <h2 className="text-2xl font-bold mb-2 text-yellow-400">Launching {gameLoading.gameName}</h2>
-              <p className="text-gray-300">Please wait while we prepare your game...</p>
+              <h2 className="text-2xl font-bold mb-2 text-yellow-400">
+                Launching {gameLoading.gameName}
+              </h2>
+              <p className="text-gray-300">
+                Please wait while we prepare your game...
+              </p>
             </div>
 
             <div className="w-full bg-black/50 rounded-full h-3 mb-4 border border-yellow-500/20">
@@ -507,7 +545,9 @@ export default function HomePage() {
                 style={{ width: `${gameLoading.progress}%` }}
               />
             </div>
-            <p className="text-sm text-gray-400">{Math.round(gameLoading.progress)}% Complete</p>
+            <p className="text-sm text-gray-400">
+              {Math.round(gameLoading.progress)}% Complete
+            </p>
           </div>
         </div>
       )}
@@ -518,7 +558,9 @@ export default function HomePage() {
       {showWelcomeNotification && (
         <div className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 animate-in slide-in-from-top duration-500">
           <div className="bg-gradient-to-r from-yellow-600 to-yellow-500 text-black px-6 py-3 rounded-full shadow-lg backdrop-blur-sm border border-yellow-400/30">
-            <p className="text-sm md:text-base font-bold">Welcome back, {username}! 🎮</p>
+            <p className="text-sm md:text-base font-bold">
+              Welcome back, {username}! 🎮
+            </p>
           </div>
         </div>
       )}
@@ -564,17 +606,29 @@ export default function HomePage() {
             {/* Games Section - 2 Rows */}
             {/* use JEImage in the small horizontal scroller for JE games */}
             <div className="h-full overflow-x-auto scrollbar-hide">
-              <div className="grid grid-rows-2 grid-flow-col gap-2 h-full" style={{ width: "max-content" }}>
+              <div
+                className="grid grid-rows-2 grid-flow-col gap-2 h-full"
+                style={{ width: "max-content" }}
+              >
                 {filteredGames.slice(0, 20).map((game) => (
                   <div
                     key={game.g_code}
                     className="relative cursor-pointer hover:scale-105 transition-all duration-300 group"
-                    onClick={() => launchGame(game.g_code, game.p_type, game.gameName, game.Pcode)}
+                    onClick={() =>
+                      launchGame(
+                        game.g_code,
+                        game.p_type,
+                        game.gameName,
+                        game.Pcode,
+                      )
+                    }
                   >
                     <div className="relative w-28 h-36 bg-gradient-to-br from-black via-gray-900 to-black rounded-lg overflow-hidden shadow-lg border border-yellow-500/30">
                       <JEImage gCode={game.g_code} alt={game.gameName} />
                     </div>
-                    <div className="mt-1 text-[11px] text-center text-yellow-200 line-clamp-1">{game.gameName}</div>
+                    <div className="mt-1 text-[11px] text-center text-yellow-200 line-clamp-1">
+                      {game.gameName}
+                    </div>
                   </div>
                 ))}
               </div>
@@ -585,11 +639,22 @@ export default function HomePage() {
                 {pickRandom(filteredGames, 10).map((game) => (
                   <button
                     key={`je-banner-${game.g_code}`}
-                    onClick={() => launchGame(game.g_code, game.p_type, game.gameName, game.Pcode)}
+                    onClick={() =>
+                      launchGame(
+                        game.g_code,
+                        game.p_type,
+                        game.gameName,
+                        game.Pcode,
+                      )
+                    }
                     className="relative flex-shrink-0 w-[295px] md:w-[360px] aspect-[590/193] rounded-lg overflow-hidden bg-black/70 border border-yellow-500/20 hover:border-yellow-400/40 transition-colors"
                     aria-label={`Play ${game.gameName}`}
                   >
-                    <JEBannerImage gCode={game.g_code} alt={game.gameName} fallbackSrc={game.imgFileName} />
+                    <JEBannerImage
+                      gCode={game.g_code}
+                      alt={game.gameName}
+                      fallbackSrc={game.imgFileName}
+                    />
                   </button>
                 ))}
               </div>
@@ -641,48 +706,67 @@ export default function HomePage() {
             <div className="flex gap-4 overflow-x-auto scrollbar-hide pb-2">
               <button
                 onClick={() => setSelectedFilter("ALL")}
-                className={`flex items-center gap-2 px-6 py-1 bg-[#450b00] rounded-sm whitespace-nowrap transition-colors ${
+                className={`flex items-center gap-1 p-0 pl-1 bg-[#450b00] rounded-sm whitespace-nowrap transition-colors ${
                   selectedFilter === "ALL" ? " text-white " : " text-white/70 "
                 }`}
               >
-                <Flame className="text-yellow-400" size={18} />
+                <Image
+                  src={hotIcon}
+                  alt="Hot"
+                
+                  className=" w-4 h-4 bg-gradient-to-r from-yellow-500/30 to-red-500 rounded-lg flex items-start "
+                />
                 Hot
               </button>
+
               {[
-                { key: "SL", label: "Slots", icon: "🎰" },
-                { key: "FH", label: "live", icon: "🃏" },
-                { key: "CB", label: "Cards", icon: "🐟" },
-                { key: "OT", label: "Others", icon: "🎮" },
+                { key: "SL", label: "Slots", img: "slot.png" },
+                { key: "FH", label: "Live", img: "casino.png" },
+                { key: "CB", label: "Cards", img: "cards.png" },
+                { key: "OT", label: "Others", img: "bell.png" },
               ].map((filter) => (
                 <button
                   key={filter.key}
                   onClick={() => setSelectedFilter(filter.key)}
-                  className={`flex items-center gap-2 px-2 bg-[#450b00] rounded-sm whitespace-nowrap transition-colors ${
-                    selectedFilter === filter.key ? " text-white " : " text-white/70 "
+                  className={`flex items-center gap-1 p-0 pl-1 bg-[#450b00] rounded-sm whitespace-nowrap transition-colors ${
+                    selectedFilter === filter.key
+                      ? " text-white "
+                      : " text-white/70 "
                   }`}
                 >
-                  <span>{filter.icon}</span>
+                  <img
+                    src={`/assets/${filter.img}`}
+                    alt={filter.label}
+                    className="w-4 h-4 bg-gradient-to-r from-yellow-500/30 to-red-500 rounded-lg flex items-center justify-center"
+                  />
                   {filter.label}
                 </button>
               ))}
             </div>
-          </div>
-
-          <div className="space-y-8">
             {/* Slots Games Category */}
-            {filteredGames.filter((game) => game.p_type === "SL").length > 0 && (
+            {filteredGames.filter((game) => game.p_type === "SL").length >
+              0 && (
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="w-6 h-6 bg-gradient-to-r from-yellow-500/30 to-red-500 rounded-lg flex items-center justify-center">
-                      <Image src={hot || "/placeholder.svg"} alt="Logo 1" className="h-6 w-auto" />
+                      <Image src={slotIcon} alt="Logo 1" className="h-4 w-4" />
                     </div>
-                    <h2 className="text-xl md:text-2xl text-yellow-300 drop-shadow-lg">Slots </h2>
-                    <h2 className="text-xl md:text-2xl text-white drop-shadow-lg"> Games</h2>
+                    <h2 className="text-xl md:text-2xl text-yellow-300 drop-shadow-lg">
+                      Slots{" "}
+                    </h2>
+                    <h2 className="text-xl md:text-2xl text-white drop-shadow-lg">
+                      {" "}
+                      Games
+                    </h2>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="text-gray-200 text-sm drop-shadow-md">
-                      All {filteredGames.filter((game) => game.p_type === "SL").length}
+                      All{" "}
+                      {
+                        filteredGames.filter((game) => game.p_type === "SL")
+                          .length
+                      }
                     </span>
                     <button
                       onClick={() => prevPage("SL")}
@@ -703,7 +787,14 @@ export default function HomePage() {
                     <div
                       key={`slots-grid-${game.g_code}`}
                       className="relative cursor-pointer hover:scale-105 transition-all duration-300 group"
-                      onClick={() => launchGame(game.g_code, game.p_type, game.gameName, game.Pcode)}
+                      onClick={() =>
+                        launchGame(
+                          game.g_code,
+                          game.p_type,
+                          game.gameName,
+                          game.Pcode,
+                        )
+                      }
                     >
                       <div className="relative w-full aspect-[3/4] bg-gradient-to-br from-black via-gray-900 to-black rounded-xl overflow-hidden shadow-lg border border-yellow-500/30">
                         <JEImage gCode={game.g_code} alt={game.gameName} />
@@ -720,18 +811,25 @@ export default function HomePage() {
             )}
 
             {/* Fishing Games Category */}
-            {filteredGames.filter((game) => game.p_type === "FH").length > 0 && (
+            {filteredGames.filter((game) => game.p_type === "FH").length >
+              0 && (
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="w-6 h-6 bg-gradient-to-r from-yellow-500 to-red-500 rounded-lg flex items-center justify-center">
-                      <Image src={fish || "/placeholder.svg"} alt="Logo 1" className="h-8 w-auto" />
+                      <img src="fish" alt="Logo 1" className="h-8 w-auto" />
                     </div>
-                    <h2 className="text-xl md:text-2xl font-bold text-white drop-shadow-lg">Fishing Games</h2>
+                    <h2 className="text-xl md:text-2xl font-bold text-white drop-shadow-lg">
+                      Fishing Games
+                    </h2>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="text-gray-200 text-sm drop-shadow-md">
-                      All {filteredGames.filter((game) => game.p_type === "FH").length}
+                      All{" "}
+                      {
+                        filteredGames.filter((game) => game.p_type === "FH")
+                          .length
+                      }
                     </span>
                     <button
                       onClick={() => prevPage("FH")}
@@ -752,12 +850,21 @@ export default function HomePage() {
                     <div
                       key={`fishing-grid-${game.g_code}`}
                       className="relative cursor-pointer hover:scale-105 transition-all duration-300 group"
-                      onClick={() => launchGame(game.g_code, game.p_type, game.gameName, game.Pcode)}
+                      onClick={() =>
+                        launchGame(
+                          game.g_code,
+                          game.p_type,
+                          game.gameName,
+                          game.Pcode,
+                        )
+                      }
                     >
                       <div className="relative w-full aspect-[3/4] bg-gradient-to-br from-black via-gray-900 to-black rounded-xl overflow-hidden shadow-lg border border-yellow-500/30">
                         <JEImage gCode={game.g_code} alt={game.gameName} />
                         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-2 opacity-0">
-                          <h3 className="text-yellow-300 font-bold text-xs text-center truncate">{game.gameName}</h3>
+                          <h3 className="text-yellow-300 font-bold text-xs text-center truncate">
+                            {game.gameName}
+                          </h3>
                         </div>
                       </div>
                     </div>
@@ -767,19 +874,29 @@ export default function HomePage() {
             )}
 
             {/* Card Games Category */}
-            {filteredGames.filter((game) => game.p_type === "CB").length > 0 && (
+            {filteredGames.filter((game) => game.p_type === "CB").length >
+              0 && (
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="w-6 h-6 bg-gradient-to-r from-yellow-500 to-red-500 rounded-lg flex items-center justify-center">
-                      <Image src={cards || "/placeholder.svg"} alt="Logo 1" className="h-6 w-auto" />
+                      <img src="cards" alt="Logo 1" className="h-6 w-auto" />
                     </div>
-                    <h2 className="text-xl md:text-2xl text-yellow-400 drop-shadow-lg">Cards </h2>
-                    <h2 className="text-xl md:text-2xl text-white drop-shadow-lg"> Games</h2>
+                    <h2 className="text-xl md:text-2xl text-yellow-400 drop-shadow-lg">
+                      Cards{" "}
+                    </h2>
+                    <h2 className="text-xl md:text-2xl text-white drop-shadow-lg">
+                      {" "}
+                      Games
+                    </h2>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="text-gray-200 text-sm drop-shadow-md">
-                      All {filteredGames.filter((game) => game.p_type === "CB").length}
+                      All{" "}
+                      {
+                        filteredGames.filter((game) => game.p_type === "CB")
+                          .length
+                      }
                     </span>
                     <button
                       onClick={() => prevPage("CB")}
@@ -800,7 +917,14 @@ export default function HomePage() {
                     <div
                       key={`cards-grid-${game.g_code}`}
                       className="relative cursor-pointer hover:scale-105 transition-all duration-300 group"
-                      onClick={() => launchGame(game.g_code, game.p_type, game.gameName, game.Pcode)}
+                      onClick={() =>
+                        launchGame(
+                          game.g_code,
+                          game.p_type,
+                          game.gameName,
+                          game.Pcode,
+                        )
+                      }
                     >
                       <div className="relative w-full aspect-[3/4] bg-gradient-to-br from-black via-gray-900 to-black rounded-xl overflow-hidden shadow-lg border border-yellow-500/30">
                         <JEImage gCode={game.g_code} alt={game.gameName} />
@@ -817,19 +941,28 @@ export default function HomePage() {
             )}
 
             {/* Other Games Category */}
-            {filteredGames.filter((game) => game.p_type === "OT").length > 0 && (
+            {filteredGames.filter((game) => game.p_type === "OT").length >
+              0 && (
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="w-6 h-6 bg-gradient-to-r from-yellow-500/30 to-red-500 rounded-lg flex items-center justify-center">
-                      <Image src={jili || "/placeholder.svg"} alt="Logo 1" className="h-6 w-auto" />
+                      <img src="search" alt="Logo 1" className="h-6 w-auto" />
                     </div>
-                    <h2 className="text-xl md:text-2xl text-yellow-400 drop-shadow-lg">Other </h2>
-                    <h2 className="text-xl md:text-2xl text-white drop-shadow-lg">Games </h2>
+                    <h2 className="text-xl md:text-2xl text-yellow-400 drop-shadow-lg">
+                      Other{" "}
+                    </h2>
+                    <h2 className="text-xl md:text-2xl text-white drop-shadow-lg">
+                      Games{" "}
+                    </h2>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="text-gray-200 text-sm drop-shadow-md">
-                      All {filteredGames.filter((game) => game.p_type === "OT").length}
+                      All{" "}
+                      {
+                        filteredGames.filter((game) => game.p_type === "OT")
+                          .length
+                      }
                     </span>
                     <button
                       onClick={() => prevPage("OT")}
@@ -850,13 +983,24 @@ export default function HomePage() {
                     <div
                       key={`others-grid-${game.g_code}`}
                       className="relative cursor-pointer hover:scale-105 transition-all duration-300 group"
-                      onClick={() => launchGame(game.g_code, game.p_type, game.gameName, game.Pcode)}
+                      onClick={() =>
+                        launchGame(
+                          game.g_code,
+                          game.p_type,
+                          game.gameName,
+                          game.Pcode,
+                        )
+                      }
                     >
                       <div className="relative w-full aspect-[3/4] bg-gradient-to-br from-black via-gray-900 to-black rounded-lg md:rounded-2xl overflow-hidden shadow-lg md:shadow-2xl border border-yellow-500/30">
                         <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/10 via-transparent to-yellow-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
                         <div className="relative w-full h-full md:p-4 flex items-center justify-center p-0">
-                          <JEImage gCode={game.g_code} alt={game.gameName} prefer="small" />
+                          <JEImage
+                            gCode={game.g_code}
+                            alt={game.gameName}
+                            prefer="small"
+                          />
                         </div>
 
                         <div className="absolute top-1 md:top-2 right-1 md:right-2">
@@ -885,8 +1029,12 @@ export default function HomePage() {
             {filteredGames.length === 0 && (
               <div className="text-center py-16">
                 <div className="text-6xl mb-4">🎮</div>
-                <h3 className="text-2xl font-bold mb-2 text-white drop-shadow-lg">No games found</h3>
-                <p className="text-gray-300 drop-shadow-md">Try adjusting your filter criteria</p>
+                <h3 className="text-2xl font-bold mb-2 text-white drop-shadow-lg">
+                  No games found
+                </h3>
+                <p className="text-gray-300 drop-shadow-md">
+                  Try adjusting your filter criteria
+                </p>
               </div>
             )}
           </div>
@@ -895,5 +1043,5 @@ export default function HomePage() {
 
       <BottomNavigation />
     </div>
-  )
+  );
 }

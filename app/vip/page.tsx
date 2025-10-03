@@ -55,33 +55,33 @@ const PromoVipPage = () => {
     {
       level: "VIP 2",
       deposit: formatAmount("2000"),
-      weekly: "30",
-      monthly: "50",
+      weekly: "40",
+      monthly: "60",
       upgrade: "115",
       withdrawals: "3",
     },
     {
       level: "VIP 3",
       deposit: formatAmount("₹10000"),
-      weekly: "30",
-      monthly: "150",
-      upgrade: "101",
+      weekly: "80",
+      monthly: "120",
+      upgrade: "240",
       withdrawals: "3",
     },
     {
       level: "VIP 4",
       deposit: formatAmount("₹30000"),
-      weekly: "50",
+      weekly: "130",
       monthly: "250",
-      upgrade: "201",
+      upgrade: "420",
       withdrawals: "5",
     },
     {
       level: "VIP 5",
       deposit: formatAmount("₹80000"),
-      weekly: "80",
+      weekly: "250",
       monthly: "400",
-      upgrade: "501",
+      upgrade: "6",
       withdrawals: "99",
     },
   ];
@@ -135,23 +135,27 @@ const PromoVipPage = () => {
           </Button>
         </div>
 
-        {/* Content based on active tab */}
         {activeTab === "promo" ? (
-          /* Promo Section */
           <div className="space-y-6">
             <div className="space-y-4 pb-[71px]">
               {promoCards.map((promo) => (
                 <Card
                   key={promo.id}
-                  className="h-40  cursor-pointer transition-all duration-300 hover:scale-105 bg-transparent border-0 overflow-hidden"
+                  className="h-40 cursor-pointer transition-all duration-300 hover:scale-105 bg-transparent border-0 overflow-hidden"
                   style={{ boxShadow: "var(--shadow-game)" }}
                   onClick={() => handlePromoClick(promo.url)}
                 >
                   <div className="relative h-40 w-full">
-                    <Image src={promo.url} alt="Logo" className="w-max h-max" />
+                    <Image
+                      src={promo.url}
+                      alt="Promo Image"
+                      layout="fill"
+                      objectFit="contain"
+                      className="rounded-lg"
+                    />
                     <div className="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent rounded-lg" />
-                    <div className="absolute bottom-2 left-4 ">
-                      <h3 className="text-white  rounded-sm font-extrabold text-lg">
+                    <div className="absolute bottom-2 left-4">
+                      <h3 className="text-white rounded-sm font-extrabold text-lg">
                         {promo.title}
                       </h3>
                     </div>
@@ -160,7 +164,7 @@ const PromoVipPage = () => {
               ))}
             </div>
           </div>
-        ) : (
+        ) :  (
           /* VIP Section */
           <div className="space-y-6">
             {/* Bonus Cards - 2 Grid Layout Rectangular */}
