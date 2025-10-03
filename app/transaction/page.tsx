@@ -4,7 +4,7 @@ import { useState } from "react";
 import { X, HelpCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import link from "next/link"
+import link from "next/link";
 
 interface Transaction {
   id: string;
@@ -43,22 +43,21 @@ const TransactionRecords = () => {
     return true;
   });
 
-  const getStatusColor = (type: Transaction["type"], status: Transaction["status"]) => {
-    if (type === "Deposit") {
-      if (status === "Success") return "bg-green-600";
-      if (status === "Failed") return "bg-red-600";
-      return "bg-orange-500";
+  const getStatusTextColor = (status: Transaction["status"]) => {
+    switch (status) {
+      case "Success":
+      case "Received":
+        return "text-green-500";
+      case "Pending":
+      case "Reviewing":
+        return "text-orange-500";
+      case "Processing":
+        return "text-blue-500";
+      case "Failed":
+        return "text-red-500";
+      default:
+        return "text-gray-400";
     }
-    if (type === "Withdrawal") {
-      if (status === "Reviewing") return "bg-orange-500";
-      if (status === "Processing") return "bg-blue-400";
-      if (status === "Success") return "bg-green-600";
-      return "bg-red-600";
-    }
-    if (type === "Bonus") {
-      return "bg-green-600";
-    }
-    return "bg-gray-500";
   };
 
   const TransactionCard = ({
@@ -68,7 +67,7 @@ const TransactionRecords = () => {
     transaction: Transaction;
     isLast?: boolean;
   }) => (
-    <div className="w-full text-white/70">
+    <div className="w-full text-white">
       <div className="px-3 py-2">
         <div className="text-xs mb-2">{transaction.date}</div>
 
@@ -92,7 +91,7 @@ const TransactionRecords = () => {
           </div>
           <div className="text-right flex items-center justify-end gap-2">
             <div className="text-xs">Status:</div>
-            <span className={`text-xs px-2 py-1 rounded ${getStatusColor(transaction.type, transaction.status)}`}>
+            <span className={`text-xs font-semibold ${getStatusTextColor(transaction.status)}`}>
               {transaction.status}
             </span>
             {transaction.type === "Withdrawal" && transaction.status === "Failed" && (
@@ -168,14 +167,14 @@ const TransactionRecords = () => {
             ))
           ) : (
             <div className="text-center py-20">
-              <p className="text-lg text-white/70">No More Data</p>
+              <p className="text-lg text-white">No More Data</p>
             </div>
           )}
         </div>
 
         {filteredTransactions.length > 0 && (
           <div className="text-center py-2">
-            <p className=" text-white/50 text-xs">No More Data</p>
+            <p className="text-white text-xs">No More Data</p>
           </div>
         )}
       </div>
@@ -191,7 +190,7 @@ const TransactionRecords = () => {
               <X className="w-4 h-4" />
             </button>
             <h2 className="text-sm font-semibold mb-2">Reason:</h2>
-            <p className="text-xs text-white/70">Added through admin panel</p>
+            <p className="text-xs text-white">Added through admin panel</p>
           </div>
         </div>
       )}
