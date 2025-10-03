@@ -11,6 +11,7 @@ import bellIcon from "@/public/assets/bell.png";
 import hotIcon from "@/public/assets/hot.png";
 import pgIcon from "@/public/assets/pg.png";
 import slotIcon from "@/public/assets/slot.png";
+import cardIcon from "@/public/assets/cards.png";
 import { useRouter } from "next/navigation";
 
 interface UserCredentials {
@@ -703,18 +704,17 @@ export default function HomePage() {
 
           <div className="space-y-4">
             {/* Category Filter Buttons */}
-            <div className="flex gap-4 overflow-x-auto scrollbar-hide pb-2">
+            <div className="flex gap-3 overflow-x-auto scrollbar-hide pb-2">
               <button
                 onClick={() => setSelectedFilter("ALL")}
-                className={`flex items-center gap-1 p-0 pl-1 bg-[#450b00] rounded-sm whitespace-nowrap transition-colors ${
+                className={`flex items-center gap-1  pl-1 pr-10 bg-[#450b00] rounded-sm whitespace-nowrap transition-colors ${
                   selectedFilter === "ALL" ? " text-white " : " text-white/70 "
                 }`}
               >
                 <Image
                   src={hotIcon}
                   alt="Hot"
-                
-                  className=" w-4 h-4 bg-gradient-to-r from-yellow-500/30 to-red-500 rounded-lg flex items-start "
+                  className=" w-6 h-5 bg-gradient-to-r p-0 from-yellow-500/30 to-red-500 rounded-lg flex items-start "
                 />
                 Hot
               </button>
@@ -728,7 +728,7 @@ export default function HomePage() {
                 <button
                   key={filter.key}
                   onClick={() => setSelectedFilter(filter.key)}
-                  className={`flex items-center gap-1 p-0 pl-1 bg-[#450b00] rounded-sm whitespace-nowrap transition-colors ${
+                  className={`flex items-center gap-1 p-0 pl-1 pr-10 bg-[#450b00] rounded-sm whitespace-nowrap transition-colors ${
                     selectedFilter === filter.key
                       ? " text-white "
                       : " text-white/70 "
@@ -737,7 +737,7 @@ export default function HomePage() {
                   <img
                     src={`/assets/${filter.img}`}
                     alt={filter.label}
-                    className="w-4 h-4 bg-gradient-to-r from-yellow-500/30 to-red-500 rounded-lg flex items-center justify-center"
+                    className="w-6 h-5  bg-gradient-to-r from-yellow-500/30 to-red-500 rounded-lg flex items-center justify-center"
                   />
                   {filter.label}
                 </button>
@@ -750,7 +750,7 @@ export default function HomePage() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="w-6 h-6 bg-gradient-to-r from-yellow-500/30 to-red-500 rounded-lg flex items-center justify-center">
-                      <Image src={slotIcon} alt="Logo 1" className="h-4 w-4" />
+                      <Image src={hotIcon} alt="Logo 1" className="h-6 w-6" />
                     </div>
                     <h2 className="text-xl md:text-2xl text-yellow-300 drop-shadow-lg">
                       Slots{" "}
@@ -880,7 +880,7 @@ export default function HomePage() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="w-6 h-6 bg-gradient-to-r from-yellow-500 to-red-500 rounded-lg flex items-center justify-center">
-                      <img src="cards" alt="Logo 1" className="h-6 w-auto" />
+                      <Image src={cardIcon} alt="Logo 1" className="h-6 w-auto" />
                     </div>
                     <h2 className="text-xl md:text-2xl text-yellow-400 drop-shadow-lg">
                       Cards{" "}
@@ -947,7 +947,7 @@ export default function HomePage() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="w-6 h-6 bg-gradient-to-r from-yellow-500/30 to-red-500 rounded-lg flex items-center justify-center">
-                      <img src="search" alt="Logo 1" className="h-6 w-auto" />
+              <Image src={bellIcon} alt="Logo 1" className="h-6 w-auto" />
                     </div>
                     <h2 className="text-xl md:text-2xl text-yellow-400 drop-shadow-lg">
                       Other{" "}
