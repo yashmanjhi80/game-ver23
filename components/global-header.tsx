@@ -85,7 +85,7 @@ export default function GlobalHeader() {
             <span className="text-white font-semibold ">
               {isLoadingBalance ? <span className="animate-pulse text-yellow-400">...</span> : formatBalance(balance)}
             </span>
-            <div className="w-full flex items-center  text-[12px] justify-center rounded-sm bg-orange-500 text-white hover:bg-yellow-600 px-1.5 py-2 h-5">Deposit
+            <div className="w-full flex items-center  text-[14px] justify-center rounded-sm bg-orange-500 text-white  px-2 py-3 h-5">Deposit
              
             </div>
           </Link>

@@ -708,7 +708,7 @@ export default function HomePage() {
               <div className="bg-gradient-to-r from-red-500 to-orange-400/40 text-yellow-400 font-bold px-3 py-1 rounded-full text-sm">
                 VIP2
               </div>
-                <div className="flex flex-row gap-5 absolute right-6 ">
+                <div className="flex flex-row gap-5 absolute right-4 ">
 
               <div className="flex flex-col items-center text-xs text-yellow-200">
                 <img

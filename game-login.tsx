@@ -341,9 +341,9 @@ const handleRegister = async (e: React.FormEvent) => {
 
       {/*verification message */}
       {verificationMessage && (
-        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 pointer-events-none animate-slide-in-top">
+        <div className="fixed top-4 right-12 z-50 pointer-events-none animate-slide-in-top">
           <div className="bg-black/40 border border-white rounded-xl p-2  backdrop-blur-sm flex items-center  animate-slide-out-right">
-            <CheckCircle size={44} className="text-green-400 pr-5" />
+            <CheckCircle size={40} className="text-green-400 pr-5" />
             <p className="text-green-300 text-[12px]">{verificationMessage}</p>
           </div>
         </div>
