@@ -385,7 +385,7 @@ const handleRegister = async (e: React.FormEvent) => {
           {/* Title overlay on image */}
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="text-center">
-               <Image src="/images/telegram-icon.png" alt="Telegram" width={44} height={44} className="rounded-" />
+               
               <p className="text-yellow-200 text-2xl drop-shadow-lg font-medium">
                 Enter the Ultimate Gaming Experience
               </p>
