@@ -506,14 +506,14 @@ export default function HomePage() {
               <img
                 src="/assets/telegram-icon.png"
                 alt="Telegram"
-                className="w-6 h-6 cursor-pointer hover:scale-110 transition-transform"
+                className="w-8 h-8 cursor-pointer hover:scale-110 transition-transform"
                 onClick={() => window.open("https://t.me/", "_blank")}
               />
 
               <img
                 src="/assets/customer-service.png"
                 alt="Customer Service"
-                className="w-6 h-6 cursor-pointer hover:scale-110 transition-transform"
+                className="w-8 h-8 cursor-pointer hover:scale-110 transition-transform"
                 onClick={() =>
                   window.open(
                     "https://tawk.to/chat/6866187edeea8b190aa3570d/1iv7cvc8b",
