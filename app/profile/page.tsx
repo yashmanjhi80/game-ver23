@@ -162,7 +162,7 @@ export default function ProfilePage() {
         />
 
         {/* Menu Section */}
-        <div className="space-y-2">
+        <div className="space-y-2 ">
           {menuItems.map((item, index) => {
             const IconComponent = item.icon
 
@@ -176,10 +176,10 @@ export default function ProfilePage() {
               <div
                 key={index}
                 onClick={handleClick}
-                className="menu-item flex items-center justify-between bg-burgundy-800/50 rounded-xl p-4 cursor-pointer"
+                className="menu-item flex items-center justify-between bg-gradient-to-r  from-yellow-700/30 to-red-600/30 rounded-xl p-4 cursor-pointer"
               >
                 <div className="flex items-center space-x-3">
-                  <IconComponent className="w-6 h-6 text-gold-400" />
+                  <IconComponent className="w-6 h-6 text-yellow-500 bg-gradient-to-r  from-yellow-500/30 to-red-500 rounded-full" />
                   <span className="text-white font-medium">{item.label}</span>
                 </div>
                 <div className="flex items-center space-x-2">
