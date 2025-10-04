@@ -484,7 +484,7 @@ export default function HomePage() {
         {!isSupportOpen && (
           <button
             onClick={() => setIsSupportOpen(true)}
-            className="bg-black/70 text-yellow-400 py-3 rounded-l-md border-t-1 border-b-1 border-l-1 border-white shadow-md"
+            className="bg-black/70 text-yellow-400 py-3 rounded-l-md border-t-[1px] border-b-[1px] border-l-[1px] border-white shadow-md"
           >
             <Play size={16} className="rotate-180" />
           </button>
@@ -496,13 +496,13 @@ export default function HomePage() {
             {/* Arrow to close (separate from icon box) */}
             <button
               onClick={() => setIsSupportOpen(false)}
-              className="bg-black/70 text-yellow-400 py-3 rounded-l-md border-t-1 border-b-1 border-l-1 border-white shadow-md"
+              className="bg-black/70 text-yellow-400 py-3 rounded-l-md border-t-[1px] border-b-[1px] border-l-[1px] border-white shadow-md"
             >
               <Play size={16}  />
             </button>
 
             {/* Icon container */}
-            <div className="flex flex-col items-center gap-4 bg-black/60 border-t-2 border-b-2 border-l-2 border-white rounded-l-md px-2 py-2">
+            <div className="flex flex-col items-center gap-4 bg-black/60 border-t-1 border-b-1 border-l-1 border-white rounded-l-md px-2 py-2">
               <img
                 src="/assets/telegram-icon.png"
                 alt="Telegram"
