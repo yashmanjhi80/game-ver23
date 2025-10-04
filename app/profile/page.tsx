@@ -123,36 +123,33 @@ export default function ProfilePage() {
     <div className="min-h-screen bg-[#450b00]">
       <div className="max-w-md bg-[#450b00] mx-auto px-3 py-6 pb-20">
         {/* Profile Header */}
-        <div className="text-center mb-8">
-          <div className="flex items-center space-x-4 mb-6">
-            <div className="relative">
-              <div className="profile-avatar w-20 h-20 rounded-full p-1 card-shadow">
-                <Avatar className="w-full h-full">
-                  <RandomAvatarForAvatar username={userData?.username || "Player"} alt="Profile Avatar" className="object-cover" />
-                  <AvatarFallback className="bg-burgundy-700 text-gold-400 text-lg font-semibold">
-                    {userData?.username ? userData.username.substring(0, 2).toUpperCase() : "P7"}
-                  </AvatarFallback>
-                </Avatar>
-              </div>
+        <div className="flex items-center justify-between mb-8">
+          {/* Left Section: Avatar + Username + UID */}
+          <div className="flex items-center space-x-4">
+            <div className="profile-avatar w-20 h-20 rounded-full p-1 card-shadow overflow-hidden">
+              <img
+                src="/assets/avatar.png"
+                alt="Profile Avatar"
+                className="w-full h-full object-cover rounded-full"
+              />
             </div>
-
-            <div className="flex-1 text-left">
-              <div className="flex items-center space-x-2 mb-1">
-                <span className="text-lg font-semibold text-white">
-                  {userData?.username || "Player74835887"}
-                </span>
-                <ChevronRight className="w-5 h-5 text-gray-400" />
+            <div className="text-left">
+              <div className="text-lg font-semibold text-white mb-1">
+                {userData?.username || "Player74835887"}
               </div>
-              <div className="text-sm text-gray-400 mb-2">
-                uid:{userData?.username || "74835887"}
-              </div>
-              <div className="text-lg font-bold text-gold-400">
-                ₹{isLoading ? "Loading..." : formatBalance(userData?.balance || "0")}
+              <div className="text-sm text-gray-400">
+                uid: {userData?.username || "74835887"}
               </div>
             </div>
           </div>
-        </div>
 
+          {/* Right Section: Balance */}
+          <div className="text-right pr-6">
+            <div className="text-lg font-bold text-gold-400">
+              ₹{isLoading ? ".." : formatBalance(userData?.balance || "0")}
+            </div>
+          </div>
+        </div>
 
         {/* vip card */}
         
@@ -160,7 +157,7 @@ export default function ProfilePage() {
           level={(userData?.vip || 0) as 0 | 1 | 2 | 3 | 4 | 5 | 6}
           username={userData?.username || ""}
           progress={userData?.vipProgress || 0}
-          className="mt-4"
+          className="mb-6 mt-4"
         />
 
 

@@ -335,12 +335,6 @@
   }
 }
 
-.shine-effect {
-  background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.1) 50%, transparent 100%);
-  animation: shine 2.5s infinite linear;
-  transform: translateX(-100%);
-}
-
 @keyframes shine {
   0% {
     transform: translateX(-100%);
@@ -350,3 +344,7 @@
   }
 }
 
+.shine-effect {
+  background: linear-gradient(120deg, transparent 0%, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
+  animation: shine 2.5s linear infinite;
+}

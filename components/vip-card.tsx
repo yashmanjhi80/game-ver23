@@ -56,10 +56,7 @@ export default function VipCard({ level, username, progress = 0, className }: Vi
       role="region"
       aria-label={`VIP ${level} card`}
     >
-      {/* Shine Effect */}
-      <div className="absolute inset-0 z-0 shine-effect pointer-events-none" />
-
-      {/* Background */}
+      {/* Background Image */}
       <Image
         src={bgByLevel[level] || "/placeholder.svg"}
         alt=""
@@ -68,36 +65,39 @@ export default function VipCard({ level, username, progress = 0, className }: Vi
         className="object-cover opacity-90 pointer-events-none select-none"
         sizes="(max-width: 480px) 100vw, 480px"
       />
-      <div className="absolute inset-0 bg-black/30" aria-hidden="true" />
 
-      {/* Foreground */}
-      <div className="relative z-10 flex items-center gap-4">
+      {/* Dark Overlay */}
+      <div className="absolute inset-0 bg-black/30 z-0" aria-hidden="true" />
+
+      {/* Shine Effect */}
+      <div className="absolute inset-0 z-[1] pointer-events-none">
+        <div className="w-full h-full shine-effect" />
+      </div>
+
+      {/* Foreground Content */}
+      <div className="relative z-10 flex items-center gap-3">
         {/* VIP Badge */}
         <div className="shrink-0">
           <Image
             src={badgeByLevel[level] || "/placeholder.svg"}
             alt={`VIP ${level} badge`}
-            width={64}
-            height={64}
+            width={52}
+            height={52}
             className="drop-shadow-lg"
           />
         </div>
 
         {/* Info */}
         <div className="min-w-0 flex-1">
-          <div className="flex items-baseline gap-2 mb-1">
-            <span className="text-lg font-bold text-white">VIP {level}</span>
-            <span className="text-sm font-medium text-yellow-300">{levelNames[level]}</span>
+          <div className="flex items-baseline pl-12 gap-2 mb-1">
+            <span className="text-lg font-semibold text-yellow-400">VIP {level}</span>
+            <span className="text-sm pl-8 text-right font-medium text-white">{levelNames[level]}</span>
           </div>
-          {username && (
-            <div className="text-sm text-white/90 mb-2">
-              Player: <span className="font-medium">{username}</span>
-            </div>
-          )}
+         
 
           {/* Progress */}
           <div className="text-xs text-white/90 mb-1 flex justify-between">
-            <span>Progress to next level</span>
+            <span>Deposit 300 to next level</span>
             <span className="font-semibold">{clamped}%</span>
           </div>
           <div className="h-2.5 w-full overflow-hidden rounded-full bg-white/20 border border-white/10">
