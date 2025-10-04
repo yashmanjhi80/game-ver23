@@ -484,9 +484,9 @@ export default function HomePage() {
         {!isSupportOpen && (
           <button
             onClick={() => setIsSupportOpen(true)}
-            className="bg-black/70 text-yellow-400 py-4 rounded-l-md border-t-1 border-b-1 border-l-1 border-white shadow-md"
+            className="bg-black/70 text-yellow-400 py-3 rounded-l-md border-t-1 border-b-1 border-l-1 border-white shadow-md"
           >
-            <Play size={20} />
+            <Play size={16} className="rotate-180" />
           </button>
         )}
 
@@ -496,24 +496,24 @@ export default function HomePage() {
             {/* Arrow to close (separate from icon box) */}
             <button
               onClick={() => setIsSupportOpen(false)}
-              className="bg-black/70 text-yellow-400 py-4 rounded-l-md border-t-1 border-b-1 border-l-1 border-white shadow-md"
+              className="bg-black/70 text-yellow-400 py-3 rounded-l-md border-t-1 border-b-1 border-l-1 border-white shadow-md"
             >
-              <Play size={20} className="rotate-180" />
+              <Play size={16}  />
             </button>
 
             {/* Icon container */}
-            <div className="flex flex-col items-center gap-4 bg-black/60 border-t-2 border-b-2 border-l-2 border-white rounded-l-md px-3 py-4">
+            <div className="flex flex-col items-center gap-4 bg-black/60 border-t-2 border-b-2 border-l-2 border-white rounded-l-md px-2 py-2">
               <img
                 src="/assets/telegram-icon.png"
                 alt="Telegram"
-                className="w-10 h-10 cursor-pointer hover:scale-110 transition-transform"
+                className="w-6 h-6 cursor-pointer hover:scale-110 transition-transform"
                 onClick={() => window.open("https://t.me/", "_blank")}
               />
 
               <img
                 src="/assets/customer-service.png"
                 alt="Customer Service"
-                className="w-10 h-10 cursor-pointer hover:scale-110 transition-transform"
+                className="w-6 h-6 cursor-pointer hover:scale-110 transition-transform"
                 onClick={() =>
                   window.open(
                     "https://tawk.to/chat/6866187edeea8b190aa3570d/1iv7cvc8b",
