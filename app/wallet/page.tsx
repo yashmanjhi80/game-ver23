@@ -1,7 +1,7 @@
 "use client"
 import Image from "next/image"
 import { useState, useEffect } from "react"
-import { FileText, ShoppingCart, CreditCard,BadgeIndianRupee, Plus, CheckCircle, AlertCircle } from "lucide-react"
+import { FileText, ShoppingCart, X, CreditCard,BadgeIndianRupee, Plus, CheckCircle, AlertCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -324,7 +324,24 @@ const WalletPage = () => {
         </div>
       )}
       
+      {/* Header */}
+      <div className="bg-[#2b0d0d] px-5 py-3 flex items-center justify-between  ">
+        <div className="w-2"></div>
+        <h1 className=" text-white text-center flex justify-center pl-8 items-center ">
+          Wallet
+        </h1>
+        <div className="flex items-center gap-2">
+        
+          <a href="/transaction">
+            <FileText className="w-5 h-4 text-white"  />
+          </a>
+          <a href="/profile">
+            <X className="w-5 h-4 text-white"  />
+          </a>
 
+       
+        </div>
+      </div>
       {/* Tab Navigation */}
       <div className="flex bg-[#2b0d0d] m-2 rounded-lg gap-2 my-0 mb-[23px]">
         <button

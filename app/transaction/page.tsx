@@ -207,7 +207,7 @@ const TransactionRecords = () => {
             Transaction
           </h1>
           <div className="flex items-center gap-2">
-            <a href="/profile">
+            <a href="/wallet">
               <X className="w-5 h-4 text-white" />
             </a>
           </div>

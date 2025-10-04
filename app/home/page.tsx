@@ -744,7 +744,7 @@ export default function HomePage() {
 
 
             {/* Category Filter Buttons */}
-            <div className="flex gap-3 overflow-x-auto scrollbar-hide pb-2">
+            <div className="flex gap-3 overflow-x-auto scrollbar-hide pb-2 py-2">
               <button
                 onClick={() => setSelectedFilter("ALL")}
                 className={`flex items-center gap-2 text-shadow-regal-blue pl-1 pr-10 bg-[#450b00] shodow-r rounded-sm whitespace-nowrap transition-colors ${
