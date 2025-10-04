@@ -339,6 +339,16 @@ const handleRegister = async (e: React.FormEvent) => {
       {/* Button Click Sound */}
       <audio ref={buttonClickSoundRef} src={APP_CONFIG.AUDIO.ASSETS.BUTTON_CLICK} />
 
+      {/* customer service icon on login*/}
+      <div className="fixed bottom-18 right-4 z-50  animate-bounce">
+        <img
+          src="/assets/customer-service.png"
+          alt="Customer Service"
+          className="w-12 h-12  bg-black rounded-full shadow-lg cursor-pointer hover:scale-110 transition-transform"
+          onClick={() => window.open("https://tawk.to/chat/6866187edeea8b190aa3570d/1iv7cvc8b", "_blank")}
+        />
+      </div>
+
       {/*verification message */}
       {verificationMessage && (
         <div className="fixed top-4 right-12 z-50 pointer-events-none animate-slide-in-top">

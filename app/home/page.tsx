@@ -1,6 +1,6 @@
 "use client";
 
-import { Wallet, Flame, Gamepad2, Spade, Fish, Zap } from "lucide-react";
+import { Wallet, Flame, Gamepad2, Spade, Fish, Zap, Play } from "lucide-react";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -136,6 +136,7 @@ function pickRandom<T>(arr: T[], count: number): T[] {
 }
 
 export default function HomePage() {
+  const [isSupportOpen, setIsSupportOpen] = useState(false);
   const [balance, setBalance] = useState<string>("Loading...");
   const [username, setUsername] = useState<string>("");
   const [userCredentials, setUserCredentials] =
@@ -476,13 +477,53 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-burgundy-800 to-burgundy-960 text-white">
-      <div className="fixed bottom-18 right-4 z-50 animate-bounce">
-        <img
-          src="/images/design-mode/1000282551-unscreen-%281%29-1757152743414-1757152800749%281%29%281%29%281%29.gif"
-          alt="Casino promotion"
-          className="w-16 h-auto rounded-lg shadow-lg cursor-pointer hover:scale-110 transition-transform"
-          onClick={handleGifClick}
-        />
+
+      {/* Floating Support Panel with Lucide Play Icon */}
+      <div className="fixed right-0 bottom-1/5 z-50 flex items-center">
+        {/* Arrow Toggle Button (separate from icon box) */}
+        {!isSupportOpen && (
+          <button
+            onClick={() => setIsSupportOpen(true)}
+            className="bg-black/70 text-yellow-400 py-4 rounded-l-md border-t-1 border-b-1 border-l-1 border-white shadow-md"
+          >
+            <Play size={20} />
+          </button>
+        )}
+
+        {/* Icon Box (when open) */}
+        {isSupportOpen && (
+          <>
+            {/* Arrow to close (separate from icon box) */}
+            <button
+              onClick={() => setIsSupportOpen(false)}
+              className="bg-black/70 text-yellow-400 py-4 rounded-l-md border-t-1 border-b-1 border-l-1 border-white shadow-md"
+            >
+              <Play size={20} className="rotate-180" />
+            </button>
+
+            {/* Icon container */}
+            <div className="flex flex-col items-center gap-4 bg-black/60 border-t-2 border-b-2 border-l-2 border-white rounded-l-md px-3 py-4">
+              <img
+                src="/assets/telegram-icon.png"
+                alt="Telegram"
+                className="w-10 h-10 cursor-pointer hover:scale-110 transition-transform"
+                onClick={() => window.open("https://t.me/", "_blank")}
+              />
+
+              <img
+                src="/assets/customer-service.png"
+                alt="Customer Service"
+                className="w-10 h-10 cursor-pointer hover:scale-110 transition-transform"
+                onClick={() =>
+                  window.open(
+                    "https://tawk.to/chat/6866187edeea8b190aa3570d/1iv7cvc8b",
+                    "_blank"
+                  )
+                }
+              />
+            </div>
+          </>
+        )}
       </div>
       {/* Insufficient Balance Popup */}
       {showInsufficientBalancePopup && (
@@ -789,7 +830,7 @@ export default function HomePage() {
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-6 h-6 bg-gradient-to-r from-yellow-500/30 to-red-500 rounded-lg flex items-center justify-center">
+                    <div className="w-6 h-6 bg-gradient-to-r from-yellow-500/30 to-red-500 rounded-lg flex items-center justify-center ">
                       <Image src={hotIcon} alt="Logo 1" className="h-6 w-6" />
                     </div>
                     <h2 className="text-xl md:text-2xl text-yellow-300 drop-shadow-lg">
