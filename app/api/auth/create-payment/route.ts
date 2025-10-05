@@ -32,6 +32,7 @@ export async function POST(request: NextRequest) {
       body: JSON.stringify({
         orderId: body.orderId,
         amount: body.amount,
+        method : body.method,
         username: body.username,
         ip: body.ip || "0.0.0.0",
         remark: body.remark || `Deposit for user ${body.username}`,

@@ -110,6 +110,7 @@ const WalletPage = () => {
         body: JSON.stringify({
           orderId,
           amount: selectedAmount,
+          method: selectedMethod,
           username: credentials.username,
           password: credentials.password,
           ip: "0.0.0.0",

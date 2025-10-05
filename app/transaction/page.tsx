@@ -1,117 +1,107 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { X, HelpCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 interface Transaction {
-  orderNumber?: string;
-  type: "Deposit" | "Withdrawal" | "Bonus";
-  bonusType?: "Redeem Code" | "VIP Level" | "Welcome" | "Recharge";
-  date: string;
-  channel?: string;
+  _id?: string;
+  orderId?: string;
+  username?: string;
   amount: number;
-  status:
-    | "Success"
-    | "Failed"
-    | "Reviewing"
-    | "Processing"
-    | "Received";
-  currency?: string;
+  walletProvider?: string;
+  status: string;
+  createdAt?: string;
+  paidAt?: string;
 }
 
 const TransactionRecords = () => {
   const [activeFilter, setActiveFilter] = useState<"Recharge" | "Withdraw" | "Bonus">("Recharge");
   const [showReasonPrompt, setShowReasonPrompt] = useState(false);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const transactions: Transaction[] = [
-    {
-      orderNumber: "000000000001ABC",
-      type: "Deposit",
-      date: "2025-09-19 12:07:10",
-      channel: "LGpay",
-      amount: 2000,
-      status: "Processing",
-    },
-    {
-      orderNumber: "000000000002XYZ",
-      type: "Withdrawal",
-      date: "2025-09-19 10:30:25",
-      channel: "Fpay",
-      amount: 1500,
-      status: "Success",
-    },
-    {
-      type: "Bonus",
-      bonusType: "Welcome",
-      date: "2025-09-19 09:15:42",
-      amount: 500,
-      status: "Received",
-    },
-    {
-      orderNumber: "000000000004QRS",
-      type: "Deposit",
-      date: "2025-09-18 18:22:11",
-      channel: "Fpay",
-      amount: 5000,
-      status: "Success",
-    },
-    {
-      orderNumber: "000000000005TUV",
-      type: "Withdrawal",
-      date: "2025-09-18 16:45:33",
-      channel: "Bank Transfer",
-      amount: 3000,
-      status: "Failed",
-    },
-    {
-      orderNumber: "000000000006ABC",
-      type: "Withdrawal",
-      date: "2025-09-19 10:30:25",
-      channel: "PhonePe",
-      amount: 1500,
-      status: "Reviewing",
-    },
-    {
-      orderNumber: "000000000007XYZ",
-      type: "Withdrawal",
-      date: "2025-09-19 10:30:25",
-      channel: "PhonePe",
-      amount: 1500,
-      status: "Processing",
-    },
-    {
-      type: "Bonus",
-      bonusType: "VIP Level",
-      date: "2025-09-17 14:22:10",
-      amount: 1000,
-      status: "Received",
-    },
-  ];
+  // 🔹 Fetch real transactions from your API
+  const fetchTransactions = async () => {
+    try {
+      const storedCredentials = localStorage.getItem("userCredentials");
+      if (!storedCredentials) {
+        console.error("No credentials found in localStorage");
+        setIsLoading(false);
+        return;
+      }
 
-  const filteredTransactions = transactions.filter((transaction) => {
-    if (activeFilter === "Recharge") return transaction.type === "Deposit";
-    if (activeFilter === "Withdraw") return transaction.type === "Withdrawal";
-    if (activeFilter === "Bonus") return transaction.type === "Bonus";
-    return true;
-  });
+      const { username, password } = JSON.parse(storedCredentials);
 
-  const getStatusTextColor = (status: Transaction["status"]) => {
-    switch (status) {
-      case "Success":
-      case "Received":
-        return "text-green-500";
-   
-      case "Reviewing":
-        return "text-blue-500";
-      case "Processing":
-        return "text-sky-500";
-      case "Failed":
-        return "text-red-500";
-      default:
-        return "text-gray-400";
+      const response = await fetch("https://game.zyronetworks.shop/api/transactions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        setTransactions(data.transactions || []);
+      } else {
+        console.error("API error:", data.message);
+      }
+    } catch (err) {
+      console.error("Error fetching transactions:", err);
+    } finally {
+      setIsLoading(false);
     }
+  };
+
+  useEffect(() => {
+    fetchTransactions();
+  }, []);
+
+  // 🔹 Function to auto-update "Pending" status
+  const getUpdatedStatus = (transaction: Transaction) => {
+    const status = transaction.status?.toLowerCase() || "";
+    if (status !== "pending") return transaction.status;
+
+    const createdAt = new Date(transaction.createdAt || "");
+    const now = new Date();
+
+    const diffMinutes = (now.getTime() - createdAt.getTime()) / 1000 / 60;
+
+    const isToday =
+      createdAt.getDate() === now.getDate() &&
+      createdAt.getMonth() === now.getMonth() &&
+      createdAt.getFullYear() === now.getFullYear();
+
+    // 🔸 Mark as failed if created today but older than 10 minutes
+    if (isToday && diffMinutes > 10) return "Failed";
+
+    // 🔸 Mark as failed if it's not today
+    if (!isToday) return "Failed";
+
+    // 🔸 Otherwise still pending
+    return "Pending";
+  };
+
+  // 🔹 Only deposits are currently returned from API (Recharge type)
+  const filteredTransactions = transactions
+    .filter((t) => {
+      if (activeFilter === "Recharge") return true; // deposits
+      if (activeFilter === "Withdraw") return false;
+      if (activeFilter === "Bonus") return false;
+      return true;
+    })
+    .map((t) => ({
+      ...t,
+      status: getUpdatedStatus(t),
+    }));
+
+  const getStatusTextColor = (status: string) => {
+    const lower = status.toLowerCase();
+    if (["success", "paid", "received", "successful"].includes(lower)) return "text-green-500";
+    if (["reviewing", "pending"].includes(lower)) return "text-blue-500";
+    if (["processing"].includes(lower)) return "text-sky-500";
+    if (["failed", "declined"].includes(lower)) return "text-red-500";
+    return "text-gray-400";
   };
 
   const TransactionCard = ({
@@ -125,32 +115,24 @@ const TransactionRecords = () => {
       <div className="flex flex-col gap-2">
         <div className="flex justify-between text-xs text-white/70">
           <span>Date</span>
-          <span>{transaction.date}</span>
+          <span>{new Date(transaction.createdAt || "").toLocaleString()}</span>
         </div>
 
-        {transaction.type === "Bonus" ? (
+        <div className="flex justify-between text-xs text-white/70">
+          <span>Order ID</span>
+          <span>{transaction.orderId || "N/A"}</span>
+        </div>
+
+        {transaction.walletProvider && (
           <div className="flex justify-between text-xs text-white/70">
-            <span>Type</span>
-            <span>{transaction.bonusType}</span>
+            <span>Channel</span>
+            <span>LGpay</span>
           </div>
-        ) : (
-          <>
-            <div className="flex justify-between text-xs text-white/70">
-              <span>Order No</span>
-              <span>{transaction.orderNumber}</span>
-            </div>
-            <div className="flex justify-between text-xs text-white/70">
-              <span>Channel</span>
-              <span>{transaction.channel}</span>
-            </div>
-          </>
         )}
 
         <div className="flex justify-between text-sm">
           <span className="text-white/70">Amount</span>
-          <span className="text-orange-400">
-            {transaction.currency || "₹"} {transaction.amount.toLocaleString()}
-          </span>
+          <span className="text-orange-400">₹ {transaction.amount?.toLocaleString()}</span>
         </div>
 
         <div className="flex justify-between items-center text-sm">
@@ -159,7 +141,7 @@ const TransactionRecords = () => {
             <span className={`font-semibold ${getStatusTextColor(transaction.status)}`}>
               {transaction.status}
             </span>
-            {transaction.type === "Withdrawal" && transaction.status === "Failed" && (
+            {transaction.status.toLowerCase() === "failed" && (
               <HelpCircle
                 className="w-4 h-4 text-yellow-400 border border-yellow-400 rounded-full cursor-pointer"
                 onClick={() => setShowReasonPrompt(true)}
@@ -217,21 +199,21 @@ const TransactionRecords = () => {
           <TransactionFilters />
         </div>
 
-        <div>
-          {filteredTransactions.length > 0 ? (
-            filteredTransactions.map((transaction, index) => (
-              <TransactionCard
-                key={transaction.orderNumber || `${transaction.bonusType}-${index}`}
-                transaction={transaction}
-                isLast={index === filteredTransactions.length - 1}
-              />
-            ))
-          ) : (
-            <div className="text-center py-20">
-              <p className="text-lg text-white">No More Data</p>
-            </div>
-          )}
-        </div>
+        {isLoading ? (
+          <div className="text-center py-20 text-white">Loading transactions...</div>
+        ) : filteredTransactions.length > 0 ? (
+          filteredTransactions.map((transaction, index) => (
+            <TransactionCard
+              key={transaction._id || index}
+              transaction={transaction}
+              isLast={index === filteredTransactions.length - 1}
+            />
+          ))
+        ) : (
+          <div className="text-center py-20">
+            <p className="text-lg text-white">No transactions found</p>
+          </div>
+        )}
 
         {filteredTransactions.length > 0 && (
           <div className="text-center py-2">
@@ -249,15 +231,15 @@ const TransactionRecords = () => {
             >
               <X className="w-4 h-4" />
             </button>
-               <h2 className="text-sm font-semibold mb-2">Reason:</h2>
-                        <p className="text-xs text-white">Added through admin panel</p>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              );
-            };
+            <h2 className="text-sm font-semibold mb-2">Reason:</h2>
+            <p className="text-xs text-white">
+              Transaction failed automatically — more than 10 minutes old.
+            </p>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
 
-            export default TransactionRecords;
-
-
+export default TransactionRecords;
