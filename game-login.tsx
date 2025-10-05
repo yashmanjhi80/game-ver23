@@ -1,8 +1,8 @@
 "use client"
-
+import { ShineWrapper } from "@/components/ui/shineEffect" 
 import type React from "react"
 import { useState, useEffect, useRef } from "react"
-import { Eye,CheckCircle, EyeOff,LockKeyholeOpen,CircleUserRound, Volume2, VolumeX, ArrowLeft, HeartHandshake, Mails, } from "lucide-react"
+import { Eye,CheckCircle,Phone, EyeOff,LockKeyholeOpen,CircleUserRound, Volume2, VolumeX, ArrowLeft, HeartHandshake, Mails, } from "lucide-react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { APP_CONFIG, getStorageKey, isFeatureEnabled } from "@/config/app"
@@ -331,6 +331,8 @@ const handleRegister = async (e: React.FormEvent) => {
   }
 
   return (
+
+    
     <div className="relative min-h-screen w-full overflow-hidden bg-gradient-to-br from-black via-gray-900 to-black">
       {/* Background Music */}
       {isFeatureEnabled("MUSIC_ENABLED") && (
@@ -351,7 +353,7 @@ const handleRegister = async (e: React.FormEvent) => {
 
       {/*verification message */}
       {verificationMessage && (
-        <div className="fixed top-4 right-12 z-50 pointer-events-none animate-slide-in-top">
+        <div className="fixed top-4  z-50 pointer-events-none animate-slide-in-top">
           <div className="bg-black/40 border border-white rounded-xl p-2  backdrop-blur-sm flex items-center  animate-slide-out-right">
             <CheckCircle size={40} className="text-green-400 pr-5" />
             <p className="text-green-300 text-[12px]">{verificationMessage}</p>
@@ -547,6 +549,22 @@ const handleRegister = async (e: React.FormEvent) => {
                     </div>
                   </div>
 
+                  {/* PhoneField */}
+                  <div className="relative">
+                    <div className="relative w-full h-12 flex items-center px-6 bg-black/40 border border-yellow-500/30 rounded-lg backdrop-blur-sm">
+                     < Phone size={26} className="bg-red-400/ z-30 mr-4 text-yellow-400 " />
+
+                      <input
+                        type="text"
+                        placeholder="Enter Phone Number"
+                        value={referralId}
+                        onChange={(e) => setReferralId(e.target.value)}
+                        className="w-full bg-transparent text-white placeholder-yellow-300/70 text-lg font-medium outline-none"
+                        disabled={isLoading}
+                      />
+                    </div>
+                  </div>
+
                   {/* Email Field */}
                   <div className="relative">
               
@@ -554,7 +572,7 @@ const handleRegister = async (e: React.FormEvent) => {
                         < Mails size={26} className="bg-red-400/ z-30 mr-4 text-yellow-400 " />
                       <input
                         type="email"
-                        placeholder="Email"
+                        placeholder="Enter Email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         className="w-full bg-transparent text-white placeholder-yellow-300/70 text-lg font-medium outline-none"
@@ -564,21 +582,7 @@ const handleRegister = async (e: React.FormEvent) => {
                     </div>
                   </div>
 
-                  {/* Referral ID Field */}
-                  <div className="relative">
-                    <div className="relative w-full h-12 flex items-center px-6 bg-black/40 border border-yellow-500/30 rounded-lg backdrop-blur-sm">
-                     < HeartHandshake size={26} className="bg-red-400/ z-30 mr-4 text-yellow-400 " />
-
-                      <input
-                        type="text"
-                        placeholder="Referral ID (Optional)"
-                        value={referralId}
-                        onChange={(e) => setReferralId(e.target.value)}
-                        className="w-full bg-transparent text-white placeholder-yellow-300/70 text-lg font-medium outline-none"
-                        disabled={isLoading}
-                      />
-                    </div>
-                  </div>
+                
 
                   {/* Password Field */}
                   <div className="relative">
@@ -586,7 +590,7 @@ const handleRegister = async (e: React.FormEvent) => {
                      < LockKeyholeOpen size={26} className="bg-red-400/ z-30 mr-4 text-yellow-400 " />
                       <input
                         type={showPassword ? "text" : "password"}
-                        placeholder={`Password (min ${APP_CONFIG.VALIDATION.PASSWORD.MIN_LENGTH} chars)`}
+                        placeholder={`Enter Password (min ${APP_CONFIG.VALIDATION.PASSWORD.MIN_LENGTH} chars)`}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         className="w-full bg-transparent text-white placeholder-yellow-300/70 text-lg font-medium outline-none pr-10"
@@ -626,6 +630,21 @@ const handleRegister = async (e: React.FormEvent) => {
                       >
                         {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                       </button>
+                    </div>
+                  </div>
+                  {/* Referral ID Field */}
+                  <div className="relative">
+                    <div className="relative w-full h-12 flex items-center px-6 bg-black/40 border border-yellow-500/30 rounded-lg backdrop-blur-sm">
+                     < HeartHandshake size={26} className="bg-red-400/ z-30 mr-4 text-yellow-400 " />
+
+                      <input
+                        type="text"
+                        placeholder="Referral ID (Optional)"
+                        value={referralId}
+                        onChange={(e) => setReferralId(e.target.value)}
+                        className="w-full bg-transparent text-white placeholder-yellow-300/70 text-lg font-medium outline-none"
+                        disabled={isLoading}
+                      />
                     </div>
                   </div>
 

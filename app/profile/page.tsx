@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+
 import { CreditCard } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import {
@@ -126,7 +126,7 @@ export default function ProfilePage() {
         <div className="flex items-center justify-between mb-8">
           {/* Left Section: Avatar + Username + UID */}
           <div className="flex items-center space-x-4">
-            <div className="profile-avatar w-20 h-20 rounded-full p-1 card-shadow overflow-hidden">
+            <div className="   w-14 h-14 ml-2 rounded-full  border-white border-1 card-shadow overflow-hidden">
               <img
                 src="/assets/avatar.png"
                 alt="Profile Avatar"
@@ -135,10 +135,10 @@ export default function ProfilePage() {
             </div>
             <div className="text-left">
               <div className="text-lg font-semibold text-white mb-1">
-                {userData?.username || "Player74835887"}
+                {userData?.username || "Guest7"}
               </div>
               <div className="text-sm text-gray-400">
-                uid: {userData?.username || "74835887"}
+                uid: {userData?.username || "777777"}
               </div>
             </div>
           </div>
@@ -194,6 +194,9 @@ export default function ProfilePage() {
             )
           })}
         </div>
+
+
+     
 
         {/* Logout Button */}
         <div className="flex justify-center mt-8">

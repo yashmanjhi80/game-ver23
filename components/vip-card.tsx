@@ -2,6 +2,7 @@
 
 import Image from "next/image"
 import { cn } from "@/lib/utils"
+import { ShineWrapper } from "@/components/ui/shineEffect" 
 
 type VipLevel = 0 | 1 | 2 | 3 | 4 | 5 | 6
 
@@ -19,7 +20,7 @@ const badgeByLevel: Record<VipLevel, string> = {
   3: "/vip/badge-3.png",
   4: "/vip/badge-4.png",
   5: "/vip/badge-5.png",
-  6: "/vip/badge-4.png", // fallback for level 6
+  6: "/vip/badge-4.png",
 }
 
 const bgByLevel: Record<VipLevel, string> = {
@@ -46,15 +47,12 @@ export default function VipCard({ level, username, progress = 0, className }: Vi
   const clamped = Math.max(0, Math.min(100, progress))
 
   return (
-    <div
+    <ShineWrapper
       className={cn(
-        "relative w-full overflow-hidden rounded-lg",
-        "bg-gradient-to-r from-gray-900 to-gray-800 text-white shadow-xl",
-        "p-4",
+        "relative w-full overflow-hidden rounded-lg p-4 text-white shadow-xl",
         className
       )}
-      role="region"
-      aria-label={`VIP ${level} card`}
+      bgColor="transparent" // keep transparent so background image shows
     >
       {/* Background Image */}
       <Image
@@ -69,11 +67,6 @@ export default function VipCard({ level, username, progress = 0, className }: Vi
       {/* Dark Overlay */}
       <div className="absolute inset-0 bg-black/30 z-0" aria-hidden="true" />
 
-      {/* Shine Effect */}
-      <div className="absolute inset-0 z-[1] pointer-events-none">
-        <div className="w-full h-full shine-effect" />
-      </div>
-
       {/* Foreground Content */}
       <div className="relative z-10 flex items-center gap-3">
         {/* VIP Badge */}
@@ -85,30 +78,30 @@ export default function VipCard({ level, username, progress = 0, className }: Vi
             height={52}
             className="drop-shadow-lg"
           />
+           <span className="text-lg pl-1 font-semibold text-yellow-400">VIP {level}</span>
         </div>
 
         {/* Info */}
         <div className="min-w-0 flex-1">
           <div className="flex items-baseline pl-12 gap-2 mb-1">
-            <span className="text-lg font-semibold text-yellow-400">VIP {level}</span>
+         
             <span className="text-sm pl-8 text-right font-medium text-white">{levelNames[level]}</span>
           </div>
-         
 
           {/* Progress */}
-          <div className="text-xs text-white/90 mb-1 flex justify-between">
-            <span>Deposit 300 to next level</span>
+          <div className="text-xs ml-9 text-white/90 mb-1 flex justify-between">
+            <span classname="">Deposit 300 to next level</span>
             <span className="font-semibold">{clamped}%</span>
           </div>
-          <div className="h-2.5 w-full overflow-hidden rounded-full bg-white/20 border border-white/10">
+          <div className="h-2 w-44 ml-4 overflow-hidden rounded-full bg-white/20 border border-white/10">
             <div
-              className="h-full rounded-full bg-gradient-to-r from-yellow-400 to-yellow-600 transition-all duration-300 ease-out"
+              className="h-2  rounded-full bg-gradient-to-r from-yellow-400 to-yellow-600 transition-all duration-300 ease-out"
               style={{ width: `${clamped}%` }}
             />
           </div>
         </div>
       </div>
-    </div>
+    </ShineWrapper>
   )
 }
 

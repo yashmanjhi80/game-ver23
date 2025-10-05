@@ -348,3 +348,55 @@
   background: linear-gradient(120deg, transparent 0%, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
   animation: shine 2.5s linear infinite;
 }
+
+
+@keyframes continuousShine {
+  0% {
+    transform: translateX(-100%) skewX(-20deg);
+    opacity: 0.4;
+  }
+  50% {
+    transform: translateX(0%) skewX(-20deg);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateX(100%) skewX(-20deg);
+    opacity: 0.4;
+  }
+}
+
+
+@keyframes diagonalShine {
+  0% {
+    transform: translateX(-100%) translateY(-100%) skewX(-20deg);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translateX(0%) translateY(0%) skewX(-20deg);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateX(100%) translateY(100%) skewX(-20deg);
+    opacity: 0.3;
+  }
+}
+
+.header-shine {
+  position: relative;
+  overflow: hidden; /* ✅ restrict shine to header bounds */
+}
+
+.header-shine::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200%;
+  height: 200%;
+  background: rgba(255, 255, 255, 0.2);
+  transform: skewX(-20deg);
+  animation: diagonalShine 3s linear infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+

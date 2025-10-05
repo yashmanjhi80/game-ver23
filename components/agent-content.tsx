@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { DollarSign, UserPlus, Copy, QrCode, Users, UserCheck, HelpCircle } from "lucide-react"
+import { DollarSign, CircleCheckBig,UserPlus, Copy, QrCode, Users, UserCheck, HelpCircle } from "lucide-react"
 import Image from "next/image"
 import { useEffect, useMemo, useState } from "react"
 
@@ -123,6 +123,8 @@ const AgentContent = ({ activeTab }: AgentContentProps) => {
     return list.reduce((acc, r) => acc + (new Date(r.date).toDateString() === today ? 1 : 0), 0)
   }, [userData])
 
+  
+
   const invitationLink = useMemo(() => {
     if (!userData?.referralCode) return ""
     const origin = typeof window !== "undefined" ? window.location.origin : ""
@@ -130,15 +132,17 @@ const AgentContent = ({ activeTab }: AgentContentProps) => {
   }, [userData])
 
   const handleCopyInvitation = async () => {
-    if (!invitationLink) return
+    if (!invitationLink) return;
     try {
-      await navigator.clipboard.writeText(invitationLink)
-      setCopied(true)
-      setTimeout(() => setCopied(false), 1200)
+      await navigator.clipboard.writeText(invitationLink);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 3000); // Show success icon for 3 seconds
     } catch (e) {
-      console.error("Failed to copy invitation link:", e)
+      console.error("Failed to copy invitation link:", e);
     }
-  }
+  };
+
+
 
   const renderDetailsContent = () => (
     <>
@@ -220,7 +224,7 @@ const AgentContent = ({ activeTab }: AgentContentProps) => {
         </div>
 
         <p className="text-white/70 text-xs mb-4">
-          For each friend you invite, you will receive ₹ 80, plus a 15% commission on their recharge amount. Commissions
+          For each friend you invite, you will receive ₹ 50, plus a 15% commission on their recharge amount. Commissions
           are settled daily
         </p>
 
@@ -238,10 +242,16 @@ const AgentContent = ({ activeTab }: AgentContentProps) => {
               onClick={handleCopyInvitation}
               disabled={!invitationLink}
               title={copied ? "Copied!" : "Copy link"}
-              className="bg-yellow-500 bg-opacity-70 rounded-sm mr-1"
+              className="bg-green-500/40  border-white border-1 rounded-sm mr-1"
             >
-              <Copy className="w-4 h-4 text-white" />
+              {copied ? (
+                <CircleCheckBig className="w-4 h-4 text-yellow-400" />
+              ) : (
+                <Copy className="w-4 h-4 text-yellow-400" />
+              )}
             </Button>
+
+
           </div>
           <div className="text-[11px] text-white/60 mt-1">
             {userData?.referralCode ? (
@@ -255,19 +265,74 @@ const AgentContent = ({ activeTab }: AgentContentProps) => {
         </div>
 
         <div className="text-center">
-          <p className="text-xs text-white/70 mb-2">Share to  social Media</p>
-          <div className="flex justify-center gap-3">
-            <Button size="sm" className="rounded-lg w-12 h-12 p-0 bg-black/50 border border-gray-500">
-              <Image src="/images/telegram-icon.png" alt="Telegram" width={44} height={44} className="rounded-" />
-            </Button>
-            <Button size="sm" className="rounded-lg w-12 h-12 p-0 bg-black/50 border border-gray-500">
-              <Image src="/images/whatsapp-icon.png" alt="WhatsApp" width={44} height={44} className="rounded-" />
-            </Button>
-            <Button size="sm" className="rounded-lg w-12 h-12 p-0 bg-black/50 border border-gray-500">
-              <Image src="/images/share-icon.png" alt="Share Link" width={44} height={44} className="rounded-" />
-            </Button>
+            <p className="text-xs text-white/70 mb-2">Share to social Media</p>
+            <div className="flex justify-center gap-3">
+              {/* Telegram */}
+              <Button
+                size="sm"
+                onClick={() =>
+                  window.open(
+                    `https://t.me/share/url?url=${encodeURIComponent(invitationLink)}&text=Join%20me%20using%20this%20link`,
+                    "_blank"
+                  )
+                }
+                className="rounded-lg w-12 h-12 p-0 bg-black/50 border border-gray-500"
+              >
+                <Image
+                  src="/assets/telegram-icon.png"
+                  alt="Telegram"
+                  width={44}
+                  height={44}
+                  className="rounded"
+                />
+              </Button>
+
+              {/* WhatsApp */}
+              <Button
+                size="sm"
+                onClick={() =>
+                  window.open(
+                    `https://wa.me/?text=${encodeURIComponent(invitationLink)}`,
+                    "_blank"
+                  )
+                }
+                className="rounded-lg w-12 h-12 p-0 bg-black/50 border border-gray-500"
+              >
+                <Image
+                  src="/images/whatsapp-icon.png"
+                  alt="WhatsApp"
+                  width={44}
+                  height={44}
+                  className="rounded"
+                />
+              </Button>
+
+              {/* Native Share API */}
+              <Button
+                size="sm"
+                onClick={() => {
+                  if (navigator.share) {
+                    navigator.share({
+                      title: "Join me!",
+                      text: "Check out this invitation link:",
+                      url: invitationLink,
+                    });
+                  } else {
+                    alert("Sharing is not supported on this device.");
+                  }
+                }}
+                className="rounded-lg w-12 h-12 p-0 bg-black/50 border border-gray-500"
+              >
+                <Image
+                  src="/images/share-icon.png"
+                  alt="Share Link"
+                  width={44}
+                  height={44}
+                  className="rounded"
+                />
+              </Button>
+            </div>
           </div>
-        </div>
       </div>
 
       <hr className="border-t border-dotted border-[#ffe925] opacity-100 my-1" />
