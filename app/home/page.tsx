@@ -1,5 +1,8 @@
 "use client";
 
+
+
+
 import { Wallet, Flame, Gamepad2, Spade, Fish, Zap, Play } from "lucide-react";
 import { useState, useEffect } from "react";
 import Link from "next/link";
@@ -831,7 +834,9 @@ export default function HomePage() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="w-6 h-6 bg-gradient-to-r from-yellow-500/30 to-red-500 rounded-lg flex items-center justify-center ">
+                
                       <Image src={hotIcon} alt="Logo 1" className="h-6 w-6" />
+                      
                     </div>
                     <h2 className="text-xl md:text-2xl text-yellow-300 drop-shadow-lg">
                       Slots{" "}

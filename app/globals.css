@@ -400,3 +400,38 @@
   z-index: 0;
 }
 
+@keyframes flameBurst {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(1.4);
+    opacity: 1;
+  }
+}
+
+@keyframes flameFlicker {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.4;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.8;
+  }
+}
+
+.animate-flameBurst {
+  animation: flameBurst 1.5s infinite ease-in-out;
+}
+
+.animate-flameFlicker {
+  animation: flameFlicker 1.2s infinite ease-in-out;
+}
+
+.bg-gradient-radial {
+  background-image: radial-gradient(circle at center, var(--tw-gradient-stops));
+}
+
+

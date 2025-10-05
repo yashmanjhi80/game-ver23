@@ -14,7 +14,7 @@ import {
   ChevronRight,
 } from "lucide-react"
 import BottomNavigation from "@/components/bottom-navigation"
-import { RandomAvatarForAvatar } from "@/components/random-avatar"
+
 import VipCard from "@/components/vip-card"
 
 interface UserCredentials {
@@ -135,7 +135,7 @@ export default function ProfilePage() {
             </div>
             <div className="text-left">
               <div className="text-lg font-semibold text-white mb-1">
-                {userData?.username || "Guest7"}
+                {userData?.username || "Aura7"}
               </div>
               <div className="text-sm text-gray-400">
                 uid: {userData?.username || "777777"}
@@ -144,7 +144,7 @@ export default function ProfilePage() {
           </div>
 
           {/* Right Section: Balance */}
-          <div className="text-right pr-6">
+          <div className="text-right pr-10">
             <div className="text-lg font-bold text-gold-400">
               ₹{isLoading ? ".." : formatBalance(userData?.balance || "0")}
             </div>

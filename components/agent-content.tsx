@@ -238,16 +238,16 @@ const AgentContent = ({ activeTab }: AgentContentProps) => {
               className="flex-1 bg-[#2b0d0d] px-2 py-1 text-sm text-white/80 border-none outline-none"
             />
             <Button
-              size="sm"
+            
               onClick={handleCopyInvitation}
               disabled={!invitationLink}
               title={copied ? "Copied!" : "Copy link"}
-              className="bg-green-500/40  border-white border-1 rounded-sm mr-1"
+              className="bg-green-500/80 w-6 h-7 p-0 border-white border-1 rounded-sm mr-1 hover:bg-green-500/90 transition-colors"
             >
               {copied ? (
-                <CircleCheckBig className="w-4 h-4 text-yellow-400" />
+                <CircleCheckBig className="w-4 h-5 text-yellow-400" />
               ) : (
-                <Copy className="w-4 h-4 text-yellow-400" />
+                <Copy className="w-4 h-5 text-yellow-400" />
               )}
             </Button>
 
