@@ -415,7 +415,7 @@ const WalletPage = () => {
 
                 {/* 🔁 USDT Recharge UI — Side-by-Side Labels + Full Width */}
                 {selectedMethod === "USDT" && (
-                  <div className="  w-86 my-10 mb-5">
+                  <div className="  w-82  mx-2 my-10 mb-5">
                     {/* Labels Row */}
                     <div className="flex justify-between items-center px-2">
                       <h3 className="text-sm font-medium text-gray-400">Enter Amount ($)</h3>
