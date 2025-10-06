@@ -34,10 +34,14 @@ const WalletPage = () => {
   const [isProcessing, setIsProcessing] = useState(false)
   const [paymentError, setPaymentError] = useState("")
   const [paymentSuccess, setPaymentSuccess] = useState("")
+  
 
   const amounts = [200, 300, 500, 800, 1000, 1500, 2000, 5000, 10000, 20000, 30000, 50000]
   const withdrawalAmounts = [100, 400, 600, 800, 1000, 2000, 5000, 10000]
-  const paymentMethods = ["Fpay", "LGpay", "Other"]
+  const [usdtAmount, setUsdtAmount] = useState<number>(10)
+  const [usdtRate, setUsdtRate] = useState<number>(98.64)
+
+  const paymentMethods = ["Fpay", "LGpay", "USDT"]
 
   
   const MIN_DEPOSIT = 100
@@ -376,6 +380,7 @@ const WalletPage = () => {
                   {selectedMethod}
                 </Badge>
               </div>
+              {/* 🔁 Recharge Method Buttons */}
               <div className="grid grid-cols-3 gap-2">
                 {paymentMethods.map((method) => {
                   const isActive = selectedMethod === method
@@ -391,21 +396,8 @@ const WalletPage = () => {
                     >
                       {method}
                       {isActive && (
-                        <span
-                          className="bg-yellow-600 absolute bottom-0 right-0 rounded-sm flex items-center justify-center"
-                          style={{
-                            width: "15px",
-                            height: "15px",
-                            border: "1.5px solid #FFD700",
-                          }}
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="16"
-                            height="16"
-                            viewBox="0 0 20 20"
-                            fill="none"
-                          >
+                        <span className="absolute bottom-0 right-0 rounded-sm flex items-center justify-center">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 20 20" fill="none">
                             <path
                               d="M5 11L9 15L15 7"
                               stroke="#FFD700"
@@ -420,102 +412,149 @@ const WalletPage = () => {
                     </Button>
                   )
                 })}
+
+                {/* 🔁 USDT Recharge UI — Side-by-Side Labels + Full Width */}
+                {selectedMethod === "USDT" && (
+                  <div className="  w-86 my-10 mb-5">
+                    {/* Labels Row */}
+                    <div className="flex justify-between items-center px-2">
+                      <h3 className="text-sm font-medium text-gray-400">Enter Amount ($)</h3>
+                      <h3 className="text-sm font-medium text-yellow-400">
+                        Exchange Rate: <span className="font-bold">$1 = ₹{usdtRate}</span>
+                      </h3>
+                    </div>
+
+                    {/* Input + Rate Value */}
+                    <div className="flex flex-col sm:flex-row gap-4 ">
+                      <Input
+                        type="number"
+                        value={usdtAmount}
+                        onChange={(e) => setUsdtAmount(Number(e.target.value))}
+                        placeholder="e.g. 10"
+                        className="flex-1 bg-black/60 border-yellow-500/30 text-white placeholder:text-gray-400 h-10"
+                      />
+                    
+                    </div>
+
+                    {/* INR Conversion Preview */}
+                    <Card className="  my-5   border border-[#f0c46c] shadow-sm bg-gradient-to-r from-[#3d040b] to-[#381c1f] w-full">
+                      <div className="flex rounded-tr-xl rounded-tl-xl    items-center justify-between bg-gradient-to-b from-[#ffe36d] to-[#ffc947] px-4 py-2">
+                        <div className="text-[14px] font-medium text-[#000000]">Recharge Amount</div>
+                        <div className="text-[14px] font-medium text-[#000000]">INR Equivalent</div>
+                      </div>
+                      <div className="flex items-center justify-between rounded-xl bg-gradient-to-r from-[#641c06] to-[#300509] px-6 py-3">
+                        <div className="text-[18px] font-semibold text-[#ffe36d] drop-shadow-sm">$ {usdtAmount}</div>
+                        <div className="text-[26px] font-bold text-[#ffe36d] ">=</div>
+                        <div className="text-[18px] font-semibold text-[#ffe36d] drop-shadow-sm">₹{(usdtAmount * usdtRate).toFixed(2)}</div>
+                      </div>
+                    </Card>
+                  </div>
+                )}
+
+
+
+
               </div>
             </div>
 
-            {/* Amount Selection */}
-            <div>
-              <h3 className="text-sm font-medium text-gray-400 mb-3">Deposit Amount</h3>
-              <div className="grid grid-cols-4 gap-2">
-                {amounts.map((amount) => (
-                  <Button
-                    key={amount}
-                    variant={selectedAmount === amount ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => setSelectedAmount(amount)}
-                    className={`h-12 ${
-                      selectedAmount === amount
-                        ? "bg-yellow-500 border-yellow-400 text-black hover:bg-yellow-600"
-                        : "bg-black/60 border-yellow-500/30 text-white hover:bg-black/80"
-                    }`}
-                  >
-                    ₹ {amount.toLocaleString("en-IN")}
-                  </Button>
-                ))}
+           
+
+            {/* 🔁 Amount Selection — Hidden for USDT */}
+            {selectedMethod !== "USDT" && (
+              <div>
+                <h3 className="text-sm font-medium text-gray-400 mb-3">Deposit Amount</h3>
+                <div className="grid grid-cols-4 gap-2">
+                  {amounts.map((amount) => (
+                    <Button
+                      key={amount}
+                      variant={selectedAmount === amount ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setSelectedAmount(amount)}
+                      className={`h-12 ${
+                        selectedAmount === amount
+                          ? "bg-yellow-500 border-yellow-400 text-black hover:bg-yellow-600"
+                          : "bg-black/60 border-yellow-500/30 text-white hover:bg-black/80"
+                      }`}
+                    >
+                      ₹ {amount.toLocaleString("en-IN")}
+                    </Button>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
 
             <div>
       <h3 className="text-sm font-medium text-muted-foreground mb-3">Recharge Cashback</h3>
-      <div className="grid grid-cols-2 gap-3">
-       {/* Apply Cashback Card */}
-        <Card
-          className={` bg-black/30 border-yellow-400/40 border-1 ${
-            cashbackSelected === "apply"
-              ? "border-yellow-500 bg-yellow-500/60"
-              : ""
-          }`}
-          onClick={() => setCashbackSelected("apply")}
-        >
-          <div className="grid grid-cols-2 px-3 text-white  items-center text-center">
-            <span className="grid grid-cols-2 gap-6 items-center justify-center text-sm ">
-              <Image src={CashIcon} alt="Share" className="m-3 ml-7 h-5 w-5" />
-            </span>
-            <span className="mr-7">Apply</span>
-          </div>
-        </Card>
-
-        {/* Later Card */}
-        <Card
-          className={`bg-black/30 border-yellow-400/40 border-1  ${
-            cashbackSelected === "later"
-              ? "border-yellow-500 bg-yellow-500/60"
-              : ""
-          }`}
-          onClick={() => setCashbackSelected("later")}
-        >
-          <div className="flex items-center   text-white justify-center  mt-3">Later</div>
-        </Card>
-      </div>
-
-      {/* Conditionally render Amount Summary if Apply selected */}
-      {cashbackSelected === "apply" && (
-        <Card className="rounded-lg overflow-hidden border border-[#f0c46c] p-0 shadow-sm bg-gradient-to-r from-[#3d040b] to-[#381c1f] mt-4">
-          <div className="flex items-center justify-between bg-gradient-to-b from-[#ffe36d] to-[#ffc947] px-3 py-0.5">
-            <div className="text-[14px] font-medium text-[#000000]">Deposit Amount</div>
-            <div className="text-[14px] font-medium text-[#000000]">Cashback amount</div>
-          </div>
-          <div className="flex items-center justify-between bg-gradient-to-r from-[#641c06] to-[#300509] px-4 py-2">
-            <div className="flex flex-col items-start">
-              <div className="text-[17px] font-semibold text-[#ffe36d] drop-shadow-sm">₹{selectedAmount}</div>
+    
+        {/* 🔁 Cashback Selection */}
+        <div className="grid grid-cols-2 gap-3">
+          {/* Apply Cashback Card */}
+          <Card
+            className={`bg-black/30 border-yellow-400/40 border-1 ${
+              cashbackSelected === "apply" ? "border-yellow-500 bg-yellow-500/60" : ""
+            }`}
+            onClick={() => setCashbackSelected("apply")}
+          >
+            <div className="grid grid-cols-2 px-3 text-white items-center text-center">
+              <span className="grid grid-cols-2 gap-6 items-center justify-center text-sm">
+                <Image src={CashIcon} alt="Share" className="m-3 ml-7 h-5 w-5" />
+              </span>
+              <span className="mr-7">Apply</span>
             </div>
-            <div className="text-[26px] font-bold text-[#ffe36d] mx-2">+</div>
-            <div className="flex flex-col items-end">
-              <div className="text-[17px] font-semibold text-[#ffe36d] drop-shadow-sm">₹{Math.floor(selectedAmount * 0.1)}</div>
+          </Card>
+
+          {/* Later Card */}
+          <Card
+            className={`bg-black/30 border-yellow-400/40 border-1 ${
+              cashbackSelected === "later" ? "border-yellow-500 bg-yellow-500/60" : ""
+            }`}
+            onClick={() => setCashbackSelected("later")}
+          >
+            <div className="flex items-center text-white justify-center mt-3">Later</div>
+          </Card>
+        </div>
+
+        {/* 🔁 Cashback Summary — Dynamic for USDT and INR */}
+        {cashbackSelected === "apply" && (
+          <Card className="rounded-lg overflow-hidden border border-[#f0c46c] shadow-sm bg-gradient-to-r from-[#3d040b] to-[#381c1f] mt-4">
+            <div className="flex items-center justify-between bg-gradient-to-b from-[#ffe36d] to-[#ffc947] px-4 py-2">
+              <div className="text-[14px] font-medium text-[#000000]">Recharge Amount</div>
+              <div className="text-[14px] font-medium text-[#000000]">Cashback Bonus</div>
             </div>
-          </div>
-        </Card>
-      )}
-    </div>
+            <div className="flex items-center justify-between bg-gradient-to-r from-[#641c06] to-[#300509] px-6 py-3">
+              <div className="text-[17px] font-semibold text-[#ffe36d] drop-shadow-sm">
+                {selectedMethod === "USDT" ? `$ ${usdtAmount}` : `₹${selectedAmount}`}
+              </div>
+              <div className="text-[26px] font-bold text-[#ffe36d] mx-2">+</div>
+              <div className="text-[17px] font-semibold text-[#ffe36d] drop-shadow-sm">
+                {selectedMethod === "USDT"
+                  ? `$ ${(usdtAmount * 0.1).toFixed(2)}`
+                  : `₹${Math.floor(selectedAmount * 0.1)}`}
+              </div>
+            </div>
+          </Card>
+        )}
+         </div>
 
 
-            {/* Pay Button */}
-            <div className="flex justify-center relative">
-              {/* <Button
-                className="bg-gradient-to-b from-yellow-300 via-yellow-400 to-yellow-600 text-black font-bold py-4 px-16 rounded-full text-base hover:from-yellow-400 hover:via-yellow-500 hover:to-yellow-700 transition-all duration-300 shadow-lg border border-yellow-400 relative overflow-hidden"
-                size="lg"
+
+            {/* 🔁 Recharge Button */}
+            <div className="flex justify-center pt-6">
+              <Button
+                onClick={handleRecharge}
+                disabled={isProcessing}
+                className="bg-gradient-to-b from-yellow-300 via-yellow-400 to-yellow-600 text-black font-bold px-16 py-4 rounded-full relative overflow-hidden shadow-lg border border-yellow-400 hover:from-yellow-400 hover:via-yellow-500 hover:to-yellow-700 transition-all duration-300"
               >
                 <div className="absolute inset-0 bg-gradient-to-b from-white/20 via-transparent to-black/10 rounded-full"></div>
                 <div className="absolute top-1 left-4 right-4 h-1 bg-gradient-to-r from-transparent via-white/40 to-transparent rounded-full"></div>
-                <span className="relative z-10 tracking-wide">Pay</span>
-              </Button> */}
-                      <Button
-          onClick={activeTab === "recharge" ? handleRecharge : handleWithdraw}
-          disabled={isProcessing}
-          className="bg-gradient-to-b from-yellow-300 via-yellow-400 to-yellow-600 text-black font-bold px-16 py-4 rounded-full"
-        >
-          {isProcessing ? "Processing..." : activeTab === "recharge" ? `Recharge ₹${selectedAmount}` : `Withdraw ₹${selectedAmount}`}
-        </Button>
+                <span className="relative z-10 tracking-wide">
+                  {isProcessing
+                    ? "Processing..."
+                    : selectedMethod === "USDT"
+                    ? `Recharge $${usdtAmount}`
+                    : `Recharge ₹${selectedAmount}`}
+                </span>
+              </Button>
             </div>
           </>
         ) : (
