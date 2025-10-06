@@ -390,14 +390,14 @@ const WalletPage = () => {
                       variant="outline"
                       size="sm"
                       onClick={() => setSelectedMethod(method)}
-                      className={`rounded-lg h-9 relative px-2 bg-black/60 border-yellow-500/30 text-white hover:bg-black/80 ${
+                      className={`rounded-lg h-9  relative px-2 bg-black/60 border-yellow-500/30 text-white hover:bg-black/80 ${
                         isActive ? "border-2 border-yellow-400 bg-yellow-300/20" : ""
                       }`}
                     >
                       {method}
                       {isActive && (
                         <span className="absolute bottom-0 right-0 rounded-sm flex items-center justify-center">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 20 20" fill="none">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="24" viewBox="0 0 20 20" fill="none">
                             <path
                               d="M5 11L9 15L15 7"
                               stroke="#FFD700"
@@ -413,45 +413,42 @@ const WalletPage = () => {
                   )
                 })}
 
-                {/* 🔁 USDT Recharge UI — Side-by-Side Labels + Full Width */}
+                {/* 🔁 USDT Recharge UI — Responsive & Unified with Cashback */}
                 {selectedMethod === "USDT" && (
-                  <div className="  w-82  mx-2 my-10 mb-5">
+                  <div className="w-[94vw] my-10 ">
                     {/* Labels Row */}
-                    <div className="flex justify-between items-center px-2">
-                      <h3 className="text-sm font-medium text-gray-400">Enter Amount ($)</h3>
+                    <div className="flex justify-left   items-center mb-3">
+                      <h3 className="text-sm font-medium mr-11 text-gray-400">Enter Amount ($)</h3>
                       <h3 className="text-sm font-medium text-yellow-400">
                         Exchange Rate: <span className="font-bold">$1 = ₹{usdtRate}</span>
                       </h3>
                     </div>
 
-                    {/* Input + Rate Value */}
-                    <div className="flex flex-col sm:flex-row gap-4 ">
+                    {/* Input Field */}
+                    <div className="">
                       <Input
                         type="number"
                         value={usdtAmount}
                         onChange={(e) => setUsdtAmount(Number(e.target.value))}
                         placeholder="e.g. 10"
-                        className="flex-1 bg-black/60 border-yellow-500/30 text-white placeholder:text-gray-400 h-10"
+                        className="  bg-black/60  overflow-hidden w-[91vw] border-yellow-500/30 text-white placeholder:text-gray-400 h-10"
                       />
-                    
                     </div>
 
-                    {/* INR Conversion Preview */}
-                    <Card className="  my-5   border border-[#f0c46c] shadow-sm bg-gradient-to-r from-[#3d040b] to-[#381c1f] w-full">
-                      <div className="flex rounded-tr-xl rounded-tl-xl    items-center justify-between bg-gradient-to-b from-[#ffe36d] to-[#ffc947] px-4 py-2">
+                    {/* INR Conversion Preview — Styled like Cashback */}
+                    <Card className="rounded-xl overflow-hidden border border-[#f0c46c] shadow-sm bg-gradient-to-r from-[#3d040b] to-[#381c1f]   mr-3 mt-5">
+                      <div className="flex items-center justify-between  bg-gradient-to-b from-[#ffe36d] to-[#ffc947] px-6 py-2">
                         <div className="text-[14px] font-medium text-[#000000]">Recharge Amount</div>
                         <div className="text-[14px] font-medium text-[#000000]">INR Equivalent</div>
                       </div>
-                      <div className="flex items-center justify-between rounded-xl bg-gradient-to-r from-[#641c06] to-[#300509] px-6 py-3">
-                        <div className="text-[18px] font-semibold text-[#ffe36d] drop-shadow-sm">$ {usdtAmount}</div>
-                        <div className="text-[26px] font-bold text-[#ffe36d] ">=</div>
-                        <div className="text-[18px] font-semibold text-[#ffe36d] drop-shadow-sm">₹{(usdtAmount * usdtRate).toFixed(2)}</div>
+                      <div className="flex items-center justify-between bg-gradient-to-r from-[#641c06] to-[#300509] px-8 py-3">
+                        <div className="text-[17px] font-semibold text-[#ffe36d] drop-shadow-sm">$ {usdtAmount}</div>
+                        <div className="text-[26px] font-bold text-[#ffe36d]">=</div>
+                        <div className="text-[17px] font-semibold text-[#ffe36d] drop-shadow-sm">₹{(usdtAmount * usdtRate).toFixed(2)}</div>
                       </div>
                     </Card>
                   </div>
                 )}
-
-
 
 
               </div>
