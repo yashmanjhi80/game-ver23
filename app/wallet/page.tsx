@@ -56,18 +56,25 @@ const WalletPage = () => {
     }
   }, [])
 
-  // Generate unique order ID
-  
-  let orderCounter = 12302; // Starting from 12A302
+// order id generate
+  let orderSequence = 302; // Starting from 302
 
   const generateOrderId = () => {
     const fixedPart = "P340UOI2";
-    const datePart = new Date().toLocaleDateString("en-GB").replace(/[/]/g, ""); // Format: DDMMYYYY
-    const incrementalPart = `12A${orderCounter++}`; // Increment each time
+
+    // Format today's date as DDMMYYYY
+    const now = new Date();
+    const day = String(now.getDate()).padStart(2, "0");
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const year = now.getFullYear();
+    const datePart = `${day}${month}${year}`;
+
+    // Generate the changing code
+    const incrementalPart = `12A${orderSequence++}`;
 
     return `${fixedPart}${datePart}${incrementalPart}`;
-  };
 
+  };
   
 //message animation
   const showMessage = (type: "error" | "success", message: string) => {
