@@ -152,19 +152,19 @@ const AgentContent = ({ activeTab }: AgentContentProps) => {
             <div className="text-white/70">
               {creds?.username ? (
                 <>
-                  Signed in as <span className="text-white font-semibold">{creds.username}</span>
+                  Hello <span className="text-white font-semibold">{creds.username}</span>
                 </>
               ) : (
                 <span className="text-red-300">No credentials found in localStorage</span>
               )}
             </div>
             {apiError ? <div className="text-red-400 mt-1">{apiError}</div> : null}
-            {!apiError && userData ? <div className="text-green-400 mt-1">Details loaded</div> : null}
+            {!apiError && userData ? <div className="text-green-400 mt-1">Refreshed</div> : null}
           </div>
           <Button
             onClick={handleFetchDetails}
             disabled={!creds || isLoading}
-            className="bg-gradient-to-b from-yellow-300 via-golden to-yellow-600 text-black font-bold px-4 py-2 rounded-full border border-yellow-400 hover:from-yellow-400 hover:via-golden hover:to-yellow-700 disabled:opacity-60"
+            className="bg-gradient-to-b from-yellow-300 via-golden to-yellow-600 text-black  px-2 py-1 rounded-lg border border-yellow-400 hover:from-yellow-400 hover:via-golden hover:to-yellow-700 disabled:opacity-60"
           >
             {isLoading ? "Fetching..." : "Refresh"}
           </Button>
@@ -187,7 +187,7 @@ const AgentContent = ({ activeTab }: AgentContentProps) => {
 
           <div className="flex justify-center relative">
             <Button
-              className="bg-gradient-to-b from-yellow-300 via-golden to-yellow-600 text-black font-bold py-4 px-12 rounded-full text-base hover:from-yellow-400 hover:via-golden hover:to-yellow-700 transition-all duration-300 shadow-lg border border-yellow-400 relative overflow-hidden"
+              className="bg-gradient-to-b from-yellow-300 via-golden to-yellow-600 text-black  py-1 px-4 rounded-lg text-base hover:from-yellow-400 hover:via-golden hover:to-yellow-700 transition-all duration-300 shadow-lg border border-yellow-400 relative overflow-hidden"
               size="lg"
               data-testid="button-withdraw"
             >

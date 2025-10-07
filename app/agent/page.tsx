@@ -11,7 +11,7 @@ export default function AgentPage() {
   return (
     <div className="min-h-screen bg-linear-65 from-burgundy-800 to-burgundy-960 text-white pb-20">
       <main className="max-w-md mx-auto">
-        <div className="px-4 py-4 bg-black/70 border-b border-yellow-500/20">
+        <div className=" bg-red-900/40">
           <TabNavigation activeTab={activeTab} onTabChange={setActiveTab} />
         </div>
 
