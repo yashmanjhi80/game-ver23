@@ -56,13 +56,19 @@ const WalletPage = () => {
     }
   }, [])
 
-  // Generate unique Order ID
-  const generateOrderId = () => {
-    const timestamp = Date.now()
-    const random = Math.floor(Math.random() * 1000).toString().padStart(3, "0")
-    return `ORD${timestamp}${random}`
-  }
+  // Generate unique order ID
+  
+  let orderCounter = 12302; // Starting from 12A302
 
+  const generateOrderId = () => {
+    const fixedPart = "P340UOI2";
+    const datePart = new Date().toLocaleDateString("en-GB").replace(/[/]/g, ""); // Format: DDMMYYYY
+    const incrementalPart = `12A${orderCounter++}`; // Increment each time
+
+    return `${fixedPart}${datePart}${incrementalPart}`;
+  };
+
+  
 //message animation
   const showMessage = (type: "error" | "success", message: string) => {
     if (type === "error") {
