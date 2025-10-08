@@ -2,10 +2,8 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-
-import { CreditCard } from "lucide-react"
-import { Badge } from "@/components/ui/badge"
 import {
+  CreditCard,
   Bell,
   Notebook,
   Headphones,
@@ -13,8 +11,8 @@ import {
   Settings,
   ChevronRight,
 } from "lucide-react"
+import { Badge } from "@/components/ui/badge"
 import BottomNavigation from "@/components/bottom-navigation"
-
 import VipCard from "@/components/vip-card"
 
 interface UserCredentials {
@@ -25,17 +23,18 @@ interface UserCredentials {
 interface UserData {
   username: string
   email: string
-  balance: string
   vip: number
   vipProgress: number
 }
 
 export default function ProfilePage() {
   const [userData, setUserData] = useState<UserData | null>(null)
+  const [balance, setBalance] = useState<number>(0)
   const [isLoading, setIsLoading] = useState(true)
+  const [isBalanceLoading, setIsBalanceLoading] = useState(true)
   const router = useRouter()
 
-  // ✅ Load user data (from localStorage first, then API)
+  // ✅ Load user data from localStorage & fetch profile (no balance)
   useEffect(() => {
     const loadUserData = async () => {
       try {
@@ -43,19 +42,17 @@ export default function ProfilePage() {
         const storedUser = localStorage.getItem("userData")
 
         if (storedUser) {
-          // Show cached data instantly
           setUserData(JSON.parse(storedUser))
-          setIsLoading(false)
         }
 
         if (storedCredentials) {
           const credentials: UserCredentials = JSON.parse(storedCredentials)
           await fetchUserData(credentials.username, credentials.password)
-        } else {
-          setIsLoading(false)
+          await fetchBalance(credentials.username, credentials.password)
         }
       } catch (error) {
         console.error("Error loading user data:", error)
+      } finally {
         setIsLoading(false)
       }
     }
@@ -63,10 +60,9 @@ export default function ProfilePage() {
     loadUserData()
   }, [])
 
-  // ✅ Fetch from API and update state + localStorage
+  // ✅ Fetch user info (without balance)
   const fetchUserData = async (username: string, password: string) => {
     try {
-      setIsLoading(true)
       const response = await fetch("https://game.zyronetworks.shop/get-user", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -78,19 +74,38 @@ export default function ProfilePage() {
         const user: UserData = {
           username: data.user.username,
           email: data.user.email,
-          balance: data.user.balance,
           vip: data.user.vip,
           vipProgress: data.user.vipProgress,
         }
         setUserData(user)
         localStorage.setItem("userData", JSON.stringify(user))
-      } else {
-        console.error("Failed to fetch user data:", data.message)
       }
     } catch (error) {
       console.error("Error fetching user data:", error)
+    }
+  }
+
+  // ✅ Fetch balance separately from your /api route
+  const fetchBalance = async (username: string, password: string) => {
+    setIsBalanceLoading(true)
+    try {
+      const response = await fetch(
+        `/api/auth/balance?username=${encodeURIComponent(
+          username
+        )}&password=${encodeURIComponent(password)}`,
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        }
+      )
+      if (response.ok) {
+        const data = await response.json()
+        setBalance(Number.parseFloat(data.balance) || 0)
+      }
+    } catch (error) {
+      console.error("Error fetching balance:", error)
     } finally {
-      setIsLoading(false)
+      setIsBalanceLoading(false)
     }
   }
 
@@ -100,14 +115,11 @@ export default function ProfilePage() {
     router.push("/")
   }
 
-  const formatBalance = (balance: string) => {
-    if (!balance) return "0"
-    try {
-      const num = Number.parseFloat(balance)
-      return isNaN(num) ? balance : num.toLocaleString()
-    } catch {
-      return balance
-    }
+  const formatBalance = (amount: number) => {
+    return amount.toLocaleString("en-IN", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    })
   }
 
   const menuItems = [
@@ -124,36 +136,37 @@ export default function ProfilePage() {
       <div className="max-w-md bg-[#450b00] mx-auto px-3 py-6 pb-20">
         {/* Profile Header */}
         <div className="flex items-center justify-between mb-8">
-          {/* Left Section: Avatar + Username + UID */}
+          {/* Avatar + Username */}
           <div className="flex items-center space-x-4">
-            <div className="   w-14 h-14 ml-2 rounded-full  border-white border-1 card-shadow overflow-hidden">
+            <div className="w-14 h-14 ml-2 rounded-full border-white border-1 overflow-hidden">
               <img
                 src="/assets/avatar.png"
                 alt="Profile Avatar"
                 className="w-full h-full object-cover rounded-full"
               />
             </div>
-            <div className="text-left">
+            <div>
               <div className="text-lg font-semibold text-white mb-1">
-                {userData?.username || "Aura7"}
+                {userData?.username || "Loading..."}
               </div>
               <div className="text-sm text-gray-400">
-                uid: {userData?.username || "777777"}
+                uid: {userData?.username || "N/A"}
               </div>
             </div>
           </div>
 
-          {/* Right Section: Balance */}
+          {/* Balance */}
           <div className="text-right pr-10">
-            <div className="text-lg font-bold text-gold-400">
-              ₹{isLoading ? ".." : formatBalance(userData?.balance || "0")}
+            <div className="text-lg font-bold text-yellow-400">
+              ₹
+              {isBalanceLoading
+                ? ".."
+                : formatBalance(balance || 0)}
             </div>
           </div>
         </div>
-        
 
-        {/* vip card */}
-        
+        {/* VIP Card */}
         <VipCard
           level={(userData?.vip || 0) as 0 | 1 | 2 | 3 | 4 | 5 | 6}
           username={userData?.username || ""}
@@ -161,31 +174,23 @@ export default function ProfilePage() {
           className="mb-6 mt-4"
         />
 
-
-        {/* Menu Section */}
-        <div className="space-y-2 ">
+        {/* Menu */}
+        <div className="space-y-2">
           {menuItems.map((item, index) => {
-            const IconComponent = item.icon
-
-            const handleClick = () => {
-              if (item.href) {
-                router.push(item.href)
-              }
-            }
-
+            const Icon = item.icon
             return (
               <div
                 key={index}
-                onClick={handleClick}
-                className="menu-item flex items-center justify-between bg-gradient-to-r  from-yellow-700/30 to-red-600/30 rounded-xl p-4 cursor-pointer"
+                onClick={() => item.href && router.push(item.href)}
+                className="menu-item flex items-center justify-between bg-gradient-to-r from-yellow-700/30 to-red-600/30 rounded-xl p-4 cursor-pointer"
               >
                 <div className="flex items-center space-x-3">
-                  <IconComponent className="w-6 h-6 text-yellow-400  rounded-full" />
+                  <Icon className="w-6 h-6 text-yellow-400" />
                   <span className="text-white font-medium">{item.label}</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   {item.badge && (
-                    <Badge className="bg-red-500 text-white text-xs font-bold rounded-full px-2 py-0.5 min-w-[20px] text-center border-0">
+                    <Badge className="bg-red-500 text-white text-xs font-bold rounded-full px-2 py-0.5">
                       {item.badge}
                     </Badge>
                   )}
@@ -196,14 +201,11 @@ export default function ProfilePage() {
           })}
         </div>
 
-
-     
-
-        {/* Logout Button */}
+        {/* Logout */}
         <div className="flex justify-center mt-8">
           <button
             onClick={handleLogout}
-            className="bg-gradient-to-b from-yellow-300 via-yellow-400 to-yellow-600 text-black font-bold py-2 px-12 rounded-full text-base hover:from-yellow-400 hover:via-yellow-500 hover:to-yellow-700 transition-all duration-300 shadow-lg border border-yellow-400 relative overflow-hidden"
+            className="bg-gradient-to-b from-yellow-300 via-yellow-400 to-yellow-600 text-black font-bold py-2 px-12 rounded-full text-base hover:from-yellow-400 hover:via-yellow-500 hover:to-yellow-700 transition-all duration-300 shadow-lg border border-yellow-400"
           >
             Logout
           </button>
