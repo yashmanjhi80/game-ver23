@@ -575,36 +575,22 @@ export default function HomePage() {
 
       {/* Game Loading Screen */}
       {gameLoading.isLoading && (
-        <div className="fixed inset-x-0 bottom-1/3 h-1/3 bg-[#2b0d0d] backdrop-blur-sm z-50 flex items-center justify-center">
+        <div className="fixed inset-x-0 bottom-1/3 h-1/3 bg-black/40 rounded-sm mx-2 border-yellow-400 border-1 backdrop-blur-sm z-50 flex items-center justify-center">
           <div className="text-center max-w-md mx-auto p-8">
             <div className="mb-6">
-              <div className="flex justify-center gap-4 mb-6">
+              <div className="flex justify-center gap-4 mb-4">
+               
                 <Trefoil
-                  size="36"
+                  size="32"
                   stroke="4"
                   strokeLength="0.15"
-                  bgOpacity="0.1"
-                  speed="1.4"
-                  color="#00FF7F" // Spring Green
-                />
-                <Trefoil
-                  size="36"
-                  stroke="4"
-                  strokeLength="0.15"
-                  bgOpacity="0.1"
+                  bgOpacity="0.9"
                   speed="1.4"
                   color="#1E90FF" // Dodger Blue
                 />
-                <Trefoil
-                  size="36"
-                  stroke="4"
-                  strokeLength="0.15"
-                  bgOpacity="0.1"
-                  speed="1.4"
-                  color="#FFD700" // Vibrant Yellow
-                />
+              
               </div>
-              <h2 className="text-2xl font-bold mb-2 text-white tracking-wide">
+              <h2 className="text-2xl font-semibold mb-2 text-yellow-400 tracking-wide">
                 Launching {gameLoading.gameName}
               </h2>
               <p className="text-gray-300">
