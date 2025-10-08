@@ -559,7 +559,7 @@ export default function HomePage() {
                   Cancel
                 </button>
                 <Link
-                  href="/deposit"
+                  href="/wallet"
                   className="flex-1 bg-gradient-to-r from-yellow-600 to-yellow-500 hover:from-yellow-700 hover:to-yellow-600 text-black font-bold py-3 px-4 rounded-lg transition-all text-center border border-yellow-400/30"
                   onClick={() => setShowInsufficientBalancePopup(false)}
                 >
@@ -575,7 +575,7 @@ export default function HomePage() {
 
       {/* Game Loading Screen */}
       {gameLoading.isLoading && (
-        <div className="fixed inset-x-0 bottom-1/3 h-1/3 bg-black/40 rounded-sm mx-2 border-yellow-400 border-1 backdrop-blur-sm z-50 flex items-center justify-center">
+        <div className="fixed inset-x-0 bottom-1/3 h-1/3 bg-black/60 rounded-sm mx-2 border-yellow-400 border-1 backdrop-blur-sm z-50 flex items-center justify-center">
           <div className="text-center max-w-md mx-auto p-8">
             <div className="mb-6">
               <div className="flex justify-center gap-4 mb-4">
