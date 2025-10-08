@@ -90,7 +90,7 @@ export default function VipCard({ level, username, progress = 0, className }: Vi
 
           {/* Progress */}
           <div className="text-xs ml-9 text-white/90 mb-1 flex justify-between">
-            <span classname="">Deposit 300 to next level</span>
+            <span className="">Deposit 300 to next level</span>
             <span className="font-semibold">{clamped}%</span>
           </div>
           <div className="h-2 w-44 ml-4 overflow-hidden rounded-full bg-white/20 border border-white/10">

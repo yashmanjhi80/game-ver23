@@ -47,10 +47,10 @@ export default function GlobalHeader() {
   }, [])
 
   return (
-    <header className="sticky top-0 z-40 border-b backdrop-blur-md border-yellow-500/20 p-1 bg-[#450b00] header-shine">
-      <div className="relative z-10 max-w-6xl mx-auto  flex items-center justify-between">
+    <header className="sticky top-0 z-40 border-b backdrop-blur-md border-yellow-500/20 p-2 bg-burgundy-800 relative header-shine">
+      <div className="relative z-10 max-w-6xl mx-auto flex items-center justify-between">
         {/* LEFT: Logo */}
-        <div className="flex items-center space">
+        <div className="flex items-center space-x-2">
           <Link href="/home">
             <img src={DomainIcon.src} alt="Logo" className="h-5 w-auto" />
           </Link>
@@ -60,13 +60,23 @@ export default function GlobalHeader() {
         <div className="flex items-center space-x-5">
           <Link
             href="/wallet"
-            className="flex items-center bg-black/ py-1 rounded-sm space-x-2 transition-transform"
+            className="flex items-center bg-black/ py-1.5 rounded-sm space-x-2 transition-transform"
           >
-          
+            <button
+              onClick={loadBalance}
+              disabled={isLoadingBalance}
+              className=" rounded-sm transition-colors disabled:opacity-50 px-2 py-1"
+              title="Refresh Balance"
+            >
+              <RefreshCw
+                size={16}
+                className={`text-yellow-400 ${isLoadingBalance ? "animate-spin" : ""}`}
+              />
+            </button>
 
-            <div className="text-white text-[20px] font-semibold">₹</div>
+            <div className="text-white font-semibold">₹</div>
 
-            <span className="text-white text-[20px] font-semibold">
+            <span className="text-white font-semibold">
               {isLoadingBalance ? (
                 <span className="animate-pulse text-yellow-400">...</span>
               ) : (
@@ -74,7 +84,7 @@ export default function GlobalHeader() {
               )}
             </span>
 
-            <div className="w-full mx-2 flex items-center font-semibold text-sm justify-center rounded-sm bg-orange-500 text-white px-4 py-3 h-5">
+            <div className="w-full flex mx-2 items-center text-[14px] justify-center rounded-sm bg-orange-500 text-white px-2 py-3 h-5">
               Deposit
             </div>
           </Link>

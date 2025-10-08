@@ -2,7 +2,8 @@
 
 
 
-
+import { Trefoil } from 'ldrs/react'
+import 'ldrs/react/Trefoil.css'
 import { Wallet, Flame, Gamepad2, Spade, Fish, Zap, Play } from "lucide-react";
 import { useState, useEffect } from "react";
 import Link from "next/link";
@@ -570,13 +571,40 @@ export default function HomePage() {
         </div>
       )}
 
-      {/* Full Window Loading Overlay */}
+  
+
+      {/* Game Loading Screen */}
       {gameLoading.isLoading && (
-        <div className="fixed inset-0 bg-black/95 backdrop-blur-sm z-50 flex items-center justify-center">
+        <div className="fixed inset-x-0 bottom-1/3 h-1/3 bg-[#2b0d0d] backdrop-blur-sm z-50 flex items-center justify-center">
           <div className="text-center max-w-md mx-auto p-8">
-            <div className="mb-8">
-              <div className="w-24 h-24 border-4 border-yellow-500/30 border-t-yellow-400 rounded-full animate-spin mx-auto mb-6" />
-              <h2 className="text-2xl font-bold mb-2 text-yellow-400">
+            <div className="mb-6">
+              <div className="flex justify-center gap-4 mb-6">
+                <Trefoil
+                  size="36"
+                  stroke="4"
+                  strokeLength="0.15"
+                  bgOpacity="0.1"
+                  speed="1.4"
+                  color="#00FF7F" // Spring Green
+                />
+                <Trefoil
+                  size="36"
+                  stroke="4"
+                  strokeLength="0.15"
+                  bgOpacity="0.1"
+                  speed="1.4"
+                  color="#1E90FF" // Dodger Blue
+                />
+                <Trefoil
+                  size="36"
+                  stroke="4"
+                  strokeLength="0.15"
+                  bgOpacity="0.1"
+                  speed="1.4"
+                  color="#FFD700" // Vibrant Yellow
+                />
+              </div>
+              <h2 className="text-2xl font-bold mb-2 text-white tracking-wide">
                 Launching {gameLoading.gameName}
               </h2>
               <p className="text-gray-300">
@@ -584,9 +612,9 @@ export default function HomePage() {
               </p>
             </div>
 
-            <div className="w-full bg-black/50 rounded-full h-3 mb-4 border border-yellow-500/20">
+            <div className="w-full bg-black/50 rounded-full h-3 mb-4 border border-white/20">
               <div
-                className="bg-gradient-to-r from-yellow-600 to-yellow-400 h-3 rounded-full transition-all duration-300 ease-out"
+                className="bg-gradient-to-r from-green-400 via-blue-400 to-yellow-400 h-3 rounded-full transition-all duration-300 ease-out"
                 style={{ width: `${gameLoading.progress}%` }}
               />
             </div>
