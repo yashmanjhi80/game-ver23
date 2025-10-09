@@ -575,16 +575,16 @@ export default function HomePage() {
 
       {/* Game Loading Screen */}
       {gameLoading.isLoading && (
-        <div className="fixed inset-x-0 bottom-1/3 h-1/3 bg-black/60 rounded-sm mx-2 border-yellow-400 border-1 backdrop-blur-sm z-50 flex items-center justify-center">
+        <div className="fixed inset-x-0 bottom-1/3 h-1/2 bg-black/60 rounded-sm mx-2 border-yellow-400 border-1 backdrop-blur-sm z-50 flex items-center justify-center">
           <div className="text-center max-w-md mx-auto p-8">
             <div className="mb-6">
-              <div className="flex justify-center gap-4 mb-4">
+              <div className="flex justify-center gap-4 mb-2">
                
                 <Trefoil
                   size="32"
                   stroke="4"
                   strokeLength="0.15"
-                  bgOpacity="0.9"
+                  bgOpacity="0.1"
                   speed="1.4"
                   color="#1E90FF" // Dodger Blue
                 />
