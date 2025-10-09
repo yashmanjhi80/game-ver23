@@ -418,6 +418,7 @@ const AgentContent = ({ activeTab }: AgentContentProps) => {
               title: "Friends Recharge and Place bets",
               description: "Unlock invitation rewards + enjoy agent commissions",
             },
+     
           ].map((step) => (
             <div key={step.number} className="flex gap-4 p-3 bg-white/10 rounded-lg border border-white/20">
               <div className="flex-shrink-0">
@@ -430,7 +431,7 @@ const AgentContent = ({ activeTab }: AgentContentProps) => {
                 <h4 className="font-semibold text-white mb-1 text-sm">
                   {step.title.split(" ").map((word, index) => (
                     <span key={index}>
-                      {word === "Download" || word === "Register" || word === "Recharge" || word === "bets" ? (
+                      {word === "Download"  || word === "Friends" || word === "Valid" || word === "Register" || word === "Recharge" || word === "bets" ? (
                         <span className="text-yellow-400">{word}</span>
                       ) : (
                         word
@@ -450,56 +451,28 @@ const AgentContent = ({ activeTab }: AgentContentProps) => {
 
   const renderCommissionContent = () => (
     <>
-      <div className="p-4 bg-[#2b0d0d] rounded-md">
-        <div className="flex items-center gap-2 mb-4">
-          <DollarSign className="w-5 h-5 text-yellow-400" />
-          <h3 className="text-base font-semibold text-white">Withdrawable commission</h3>
-        </div>
-
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2 bg-[#3a1010] rounded-full px-4 py-2">
-            <span className="flex items-center justify-center w-6 h-6 rounded-full bg-yellow-400 text-black font-bold">
-              ₹
-            </span>
-            <span className="text-yellow-400 font-bold text-lg">0</span>
-          </div>
-          <div className="flex justify-center relative">
-            <Button
-              className="bg-gradient-to-b from-yellow-300 via-golden to-yellow-600 text-black font-bold py-4 px-12 rounded-full text-base hover:from-yellow-400 hover:via-golden hover:to-yellow-700 transition-all duration-300 shadow-lg border border-yellow-400 relative overflow-hidden"
-              size="lg"
-              data-testid="button-withdraw"
-            >
-              <div className="absolute inset-0 bg-gradient-to-b from-white/20 via-transparent to-black/10 rounded-full"></div>
-              <div className="absolute top-1 left-4 right-4 h-1 bg-gradient-to-r from-transparent via-white/40 to-transparent rounded-full"></div>
-              <span className="relative z-10 tracking-wide">Withdraw</span>
-            </Button>
-          </div>
-        </div>
-
-        <p className="text-white/70 text-sm">An independent withdrawal system that everyone can participate in</p>
-      </div>
-
-      <hr className="border-t border-dotted border-[#ffe925] opacity-100 my-0" />
+     
+      
 
       <div className="bg-[#2b0d0d] rounded-xl p-6 relative w-full">
-        <h3 className="pb-3 text-base font-semibold text-white">Invite friends to get</h3>
+        <h3 className="pb-3 text-base font-bold flex justify-center mb-8 text-green-500">Invite friends to get</h3>
         <div className="grid grid-cols-2 text-center gap-4 mb-6">
           <div>
-            <div className="text-white text-sm">Total Recharge Yesterday</div>
-            <div className="text-[#ffe925] text-2xl font-bold">₹ 0</div>
-            <div className="mt-3 text-white text-sm">Yesterday's Commission</div>
-            <div className="text-[#ffe925] text-2xl font-bold">₹ 0</div>
+            <div className="text-white mb-3 text-sm">Total Recharge Yesterday</div>
+            <div className="text-[#ffe925] text-sm mb-8 font-bold">₹ 0</div>
+            <div className="mt-3 text-white mb-3 text-sm">Yesterday's Commission</div>
+            <div className="text-[#ffe925] text-sm mb-8 font-bold">₹ 0</div>
           </div>
           <div>
-            <div className="text-white text-sm">Today's Team Recharge</div>
-            <div className="text-[#ffe925] text-2xl font-bold">₹ 0</div>
-            <div className="mt-3 text-white text-sm">Unclaimed Commission</div>
-            <div className="text-[#ffe925] text-2xl font-bold">₹ 0</div>
+            <div className="text-white mb-3 text-sm">Today's Team Recharge</div>
+            <div className="text-[#ffe925] text-sm mb-8 font-bold">₹ 0</div>
+            <div className="mt-3 text-white mb-3 text-sm">Unclaimed Commission</div>
+            <div className="text-[#ffe925] text-sm mb-8 font-bold">₹ 0</div>
           </div>
         </div>
         <div className="flex justify-center relative">
           <Button
-            className="bg-gradient-to-b from-yellow-300 via-golden to-yellow-600 text-black font-bold py-4 px-20 rounded-full text-base hover:from-yellow-400 hover:via-golden hover:to-yellow-700 transition-all duration-300 shadow-lg border border-yellow-400 relative overflow-hidden"
+            className="bg-gradient-to-b from-yellow-300 via-golden to-yellow-600 text-black  py-1 px-6 rounded-lg text-base hover:from-yellow-400 hover:via-golden hover:to-yellow-700 transition-all duration-300 shadow-lg border border-yellow-400 relative overflow-hidden"
             size="lg"
             data-testid="button-withdraw"
           >
@@ -513,7 +486,7 @@ const AgentContent = ({ activeTab }: AgentContentProps) => {
       <div className="max-w-xl mx-auto bg-[#2b0d0d] rounded-xl p-6 relative">
         <div className="text-white text-lg flex items-center mb-3">
           <svg className="w-5 h-5 mr-2 text-[#7ec4ff]" fill="none" />
-          Commission Withdrawal Rules
+          Commission  Rules
         </div>
         <div className="flex justify-center items-center mb-8">
           {/* Avatar icons go here */}
@@ -522,7 +495,7 @@ const AgentContent = ({ activeTab }: AgentContentProps) => {
         <div className="grid grid-cols-3 gap-2 text-center">
           <div>
             <div className="text-white">Invitation Reward</div>
-            <div className="text-[#ffe925]">80</div>
+            <div className="text-[#ffe925]">50</div>
             <div className="text-white mt-3">Recharge</div>
             <div className="text-[#ffe925]">300-1000</div>
             <div className="text-white mt-3">Commission</div>
@@ -531,7 +504,7 @@ const AgentContent = ({ activeTab }: AgentContentProps) => {
           </div>
           <div>
             <div className="text-white">Invitation Reward</div>
-            <div className="text-[#ffe925]">80</div>
+            <div className="text-[#ffe925]">50</div>
             <div className="text-white mt-3">Recharge</div>
             <div className="text-[#ffe925]">1001-3000</div>
             <div className="text-white mt-3">Commission</div>
@@ -540,7 +513,7 @@ const AgentContent = ({ activeTab }: AgentContentProps) => {
           </div>
           <div>
             <div className="text-white">Invitation Reward</div>
-            <div className="text-[#ffe925]">80</div>
+            <div className="text-[#ffe925]">50</div>
             <div className="text-white mt-3">Recharge</div>
             <div className="text-[#ffe925]">3000+</div>
             <div className="text-white mt-3">Commission</div>
@@ -578,7 +551,7 @@ const AgentContent = ({ activeTab }: AgentContentProps) => {
             <tbody>
               <tr>
                 <td className="border border-[#c6b9a7] px-3 py-2">Reward Amount</td>
-                <td className="border border-[#c6b9a7] px-3 py-2 text-[#ffe925]">₹80 for each valid user</td>
+                <td className="border border-[#c6b9a7] px-3 py-2 text-[#ffe925]">₹50 for each valid user</td>
               </tr>
               <tr>
                 <td className="border border-[#c6b9a7] px-3 py-2">Reward Limit</td>
@@ -587,7 +560,7 @@ const AgentContent = ({ activeTab }: AgentContentProps) => {
               <tr>
                 <td className="border border-[#c6b9a7] px-3 py-2">Valid User Definition</td>
                 <td className="border border-[#c6b9a7] px-3 py-2">
-                  User is considered valid when recharge reaches ₹500
+                  User is considered valid when recharge reaches ₹300
                 </td>
               </tr>
               <tr>
@@ -598,7 +571,7 @@ const AgentContent = ({ activeTab }: AgentContentProps) => {
           </table>
         </div>
         <p className="mt-1">
-          When a new user you invite recharges ₹500, you will receive a ₹80 reward. You can receive rewards for up to 20
+          When a new user you invite recharges ₹500, you will receive a ₹50 reward. You can receive rewards for up to 20
           users!
         </p>
       </div>
