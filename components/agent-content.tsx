@@ -187,13 +187,13 @@ const AgentContent = ({ activeTab }: AgentContentProps) => {
 
           <div className="flex justify-center relative">
             <Button
-              className="bg-gradient-to-b from-yellow-300 via-golden to-yellow-600 text-black  py-1 px-4 rounded-lg text-base hover:from-yellow-400 hover:via-golden hover:to-yellow-700 transition-all duration-300 shadow-lg border border-yellow-400 relative overflow-hidden"
+              className="bg-gradient-to-b from-yellow-300 via-golden to-yellow-600 text-black  py-1 px-6 rounded-lg text-base hover:from-yellow-400 hover:via-golden hover:to-yellow-700 transition-all duration-300 shadow-lg border border-yellow-400 relative overflow-hidden"
               size="lg"
               data-testid="button-withdraw"
             >
               <div className="absolute inset-0 bg-gradient-to-b from-white/20 via-transparent to-black/10 rounded-full"></div>
               <div className="absolute top-1 left-4 right-4 h-1 bg-gradient-to-r from-transparent via-white/40 to-transparent rounded-full"></div>
-              <span className="relative z-10 tracking-wide">Withdraw</span>
+              <span className="relative z-10 tracking-wide">Claim</span>
             </Button>
           </div>
         </div>
@@ -455,10 +455,14 @@ const AgentContent = ({ activeTab }: AgentContentProps) => {
       
 
       <div className="bg-[#2b0d0d] rounded-xl p-6 relative w-full">
-        <h3 className="pb-3 text-base font-bold flex justify-center mb-8 text-green-500">Invite friends to get</h3>
+        <h3 className="pb-2 text-base font-bold flex justify-center  text-green-500">Invite friends to get
+        
+        </h3> <p className="mb-8 flex justify-center font-semibold text-[12px] text-yellow-400"> Real-time commission calculation, updated every 15 min.
+ </p>
+       
         <div className="grid grid-cols-2 text-center gap-4 mb-6">
           <div>
-            <div className="text-white mb-3 text-sm">Total Recharge Yesterday</div>
+            <div className="text-white mb-3 text-sm">Today's Commisssion</div>
             <div className="text-[#ffe925] text-sm mb-8 font-bold">₹ 0</div>
             <div className="mt-3 text-white mb-3 text-sm">Yesterday's Commission</div>
             <div className="text-[#ffe925] text-sm mb-8 font-bold">₹ 0</div>
@@ -497,28 +501,28 @@ const AgentContent = ({ activeTab }: AgentContentProps) => {
             <div className="text-white">Invitation Reward</div>
             <div className="text-[#ffe925]">50</div>
             <div className="text-white mt-3">Recharge</div>
-            <div className="text-[#ffe925]">300-1000</div>
+            <div className="text-[#ffe925]">300-2000</div>
             <div className="text-white mt-3">Commission</div>
-            <div className="text-[#ffe925]">1000*0.05</div>
-            <div className="text-[#ffe925]">(Actual:50)</div>
+            <div className="text-[#ffe925]">2000*0.05</div>
+            <div className="text-[#ffe925]">(Actual:100)</div>
           </div>
           <div>
             <div className="text-white">Invitation Reward</div>
             <div className="text-[#ffe925]">50</div>
             <div className="text-white mt-3">Recharge</div>
-            <div className="text-[#ffe925]">1001-3000</div>
+            <div className="text-[#ffe925]">2001-15000</div>
             <div className="text-white mt-3">Commission</div>
-            <div className="text-[#ffe925]">3000*0.10</div>
-            <div className="text-[#ffe925]">(Actual:300)</div>
+            <div className="text-[#ffe925]">15000*0.07</div>
+            <div className="text-[#ffe925]">(Actual:1050)</div>
           </div>
           <div>
             <div className="text-white">Invitation Reward</div>
             <div className="text-[#ffe925]">50</div>
             <div className="text-white mt-3">Recharge</div>
-            <div className="text-[#ffe925]">3000+</div>
+            <div className="text-[#ffe925]">15000+</div>
             <div className="text-white mt-3">Commission</div>
-            <div className="text-[#ffe925]">5000*0.15</div>
-            <div className="text-[#ffe925]">(Actual:750)</div>
+            <div className="text-[#ffe925]">15000*0.09</div>
+            <div className="text-[#ffe925]">(Actual:1350)</div>
           </div>
         </div>
         <hr className="absolute bottom-0 left-0 w-full border-t-2 border-dotted border-[#ffe925] rounded-b-xl" />
