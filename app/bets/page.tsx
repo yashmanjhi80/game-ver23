@@ -18,9 +18,32 @@ const BetRecords = () => {
   useEffect(() => {
     const fetchBets = async () => {
       try {
-        const res = await fetch("https://game.zyronetworks.shop/getUserBets");
-        const data = await res.json();
-        setBetRecords(data);
+        // Retrieve stored credentials from localStorage
+        const storedCredentials = localStorage.getItem("userCredentials");
+        if (!storedCredentials) {
+          console.error("No credentials found in localStorage");
+          setLoading(false);
+          return;
+        }
+
+        const { username, password } = JSON.parse(storedCredentials);
+
+        // Fetch bets from API with credentials
+        const response = await fetch("https://game.zyronetworks.shop/getUserBets", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, password }),
+        });
+
+        const data = await response.json();
+
+        if (Array.isArray(data)) {
+          setBetRecords(data);
+        } else if (data.success && Array.isArray(data.bets)) {
+          setBetRecords(data.bets);
+        } else {
+          console.error("Unexpected API response:", data);
+        }
       } catch (error) {
         console.error("Error fetching bet records:", error);
       } finally {
@@ -54,7 +77,6 @@ const BetRecords = () => {
       ) : (
         <div className="pb-4">
           {betRecords.map((record, index) => {
-            // Calculate win/loss difference
             const winLoss =
               record.status === "win"
                 ? record.amount - record.bet
