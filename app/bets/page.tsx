@@ -16,43 +16,50 @@ const BetRecords = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchBets = async () => {
-      try {
-        // Retrieve stored credentials from localStorage
-        const storedCredentials = localStorage.getItem("userCredentials");
-        if (!storedCredentials) {
-          console.error("No credentials found in localStorage");
-          setLoading(false);
-          return;
-        }
-
-        const { username, password } = JSON.parse(storedCredentials);
-
-        // Fetch bets from API with credentials
-        const response = await fetch("https://game.zyronetworks.shop/getUserBets", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ username, password }),
-        });
-
-        const data = await response.json();
-
-        if (Array.isArray(data)) {
-          setBetRecords(data);
-        } else if (data.success && Array.isArray(data.bets)) {
-          setBetRecords(data.bets);
-        } else {
-          console.error("Unexpected API response:", data);
-        }
-      } catch (error) {
-        console.error("Error fetching bet records:", error);
-      } finally {
+  const fetchBets = async () => {
+    try {
+      // Retrieve stored credentials from localStorage
+      const storedCredentials = localStorage.getItem("userCredentials");
+      if (!storedCredentials) {
+        console.error("No credentials found in localStorage");
         setLoading(false);
+        return;
       }
-    };
 
-    fetchBets();
-  }, []);
+      const { username, password } = JSON.parse(storedCredentials);
+
+      // Fetch bets from API with credentials
+      const response = await fetch("https://game.zyronetworks.shop/getUserBets", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      });
+
+      const data = await response.json();
+
+      if (Array.isArray(data)) {
+        const sorted = data.sort(
+          (a, b) => new Date(b.time).getTime() - new Date(a.time).getTime()
+        );
+        setBetRecords(sorted);
+      } else if (data.success && Array.isArray(data.bets)) {
+        const sorted = data.bets.sort(
+          (a, b) => new Date(b.time).getTime() - new Date(a.time).getTime()
+        );
+        setBetRecords(sorted);
+      } else {
+        console.error("Unexpected API response:", data);
+      }
+    } catch (error) {
+      console.error("Error fetching bet records:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchBets();
+}, []);
+
 
   return (
     <div className="min-h-screen bg-[#450b00]">
