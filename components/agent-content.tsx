@@ -77,7 +77,10 @@ const AgentContent = ({ activeTab }: AgentContentProps) => {
 
   useEffect(() => {
     if (activeTab === "details" && creds) {
-      if (!isLoading) handleFetchDetails()
+      if (!isLoading) {
+        handleFetchDetails()
+        handleFetchAgentInfo();
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab, creds])
@@ -115,6 +118,32 @@ const AgentContent = ({ activeTab }: AgentContentProps) => {
       setIsLoading(false)
     }
   }
+
+  async function handleFetchAgentInfo() {
+  try {
+    if (!creds) return;
+    const res = await fetch("https://game.zyronetworks.shop/agent-info", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        username: creds.username,
+        password: creds.password,
+      }),
+    });
+
+    if (!res.ok) throw new Error(`HTTP error ${res.status}`);
+
+    const data = await res.json();
+    if (data.success && data.agentInfo) {
+      setAgentInfo(data.agentInfo);
+    } else {
+      console.error("Invalid agent info response:", data);
+    }
+  } catch (err) {
+    console.error("Failed to fetch agent info:", err);
+  }
+}
+
 
   const totalRegisteredUsers = userData?.totalReferrals ?? 0
   const todaysRegistrations = useMemo(() => {
@@ -369,11 +398,11 @@ const AgentContent = ({ activeTab }: AgentContentProps) => {
         <div className="grid grid-cols-2 gap-4 mb-4">
           <div className="text-center">
             <div className="text-white/70 text-sm mb-1">New Subordinates Today</div>
-            <div className="text-yellow-400 text-xl font-bold">0 People</div>
+            <div className="text-yellow-400 text-xl font-bold">{agentInfo.newSubordinatesToday} People</div>
           </div>
           <div className="text-center">
             <div className="text-white/70 text-sm mb-1">Total Subordinates</div>
-            <div className="text-yellow-400 text-xl font-bold">0 People</div>
+            <div className="text-yellow-400 text-xl font-bold">{agentInfo.totalSubordinates} People</div>
           </div>
         </div>
 
@@ -383,11 +412,11 @@ const AgentContent = ({ activeTab }: AgentContentProps) => {
           <div className="grid grid-cols-2 gap-4">
             <div className="text-center">
               <div className="text-white/70 text-sm mb-1">Invitation Reward</div>
-              <div className="text-yellow-400 text-lg font-bold">₹ 0</div>
+              <div className="text-yellow-400 text-lg font-bold">₹ {agentInfo.invitationReward}</div>
             </div>
             <div className="text-center">
               <div className="text-white/70 text-sm mb-1">Total Commissions</div>
-              <div className="text-yellow-400 text-lg font-bold">₹ 0</div>
+              <div className="text-yellow-400 text-lg font-bold">₹ {agentInfo.totalCommissions}</div>
             </div>
           </div>
         </div>
@@ -463,15 +492,15 @@ const AgentContent = ({ activeTab }: AgentContentProps) => {
         <div className="grid grid-cols-2 text-center gap-4 mb-6">
           <div>
             <div className="text-white mb-3 text-sm">Today's Commisssion</div>
-            <div className="text-[#ffe925] text-sm mb-8 font-bold">₹ 0</div>
+            <div className="text-[#ffe925] text-sm mb-8 font-bold">₹ {agentInfo.totalCommissions}</div>
             <div className="mt-3 text-white mb-3 text-sm">Yesterday's Commission</div>
-            <div className="text-[#ffe925] text-sm mb-8 font-bold">₹ 0</div>
+            <div className="text-[#ffe925] text-sm mb-8 font-bold">₹ {agentInfo.yesterdaysCommission}</div>
           </div>
           <div>
             <div className="text-white mb-3 text-sm">Today's Team Recharge</div>
-            <div className="text-[#ffe925] text-sm mb-8 font-bold">₹ 0</div>
+            <div className="text-[#ffe925] text-sm mb-8 font-bold">₹ {agentInfo.todaysTeamRecharge}</div>
             <div className="mt-3 text-white mb-3 text-sm">Unclaimed Commission</div>
-            <div className="text-[#ffe925] text-sm mb-8 font-bold">₹ 0</div>
+            <div className="text-[#ffe925] text-sm mb-8 font-bold">₹ {agentInfo.unclaimedCommission}</div>
           </div>
         </div>
         <div className="flex justify-center relative">
