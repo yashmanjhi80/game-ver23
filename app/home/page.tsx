@@ -4,7 +4,7 @@
 
 import { Trefoil } from 'ldrs/react'
 import 'ldrs/react/Trefoil.css'
-import { Wallet, Flame, Gamepad2, Spade, Fish, Zap, Play } from "lucide-react";
+import { Wallet,  Gamepad2, Spade, Fish, Zap, Play } from "lucide-react";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -190,6 +190,15 @@ export default function HomePage() {
 
     loadUserDataAndBalance();
   }, []);
+  useEffect(() => {
+    if (gameLoading.progress >= 100) {
+      const timeout = setTimeout(() => {
+        setGameLoading((prev) => ({ ...prev, isLoading: false }));
+      }, 500); // Optional delay for smoother transition
+      return () => clearTimeout(timeout);
+    }
+  }, [gameLoading.progress]);
+
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -575,7 +584,7 @@ export default function HomePage() {
 
       {/* Game Loading Screen */}
       {gameLoading.isLoading && (
-        <div className="fixed inset-x-0 bottom-1/3 h-1/2 bg-black/60 rounded-sm mx-2 border-yellow-400 border-1 backdrop-blur-sm z-50 flex items-center justify-center">
+        <div className="fixed inset-x-0 bottom-1/3 h-1/2 bg-black/90 rounded-sm mx-2 border-yellow-400 border-1 backdrop-blur-sm z-50 flex items-center justify-center">
           <div className="text-center max-w-md mx-auto p-8">
             <div className="mb-6">
               <div className="flex justify-center gap-4 mb-2">

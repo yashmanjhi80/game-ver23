@@ -65,7 +65,7 @@ export default function GlobalHeader() {
             <button
               onClick={loadBalance}
               disabled={isLoadingBalance}
-              className=" rounded-sm transition-colors disabled:opacity-50 px-2 py-1"
+              className="rounded-sm transition-colors disabled:opacity-50 px-2 py-1"
               title="Refresh Balance"
             >
               <RefreshCw
