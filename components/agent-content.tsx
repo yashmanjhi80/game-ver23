@@ -67,6 +67,16 @@ const AgentContent = ({ activeTab }: AgentContentProps) => {
   const [apiError, setApiError] = useState<string | null>(null)
   const [userData, setUserData] = useState<UserData | null>(null)
   const [copied, setCopied] = useState(false)
+  const [agentInfo, setAgentInfo] = useState({
+  newSubordinatesToday: 0,
+  totalSubordinates: 0,
+  invitationReward: 0,
+  totalCommissions: 0,
+  todaysTeamRecharge: 0,
+  yesterdaysCommission: 0,
+  unclaimedCommission: 0,
+});
+
 
   // Load credentials and cached userData on mount
   useEffect(() => {
