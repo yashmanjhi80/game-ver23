@@ -67,10 +67,10 @@ const WalletPage = () => {
     const day = String(now.getDate()).padStart(2, "0");
     const month = String(now.getMonth() + 1).padStart(2, "0");
     const year = now.getFullYear();
-    const datePart = `${day}${month}${year}`;
+    const datePart = `${day}${month}`;
 
     // Generate the changing code
-    const incrementalPart = `12A`;
+    const incrementalPart = `-1ZC`;
 
     return `${fixedPart}${datePart}${incrementalPart}`;
 
