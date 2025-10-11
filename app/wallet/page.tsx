@@ -57,7 +57,7 @@ const WalletPage = () => {
   }, [])
 
 // order id generate
-  let orderSequence = 302; // Starting from 302
+  // sequence is handeled by backend
 
   const generateOrderId = () => {
     const fixedPart = "P340UOI2";
@@ -70,7 +70,7 @@ const WalletPage = () => {
     const datePart = `${day}${month}${year}`;
 
     // Generate the changing code
-    const incrementalPart = `12A${orderSequence++}`;
+    const incrementalPart = `12A`;
 
     return `${fixedPart}${datePart}${incrementalPart}`;
 
