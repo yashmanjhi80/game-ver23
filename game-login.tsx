@@ -407,7 +407,7 @@ export default function GameLogin() {
 
       {/*verification message */}
       {verificationMessage && (
-        <div className="fixed top-4  z-50 pointer-events-none animate-slide-in-top">
+        <div className="fixed top-4 ml-10  z-50 pointer-events-none animate-slide-in-top">
           <div className="bg-black/40 border border-white rounded-xl p-2  backdrop-blur-sm flex items-center  animate-slide-out-right">
             <CheckCircle size={40} className="text-green-400 pr-5" />
             <p className="text-green-300 text-[12px]">{verificationMessage}</p>
