@@ -340,7 +340,7 @@ export default function GameLogin() {
     } catch (error: any) {
       console.error("Registration error:", error);
       setRegisterError(
-        error.message || "Registration failed. Please try again.",
+        error.message || "Registration failed. Please try again.",f
       );
     } finally {
       setIsLoading(false);
