@@ -73,6 +73,7 @@ const AgentContent = ({ activeTab }: AgentContentProps) => {
   totalSubordinates: 0,
   invitationReward: 0,
   totalCommissions: 0,
+  todayCommission: 0,  
   todaysTeamRecharge: 0,
   yesterdaysCommission: 0,
   unclaimedCommission: 0,
@@ -505,7 +506,7 @@ const AgentContent = ({ activeTab }: AgentContentProps) => {
         <div className="grid grid-cols-2 text-center gap-4 mb-6">
           <div>
             <div className="text-white mb-3 text-sm">Today's Commisssion</div>
-            <div className="text-[#ffe925] text-sm mb-8 font-bold">₹ {agentInfo.totalCommissions}</div>
+            <div className="text-[#ffe925] text-sm mb-8 font-bold">₹ {agentInfo.todayCommission}</div>
             <div className="mt-3 text-white mb-3 text-sm">Yesterday's Commission</div>
             <div className="text-[#ffe925] text-sm mb-8 font-bold">₹ {agentInfo.yesterdaysCommission}</div>
           </div>
