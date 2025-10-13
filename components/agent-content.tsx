@@ -558,7 +558,7 @@ const AgentContent = ({ activeTab }: AgentContentProps) => {
             <div className="text-white">Invitation Reward</div>
             <div className="text-[#ffe925]">50</div>
             <div className="text-white mt-3">Recharge</div>
-            <div className="text-[#ffe925]">15000+</div>
+            <div className="text-[#ffe925]">15001+</div>
             <div className="text-white mt-3">Commission</div>
             <div className="text-[#ffe925]">15000*0.09</div>
             <div className="text-[#ffe925]">(Actual:1350)</div>
@@ -632,19 +632,19 @@ const AgentContent = ({ activeTab }: AgentContentProps) => {
             </thead>
             <tbody>
               <tr>
-                <td className="border border-[#c6b9a7] px-3 py-2">₹300–₹1,000</td>
+                <td className="border border-[#c6b9a7] px-3 py-2">₹300–₹2,000</td>
                 <td className="border border-[#c6b9a7] px-3 py-2 text-[#ffe925]">5%</td>
-                <td className="border border-[#c6b9a7] px-3 py-2">Subordinate recharges ₹1,000, you receive ₹50</td>
+                <td className="border border-[#c6b9a7] px-3 py-2">Subordinate recharges ₹2,000, you receive ₹100</td>
               </tr>
               <tr>
-                <td className="border border-[#c6b9a7] px-3 py-2">₹1,001–₹3,000</td>
-                <td className="border border-[#c6b9a7] px-3 py-2 text-[#ffe925]">10%</td>
-                <td className="border border-[#c6b9a7] px-3 py-2">Subordinate recharges ₹2,000, you receive ₹200</td>
+                <td className="border border-[#c6b9a7] px-3 py-2">₹2,001–₹15,000</td>
+                <td className="border border-[#c6b9a7] px-3 py-2 text-[#ffe925]">7%</td>
+                <td className="border border-[#c6b9a7] px-3 py-2">Subordinate recharges ₹15,000, you receive ₹1050</td>
               </tr>
               <tr>
-                <td className="border border-[#c6b9a7] px-3 py-2">₹3,001 and above</td>
-                <td className="border border-[#c6b9a7] px-3 py-2 text-[#ffe925]">15%</td>
-                <td className="border border-[#c6b9a7] px-3 py-2">Subordinate recharges ₹5,000, you receive ₹750</td>
+                <td className="border border-[#c6b9a7] px-3 py-2">₹15,001 and above</td>
+                <td className="border border-[#c6b9a7] px-3 py-2 text-[#ffe925]">9%</td>
+                <td className="border border-[#c6b9a7] px-3 py-2">Subordinate recharges ₹15,001, you receive ₹1350</td>
               </tr>
             </tbody>
           </table>

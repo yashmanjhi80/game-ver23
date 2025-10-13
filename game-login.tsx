@@ -1,5 +1,5 @@
 "use client";
-import { ShineWrapper } from "@/components/ui/shineEffect";
+
 import type React from "react";
 import { useState, useEffect, useRef } from "react";
 import {
