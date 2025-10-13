@@ -11,6 +11,7 @@ import {
   Settings,
   ChevronRight,
 } from "lucide-react"
+import toast, { Toaster } from "react-hot-toast"
 import { Badge } from "@/components/ui/badge"
 import BottomNavigation from "@/components/bottom-navigation"
 import VipCard from "@/components/vip-card"
@@ -112,7 +113,8 @@ export default function ProfilePage() {
   const handleLogout = () => {
     localStorage.removeItem("userCredentials")
     localStorage.removeItem("userData")
-    router.push("/")
+    toast.success("Logged out successfully!")
+    setTimeout(() => router.push("/"), 500)
   }
 
   const formatBalance = (amount: number) => {
@@ -133,6 +135,20 @@ export default function ProfilePage() {
 
   return (
     <div className="min-h-screen bg-[#450b00]">
+      <Toaster position="top-center" toastOptions={{
+        success: {
+          style: {
+            background: 'rgba(34, 197, 94, 0.6)',
+            color: 'white',
+          },
+        },
+        error: {
+          style: {
+            background: 'rgba(239, 68, 68, 0.6)',
+            color: 'white',
+          },
+        },
+      }} />
       <div className="max-w-md bg-[#450b00] mx-auto px-3 py-6 pb-20">
         {/* Profile Header */}
         <div className="flex items-center justify-between mb-8">

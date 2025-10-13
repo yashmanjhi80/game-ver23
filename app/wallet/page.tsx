@@ -2,6 +2,7 @@
 import Image from "next/image"
 import { useState, useEffect } from "react"
 import { FileText, ShoppingCart, X, CreditCard,BadgeIndianRupee, Plus, CheckCircle, AlertCircle } from "lucide-react"
+import toast, { Toaster } from "react-hot-toast"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -79,11 +80,9 @@ const WalletPage = () => {
 //message animation
   const showMessage = (type: "error" | "success", message: string) => {
     if (type === "error") {
-      setPaymentError(message);
-      setTimeout(() => setPaymentError(""), 4000);
+      toast.error(message);
     } else {
-      setPaymentSuccess(message);
-      setTimeout(() => setPaymentSuccess(""), 4000);
+      toast.success(message);
     }
   };
 
@@ -327,20 +326,20 @@ const WalletPage = () => {
 
   return (
     <div className="min-h-screen bg-[#2b0d0d] pb-20 text-burgundy-800">
-      {/* Header */}
-       {/* ✅ Payment status messages */}
-      {paymentError && (
-        <div className="bg-black/40 border border-red-500 rounded-xl p-2 backdrop-blur-sm flex items-center space-x-3">
-          <AlertCircle size={20} className="text-red-400" />
-          <p className="text-red-300 text-[12px] ">{paymentError}</p>
-        </div>
-      )}
-      {paymentSuccess && (
-        <div className="bg-black/40 border border-white rounded-xl mx-2 p-2 backdrop-blur-sm flex items-center space-x-3">
-          <CheckCircle size={20} className="text-green-400" />
-          <p className="text-green-300 text-[12px] ">{paymentSuccess}</p>
-        </div>
-      )}
+      <Toaster position="top-center" toastOptions={{
+        success: {
+          style: {
+            background: 'rgba(34, 197, 94, 0.6)',
+            color: 'white',
+          },
+        },
+        error: {
+          style: {
+            background: 'rgba(239, 68, 68, 0.6)',
+            color: 'white',
+          },
+        },
+      }} />
       
       {/* Header */}
       <div className="bg-[#2b0d0d] px-5 py-3 flex items-center justify-between  ">

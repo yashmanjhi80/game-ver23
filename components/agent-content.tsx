@@ -7,6 +7,7 @@ import { Separator } from "@/components/ui/separator"
 import { DollarSign, CircleCheckBig,UserPlus, Copy, QrCode, Users, UserCheck, HelpCircle } from "lucide-react"
 import Image from "next/image"
 import { useEffect, useMemo, useState } from "react"
+import toast from "react-hot-toast"
 
 interface AgentContentProps {
   activeTab: string
@@ -175,9 +176,11 @@ const AgentContent = ({ activeTab }: AgentContentProps) => {
     try {
       await navigator.clipboard.writeText(invitationLink);
       setCopied(true);
-      setTimeout(() => setCopied(false), 3000); // Show success icon for 3 seconds
+      toast.success("Invitation link copied!");
+      setTimeout(() => setCopied(false), 3000);
     } catch (e) {
       console.error("Failed to copy invitation link:", e);
+      toast.error("Failed to copy link");
     }
   };
 
@@ -355,9 +358,9 @@ const AgentContent = ({ activeTab }: AgentContentProps) => {
                       title: "Join me!",
                       text: "Check out this invitation link:",
                       url: invitationLink,
-                    });
+                    }).catch(() => toast.error("Sharing cancelled"));
                   } else {
-                    alert("Sharing is not supported on this device.");
+                    toast.error("Sharing is not supported on this device");
                   }
                 }}
                 className="rounded-lg w-12 h-12 p-0 bg-black/50 border border-gray-500"

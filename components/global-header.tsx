@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import { RefreshCw } from "lucide-react"
 import DomainIcon from "./assets/Domain.png"
+import toast from "react-hot-toast"
 
 export default function GlobalHeader() {
   const [balance, setBalance] = useState(0)
@@ -33,10 +34,14 @@ export default function GlobalHeader() {
         if (response.ok) {
           const data = await response.json()
           setBalance(Number.parseFloat(data.balance) || 0)
+          toast.success("Balance refreshed!")
+        } else {
+          toast.error("Failed to refresh balance")
         }
       }
     } catch (error) {
       console.error("Failed to load balance:", error)
+      toast.error("Failed to refresh balance")
     } finally {
       setIsLoadingBalance(false)
     }

@@ -4,7 +4,6 @@ import type React from "react";
 import { useState, useEffect, useRef } from "react";
 import {
   Eye,
-  
   Phone,
   EyeOff,
   LockKeyholeOpen,
@@ -14,7 +13,6 @@ import {
   ArrowLeft,
   HeartHandshake,
   Mails,
-  AlertCircle,
   CheckCircle,
   XCircle,
 } from "lucide-react";
@@ -46,7 +44,7 @@ export default function GameLogin() {
   const [verificationCode, setVerificationCode] = useState("");
   const [verifyEmailError, setVerifyEmailError] = useState("");
   const [isVerifyingEmail, setIsVerifyingEmail] = useState(false);
-  
+
   // Check if user is already logged in and redirect to home
   useEffect(() => {
     const checkExistingLogin = () => {

@@ -5,6 +5,7 @@
 import { Trefoil } from 'ldrs/react'
 import 'ldrs/react/Trefoil.css'
 import { Wallet,  Gamepad2, Spade, Fish, Zap, Play } from "lucide-react";
+import toast, { Toaster } from "react-hot-toast";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -490,6 +491,28 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-burgundy-800 to-burgundy-960 text-white">
+      <Toaster position="top-center" toastOptions={{
+        success: {
+          style: {
+            background: 'rgba(34, 197, 94, 0.6)',
+            color: 'white',
+          },
+          iconTheme: {
+            primary: 'white',
+            secondary: 'rgba(34, 197, 94, 0.6)',
+          },
+        },
+        error: {
+          style: {
+            background: 'rgba(239, 68, 68, 0.6)',
+            color: 'white',
+          },
+          iconTheme: {
+            primary: 'white',
+            secondary: 'rgba(239, 68, 68, 0.6)',
+          },
+        },
+      }} />
 
       {/* Floating Support Panel with Lucide Play Icon */}
       <div className="fixed right-0 bottom-1/5 z-50 flex items-center">
