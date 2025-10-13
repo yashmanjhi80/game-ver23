@@ -14,13 +14,15 @@ import {
   ArrowLeft,
   HeartHandshake,
   Mails,
-  AlertCircle, // Import AlertCircle
+  AlertCircle,
+  CheckCircle,
+  XCircle,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { APP_CONFIG, getStorageKey, isFeatureEnabled } from "@/config/app";
 import Image from "next/image";
-import { toast } from "sonner"; // Import toast
+import toast, { Toaster } from "react-hot-toast";
 
 export default function GameLogin() {
   const [username, setUsername] = useState("");
@@ -44,6 +46,7 @@ export default function GameLogin() {
   const [verificationCode, setVerificationCode] = useState("");
   const [verifyEmailError, setVerifyEmailError] = useState("");
   const [isVerifyingEmail, setIsVerifyingEmail] = useState(false);
+  
   // Check if user is already logged in and redirect to home
   useEffect(() => {
     const checkExistingLogin = () => {
@@ -216,7 +219,15 @@ export default function GameLogin() {
       router.push("/home");
     } catch (error: any) {
       console.error("Login error:", error);
-      setLoginError(error.message || "Login failed. Please try again.");
+      const errorMsg = error.message || "Login failed. Please try again.";
+      toast.error(errorMsg, {
+        style: {
+          background: "rgba(255, 0, 0, 0.6)",
+          color: "#fff",
+        },
+        icon: <XCircle className="text-white" />,
+      });
+      setLoginError(errorMsg);
     } finally {
       setIsLoading(false);
     }
@@ -245,27 +256,30 @@ export default function GameLogin() {
       const data = await response.json();
       if (response.ok) {
         setVerificationCodeSent(true);
-        setVerificationMessage(
-          "Verification code sent! Please check your email.",
-        );
+        toast.success("Verification code sent! Please check your email.", {
+          style: {
+            background: "rgba(0, 128, 0, 0.6)",
+            color: "#fff",
+          },
+          icon: <CheckCircle className="text-white" />,
+        });
       } else {
         throw new Error(data.message || "Failed to send verification code.");
       }
     } catch (error: any) {
       console.error("Verification error:", error);
+      toast.error(error.message || "Failed to send verification code.", {
+        style: {
+          background: "rgba(255, 0, 0, 0.6)",
+          color: "#fff",
+        },
+        icon: <XCircle className="text-white" />,
+      });
       setVerifyEmailError(error.message || "Failed to send verification code.");
     } finally {
       setIsVerifyingEmail(false);
     }
   };
-  const [verificationMessage, setVerificationMessage] = useState("");
-
-  useEffect(() => {
-    if (verificationMessage) {
-      const timer = setTimeout(() => setVerificationMessage(""), 2000);
-      return () => clearTimeout(timer);
-    }
-  }, [verificationMessage]);
   // Modify handleRegister to include verification code
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -276,27 +290,57 @@ export default function GameLogin() {
 
     // Validation
     if (!username || !email || !password || !confirmPassword) {
-      setRegisterError("All fields are required.");
+      const errorMsg = "All fields are required.";
+      toast.error(errorMsg, {
+        style: {
+          background: "rgba(255, 0, 0, 0.6)",
+          color: "#fff",
+        },
+        icon: <XCircle className="text-white" />,
+      });
+      setRegisterError(errorMsg);
       setIsLoading(false);
       return;
     }
 
     if (password !== confirmPassword) {
-      setRegisterError("Passwords do not match.");
+      const errorMsg = "Passwords do not match.";
+      toast.error(errorMsg, {
+        style: {
+          background: "rgba(255, 0, 0, 0.6)",
+          color: "#fff",
+        },
+        icon: <XCircle className="text-white" />,
+      });
+      setRegisterError(errorMsg);
       setIsLoading(false);
       return;
     }
 
     if (!isEmailVerified) {
-      setRegisterError("Please verify your email before creating an account.");
+      const errorMsg = "Please verify your email before creating an account.";
+      toast.error(errorMsg, {
+        style: {
+          background: "rgba(255, 0, 0, 0.6)",
+          color: "#fff",
+        },
+        icon: <XCircle className="text-white" />,
+      });
+      setRegisterError(errorMsg);
       setIsLoading(false);
       return;
     }
 
     if (password.length < APP_CONFIG.VALIDATION.PASSWORD.MIN_LENGTH) {
-      setRegisterError(
-        `Password must be at least ${APP_CONFIG.VALIDATION.PASSWORD.MIN_LENGTH} characters long.`,
-      );
+      const errorMsg = `Password must be at least ${APP_CONFIG.VALIDATION.PASSWORD.MIN_LENGTH} characters long.`;
+      toast.error(errorMsg, {
+        style: {
+          background: "rgba(255, 0, 0, 0.6)",
+          color: "#fff",
+        },
+        icon: <XCircle className="text-white" />,
+      });
+      setRegisterError(errorMsg);
       setIsLoading(false);
       return;
     }
@@ -306,9 +350,15 @@ export default function GameLogin() {
       trimmedUsername.length < APP_CONFIG.VALIDATION.USERNAME.MIN_LENGTH ||
       trimmedUsername.length > APP_CONFIG.VALIDATION.USERNAME.MAX_LENGTH
     ) {
-      setRegisterError(
-        `Username must be ${APP_CONFIG.VALIDATION.USERNAME.MIN_LENGTH}-${APP_CONFIG.VALIDATION.USERNAME.MAX_LENGTH} characters long.`,
-      );
+      const errorMsg = `Username must be ${APP_CONFIG.VALIDATION.USERNAME.MIN_LENGTH}-${APP_CONFIG.VALIDATION.USERNAME.MAX_LENGTH} characters long.`;
+      toast.error(errorMsg, {
+        style: {
+          background: "rgba(255, 0, 0, 0.6)",
+          color: "#fff",
+        },
+        icon: <XCircle className="text-white" />,
+      });
+      setRegisterError(errorMsg);
       setIsLoading(false);
       return;
     }
@@ -337,14 +387,24 @@ export default function GameLogin() {
 
       setIsCreateAccount(false);
       setUsername(trimmedUsername);
-      alert(
-        "Account created successfully! Please login with your credentials.",
-      );
+      toast.success("Account created successfully! Please login with your credentials.", {
+        style: {
+          background: "rgba(0, 128, 0, 0.6)",
+          color: "#fff",
+        },
+        icon: <CheckCircle className="text-white" />,
+      });
     } catch (error: any) {
       console.error("Registration error:", error);
-      setRegisterError(
-        error.message || "Registration failed. Please try again.",
-      );
+      const errorMsg = error.message || "Registration failed. Please try again.";
+      toast.error(errorMsg, {
+        style: {
+          background: "rgba(255, 0, 0, 0.6)",
+          color: "#fff",
+        },
+        icon: <XCircle className="text-white" />,
+      });
+      setRegisterError(errorMsg);
     } finally {
       setIsLoading(false);
     }
@@ -408,15 +468,8 @@ export default function GameLogin() {
         />
       </div>
 
-      {/*verification message */}
-      {verificationMessage && (
-        <div className="fixed top-4 ml-10  z-50 pointer-events-none animate-slide-in-top">
-          <div className="bg-black/40 border border-white rounded-xl p-2  backdrop-blur-sm flex items-center  animate-slide-out-right">
-            <CheckCircle size={40} className="text-green-400 pr-5" />
-            <p className="text-green-300 text-[12px]">{verificationMessage}</p>
-          </div>
-        </div>
-      )}
+      {/* Toast Container */}
+      <Toaster position="top-center" />
 
       {/* Music Toggle Button */}
       {isFeatureEnabled("MUSIC_ENABLED") && (
