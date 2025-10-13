@@ -257,13 +257,13 @@ const AgentContent = ({ activeTab }: AgentContentProps) => {
             <div className="text-white/70 text-xs">Invitation Reward</div>
           </div>
           <div className="text-center">
-            <div className="text-yellow-400 text-sm font-bold">Up to 15%</div>
+            <div className="text-yellow-400 text-sm font-bold">Up to 09%</div>
             <div className="text-white/70 text-xs">Commission Reward</div>
           </div>
         </div>
 
         <p className="text-white/70 text-xs mb-4">
-          For each friend you invite, you will receive ₹ 50, plus a 15% commission on their recharge amount. Commissions
+          For each friend you invite, you will receive ₹ 50, plus a 09% commission on their recharge amount. Commissions
           are settled daily
         </p>
 
