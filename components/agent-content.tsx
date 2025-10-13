@@ -560,7 +560,7 @@ const AgentContent = ({ activeTab }: AgentContentProps) => {
             <div className="text-white mt-3">Recharge</div>
             <div className="text-[#ffe925]">15001+</div>
             <div className="text-white mt-3">Commission</div>
-            <div className="text-[#ffe925]">15000*0.09</div>
+            <div className="text-[#ffe925]">15001*0.09</div>
             <div className="text-[#ffe925]">(Actual:1350)</div>
           </div>
         </div>
