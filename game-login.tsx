@@ -14,11 +14,14 @@ import {
   ArrowLeft,
   HeartHandshake,
   Mails,
+  AlertCircle, // Import AlertCircle
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { APP_CONFIG, getStorageKey, isFeatureEnabled } from "@/config/app";
 import Image from "next/image";
+import { toast } from "sonner"; // Import toast
+
 export default function GameLogin() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
