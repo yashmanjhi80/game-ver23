@@ -63,8 +63,8 @@ export default function GlobalHeader() {
 
         {/* RIGHT: Balance pill */}
         <div className="flex items-center space-x-5">
-          <Link
-            href="/wallet"
+          <div
+            
             className="flex items-center bg-black/ py-1.5 rounded-sm space-x-2 transition-transform"
           >
             <button
@@ -92,7 +92,7 @@ export default function GlobalHeader() {
             <div className="w-full flex mx-2 items-center text-[14px] justify-center rounded-sm bg-orange-500 text-white px-2 py-3 h-5">
               Deposit
             </div>
-          </Link>
+          </div>
         </div>
       </div>
     </header>

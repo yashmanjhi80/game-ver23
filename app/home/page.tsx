@@ -4,7 +4,7 @@
 
 import { Trefoil } from 'ldrs/react'
 import 'ldrs/react/Trefoil.css'
-import { Wallet,  Gamepad2, Spade, Fish, Zap, Play } from "lucide-react";
+import { ShieldCheck ,AlertCircle, Wallet,Gem,  Gamepad2, Spade, Fish, Zap, Play } from "lucide-react";
 import toast, { Toaster } from "react-hot-toast";
 import { useState, useEffect } from "react";
 import Link from "next/link";
@@ -561,24 +561,28 @@ export default function HomePage() {
           </>
         )}
       </div>
+
+
+
+     
       {/* Insufficient Balance Popup */}
       {showInsufficientBalancePopup && (
-        <div className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-gradient-to-br from-black via-gray-900 to-gray-900/95 backdrop-blur-md rounded-2xl p-6 max-w-md w-full border border-yellow-500/30 shadow-2xl">
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-gradient-to-br from-blue-950 via-gray-900 to-gray-800/90 rounded-2xl p-6 max-w-md w-full border border-1 backdrop-blur-sm shadow-[0_0_30px_#facc1530]">
             <div className="text-center">
-              <div className="w-16 h-16 bg-yellow-500/20 rounded-full flex items-center justify-center mx-auto mb-4 border border-yellow-500/30">
-                <Wallet size={32} className="text-yellow-400" />
+              <div className="w-20 h-16  rounded-full flex items-center justify-center mx-auto  shadow-inner">
+                <Gem size={32} className="text-sky-400 w-20" />
               </div>
-              <h2 className="text-2xl font-bold text-yellow-400 mb-2">
-                Insufficient Balance
+              <h2 className="text-2xl font-semibold text-yellow-500 mb-2 tracking-wide">
+                Top-Up Needed
               </h2>
-              <p className="text-yellow-200 mb-4">
-                You need at least ₹10 to play games
+              <p className="text-white mb-4">
+                You need at least ₹10 to enter the game. Please add funds to continue.
               </p>
 
-              <div className="bg-black/50 rounded-lg p-4 mb-6 border border-yellow-500/20">
-                <p className="text-gray-300 text-sm mb-1">Current Balance</p>
-                <p className="text-3xl font-bold text-yellow-400">
+              <div className="bg-gradient-to-r  from-indigo-500/30 to-sky-500/80 rounded-lg p-4 mb-6 border-1 backdrop-blur-sm shadow-sm">
+                <p className="text-black text-sm mb-1">Yourt Balance</p>
+                <p className="text-xl font-bold text-yellow-400">
                   ₹{formatBalance(balance)}
                 </p>
               </div>
@@ -586,16 +590,16 @@ export default function HomePage() {
               <div className="flex gap-3">
                 <button
                   onClick={() => setShowInsufficientBalancePopup(false)}
-                  className="flex-1 bg-gray-700 hover:bg-gray-600 text-white font-semibold py-3 px-4 rounded-lg transition-colors border border-gray-600"
+                  className="flex-1 py-2 px-4 rounded-md text-white font-medium bg-gradient-to-b from-gray-700 to-gray-800 border border-gray-600 shadow-[inset_0_1px_0_#888] hover:shadow-[0_2px_8px_#00000050] hover:scale-[1.02] transition-all duration-200 ease-out"
                 >
                   Cancel
                 </button>
                 <Link
                   href="/wallet"
-                  className="flex-1 bg-gradient-to-r from-yellow-600 to-yellow-500 hover:from-yellow-700 hover:to-yellow-600 text-black font-bold py-3 px-4 rounded-lg transition-all text-center border border-yellow-400/30"
                   onClick={() => setShowInsufficientBalancePopup(false)}
+                  className="flex-1 py-2 px-4 rounded-md text-black font-semibold bg-gradient-to-b from-yellow-500 to-yellow-600 border border-yellow-400 shadow-[inset_0_1px_0_#facc15] hover:shadow-[0_2px_8px_#facc1540] hover:scale-[1.02] transition-all duration-200 ease-out text-center"
                 >
-                  Add Cash
+                  Add Funds
                 </Link>
               </div>
             </div>
@@ -645,16 +649,7 @@ export default function HomePage() {
 
       {/* Header */}
 
-      {/* Floating Welcome Notification */}
-      {showWelcomeNotification && (
-        <div className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 animate-in slide-in-from-top duration-500">
-          <div className="bg-gradient-to-r from-yellow-600 to-yellow-500 text-black px-6 py-3 rounded-full shadow-lg backdrop-blur-sm border border-yellow-400/30">
-            <p className="text-sm md:text-base font-bold">
-              Welcome back, {username}! 🎮
-            </p>
-          </div>
-        </div>
-      )}
+   
 
       {/* Main Content */}
       {isHorizontal ? (
