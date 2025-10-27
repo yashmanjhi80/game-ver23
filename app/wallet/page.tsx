@@ -42,7 +42,7 @@ const WalletPage = () => {
   const [usdtAmount, setUsdtAmount] = useState<number>(10)
   const [usdtRate, setUsdtRate] = useState<number>(98.64)
 
-  const paymentMethods = ["Fpay", "LGpay", "USDT"]
+  const paymentMethods = ["Fpay", "LGpay", "USDT", "PowerPay"]
 
   
   const MIN_DEPOSIT = 100
