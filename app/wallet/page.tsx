@@ -136,16 +136,22 @@ const WalletPage = () => {
 
       const paymentData = await response.json();
 
-      if (paymentData.status === 1 && paymentData.data?.pay_url) {
-        showMessage("success", "Redirecting to payment gateway...");
-        window.open(paymentData.data.pay_url, "_blank", "noopener,noreferrer");
-
+      if (paymentData.success && paymentData.gateway === "PowerPay") {
+  showMessage("success", "Redirecting to payment gateway...");
+  window.open(paymentData.paymentPage, "_blank", "noopener,noreferrer");
         setTimeout(() => {
           showMessage("success", "Complete the payment in the new window.");
         }, 1000);
-      } else {
-        showMessage("error", paymentData.msg || "Failed to create payment");
-      }
+} else if (paymentData.status === 1 && paymentData.data?.pay_url) {
+  // LGpay compatibility
+  showMessage("success", "Redirecting to payment gateway...");
+  window.open(paymentData.data.pay_url, "_blank", "noopener,noreferrer");
+        setTimeout(() => {
+          showMessage("success", "Complete the payment in the new window.");
+        }, 1000);
+} else {
+  showMessage("error", paymentData.message || "Failed to create payment");
+}
     } catch (error) {
       console.error("Payment creation error:", error);
       showMessage("error", "Failed to create payment. Please try again.");
