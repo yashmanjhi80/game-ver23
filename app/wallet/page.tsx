@@ -135,6 +135,7 @@ const WalletPage = () => {
       });
 
       const paymentData = await response.json();
+      console.log(paymentData);
 
       if (paymentData.success && paymentData.gateway === "PowerPay") {
   showMessage("success", "Redirecting to payment gateway...");
